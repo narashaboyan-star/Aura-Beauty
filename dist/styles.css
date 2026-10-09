@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Unbounded:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;600;700;800&display=swap');
 
 :root {
   --ink: #352637;
@@ -44,27 +44,44 @@ a { color: inherit; }
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   text-decoration: none;
 }
 
 .brand-mark {
-  width: 48px;
-  height: 48px;
+  position: relative;
+  width: 62px;
+  height: 62px;
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: var(--ink);
+  background: var(--pink-dark);
   color: white;
-  font-family: Unbounded, sans-serif;
-  font-size: .72rem;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 2rem;
   font-weight: 700;
-  letter-spacing: -.08em;
+  box-shadow: 0 10px 25px rgba(105, 54, 74, .18);
+}
+
+.brand-mark::before,
+.brand-mark::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border: 1px solid rgba(152, 67, 95, .36);
+  border-radius: 48% 52% 46% 54%;
+  transform: rotate(-18deg);
+}
+
+.brand-mark::after {
+  inset: -9px 3px;
+  transform: rotate(28deg);
+  border-color: rgba(152, 67, 95, .2);
 }
 
 .brand-copy { display: flex; flex-direction: column; gap: 2px; }
-.brand-copy strong { font-family: Unbounded, sans-serif; font-size: 1.05rem; }
-.brand-copy small { color: var(--muted); font-size: .68rem; font-weight: 700; letter-spacing: .03em; }
+.brand-copy strong { font-family: "Cormorant Garamond", serif; font-size: 1.65rem; line-height: 1; letter-spacing: .01em; }
+.brand-copy small { color: var(--muted); font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
 }
 
 .main-nav { display: flex; gap: 10px; }
@@ -110,12 +127,12 @@ main { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
 h1, h2, h3 { margin-top: 0; }
 
 h1, h2 {
-  font-family: Unbounded, sans-serif;
-  line-height: 1.08;
-  letter-spacing: -.04em;
+  font-family: "Cormorant Garamond", serif;
+  line-height: .96;
+  letter-spacing: -.025em;
 }
 
-h1 { max-width: 760px; margin-bottom: 24px; font-size: clamp(2.8rem, 5.2vw, 4.8rem); }
+h1 { max-width: 760px; margin-bottom: 24px; font-size: clamp(3.4rem, 6.4vw, 6rem); }
 h2 { font-size: clamp(1.8rem, 3.2vw, 3.2rem); }
 
 .hero-text {
@@ -171,7 +188,7 @@ h2 { font-size: clamp(1.8rem, 3.2vw, 3.2rem); }
 .category-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
 .category-card { min-height: 240px; padding: 26px; display: flex; flex-direction: column; justify-content: flex-end; border-radius: 30px; text-decoration: none; box-shadow: 0 14px 34px rgba(100, 42, 102, .12); transition: transform .2s ease, box-shadow .2s ease; }
 .category-card:hover { transform: translateY(-5px) rotate(-1deg); box-shadow: var(--shadow); }
-.category-card strong { margin-bottom: 8px; font-family: Unbounded, sans-serif; font-size: 1.15rem; }
+.category-card strong { margin-bottom: 8px; font-family: "Cormorant Garamond", serif; font-size: 1.55rem; }
 .category-card span:last-child { color: rgba(48,29,61,.7); line-height: 1.5; }
 .category-icon { margin-bottom: auto; font-size: 2.4rem; }
 .pink { background: #f0d2dc; }
@@ -222,14 +239,15 @@ footer { width: min(1160px, calc(100% - 40px)); margin: 0 auto; padding: 30px 0 
 
 @media (max-width: 620px) {
   .site-header { width: min(100% - 28px, 1160px); padding-top: 16px; }
-  .brand-mark { width: 40px; height: 40px; }
-  .brand-copy strong { font-size: .85rem; }
-  .brand-copy small { display: none; }
+  .brand { gap: 10px; }
+  .brand-mark { width: 50px; height: 50px; font-size: 1.6rem; }
+  .brand-copy strong { font-size: 1.25rem; }
+  .brand-copy small { font-size: .54rem; letter-spacing: .035em; }
   .main-nav a { padding: 9px 11px; font-size: .86rem; }
   main { width: min(100% - 28px, 1160px); }
   .hero { min-height: 680px; padding: 20px 0 60px; }
   .hero-copy { align-self: start; max-width: 100%; padding: 38px 24px; }
-  h1 { font-size: clamp(2.35rem, 11vw, 3.1rem); }
+  h1 { font-size: clamp(3rem, 14vw, 4.15rem); }
   .hero-text { font-size: 1rem; line-height: 1.58; }
   .hero-art { height: 650px; border-radius: 28px; }
   .hero-art::after { background: linear-gradient(180deg, rgba(251, 247, 242, .98) 0%, rgba(251, 247, 242, .94) 47%, rgba(251, 247, 242, .35) 68%, transparent 88%); }

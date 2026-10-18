@@ -220,7 +220,8 @@ footer { width: min(1160px, calc(100% - 40px)); margin: 0 auto; padding: 30px 0 
 .product-section { scroll-margin-top: 20px; margin-bottom: 70px; }
 .product-section h2 { margin-bottom: 25px; font-size: clamp(1.6rem, 2.5vw, 2.6rem); }
 .product-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
-.product-card { padding: 14px 14px 22px; border-radius: 28px; background: white; box-shadow: 0 12px 40px rgba(112, 38, 109, .14); }
+.price-note { max-width: 760px; margin: -46px 0 70px; color: var(--muted); font-size: .82rem; line-height: 1.6; }
+.product-card { min-height: 100%; padding: 14px 14px 22px; display: flex; flex-direction: column; border-radius: 28px; background: white; box-shadow: 0 12px 40px rgba(112, 38, 109, .14); }
 .product-card h3 { margin: 0 8px 8px; font-size: 1.1rem; }
 .product-photo { position: relative; height: 265px; margin-bottom: 18px; display: grid; place-items: center; overflow: hidden; border-radius: 20px; }
 .product-photo img { width: 100%; height: 100%; display: block; object-fit: cover; }
@@ -228,8 +229,11 @@ footer { width: min(1160px, calc(100% - 40px)); margin: 0 auto; padding: 30px 0 
 .product-photo.brand-photo img { padding: 18px; object-fit: contain; }
 .product-photo.brand-photo-wide img { padding: 0; object-fit: cover; }
 .product-kind { margin: 0 8px 7px; color: var(--pink-dark); font-size: .74rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
-.product-note { margin: 0 8px 18px; color: var(--muted); }
-.price { margin: 0 8px; font-weight: 800; }
+.product-note { margin: 0 8px 18px; color: var(--muted); line-height: 1.55; }
+.product-meta { margin-top: auto; padding: 14px 8px 0; display: flex; align-items: center; justify-content: space-between; gap: 14px; border-top: 1px solid var(--line); }
+.price { margin: 0; color: var(--ink); font-family: "Cormorant Garamond", serif; font-size: 1.65rem; font-weight: 700; }
+.product-source { color: var(--pink-dark); font-size: .75rem; font-weight: 800; text-decoration: none; }
+.product-source:hover, .product-source:focus-visible { text-decoration: underline; }
 .back-home-button { margin-top: 20px; border: 2px solid var(--ink); }
 
 @media (max-width: 900px) {

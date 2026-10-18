@@ -251,7 +251,7 @@ dialog { max-width: none; padding: 0; border: 0; color: var(--ink); background: 
 dialog::backdrop { background: rgba(36, 25, 38, .58); backdrop-filter: blur(6px); }
 .dialog-close { position: absolute; z-index: 4; top: 18px; right: 18px; width: 42px; height: 42px; display: grid; place-items: center; border: 0; border-radius: 50%; background: rgba(255,255,255,.92); font-size: 1.7rem; line-height: 1; cursor: pointer; box-shadow: 0 8px 18px rgba(53,38,55,.12); }
 
-.product-dialog { width: min(920px, calc(100% - 32px)); border-radius: 36px; background: var(--paper); box-shadow: 0 26px 90px rgba(33,21,34,.3); }
+.product-dialog { width: min(920px, calc(100% - 32px)); max-height: 90vh; overflow-y: auto; border-radius: 36px; background: var(--paper); box-shadow: 0 26px 90px rgba(33,21,34,.3); }
 .product-dialog-layout { display: grid; grid-template-columns: .9fr 1.1fr; min-height: 560px; }
 .dialog-product-photo { min-height: 560px; display: grid; place-items: center; overflow: hidden; border-radius: 36px 0 0 36px; background: #f0eff1; }
 .dialog-product-photo img { width: 100%; height: 100%; padding: 34px; display: block; object-fit: contain; }
@@ -262,6 +262,18 @@ dialog::backdrop { background: rgba(36, 25, 38, .58); backdrop-filter: blur(6px)
 .product-facts > div { padding: 12px 0; display: grid; grid-template-columns: 110px 1fr; gap: 16px; border-top: 1px solid var(--line); }
 .product-facts dt { color: var(--muted); font-size: .78rem; font-weight: 800; text-transform: uppercase; }
 .product-facts dd { margin: 0; line-height: 1.5; }
+.shade-area { margin: -6px 0 24px; padding: 18px; border-radius: 20px; background: #f3e9ed; }
+.shade-heading { margin-bottom: 14px; display: flex; align-items: baseline; justify-content: space-between; gap: 14px; }
+.shade-heading strong { font-size: .92rem; }
+.shade-heading span { color: var(--pink-dark); font-size: .78rem; font-weight: 800; text-align: right; }
+.shade-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.shade-option { min-width: 0; padding: 8px 6px; display: grid; justify-items: center; gap: 6px; border: 1px solid transparent; border-radius: 14px; background: rgba(255,255,255,.58); color: var(--ink); font-size: .67rem; line-height: 1.25; text-align: center; }
+button.shade-option { cursor: pointer; }
+.shade-option:hover, .shade-option:focus-visible, .shade-option.selected { border-color: var(--pink-dark); background: white; outline: none; box-shadow: 0 5px 14px rgba(90,39,88,.1); }
+.shade-color { width: 34px; height: 34px; display: block; border: 3px solid white; border-radius: 50%; background: var(--swatch); box-shadow: 0 0 0 1px rgba(53,38,55,.15); }
+.shade-area > small { margin-top: 12px; display: block; color: var(--muted); font-size: .7rem; line-height: 1.45; }
+.official-product-link { margin: -8px 0 22px; display: inline-flex; color: var(--pink-dark); font-size: .78rem; font-weight: 800; text-decoration: none; }
+.official-product-link:hover, .official-product-link:focus-visible { text-decoration: underline; }
 .dialog-purchase { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
 .dialog-purchase strong { font-family: "Cormorant Garamond", serif; font-size: 2rem; }
 .dialog-purchase .add-button { padding: 12px 20px; }
@@ -339,6 +351,9 @@ dialog::backdrop { background: rgba(36, 25, 38, .58); backdrop-filter: blur(6px)
   .dialog-product-photo img { padding: 22px; }
   .dialog-product-copy { padding: 34px 22px 26px; }
   .product-facts > div { grid-template-columns: 90px 1fr; }
+  .shade-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .shade-heading { align-items: start; flex-direction: column; gap: 4px; }
+  .shade-heading span { text-align: left; }
   .dialog-purchase { align-items: stretch; flex-direction: column; }
   .cart-shell { padding: 34px 18px 24px; }
   .cart-item { grid-template-columns: 60px 1fr; }

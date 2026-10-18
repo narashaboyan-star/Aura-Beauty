@@ -32,6 +32,17 @@ const products = {
     description: "Корейская ночная гель-маска, которая интенсивно увлажняет кожу и поддерживает защитный барьер во время сна.",
     facts: [["Объём", "70 мл"], ["Активы", "Ниацинамид, сквалан и гиалуроновая кислота"], ["Подходит", "Для нормальной, сухой, комбинированной и жирной кожи"], ["Применение", "Наносить вечером завершающим этапом ухода"]]
   },
+  cosrx: {
+    brand: "COSRX • K-Beauty",
+    name: "Advanced Snail 96 Mucin Essence",
+    image: "assets/cosrx-snail-96.jpg",
+    alt: "Эссенция COSRX Advanced Snail 96 Mucin Power Essence",
+    price: null,
+    priceLabel: "Цена уточняется",
+    source: "https://www.cosrx.com/collections/snail-mucin/products/advanced-snail-96-mucin-power-essence",
+    description: "Лёгкая корейская эссенция для глубокого увлажнения, более ровной текстуры и поддержки защитного барьера кожи.",
+    facts: [["Объём", "100 мл"], ["Актив", "96,3% фильтрата секреции улитки"], ["Дополнительно", "Аллантоин, пантенол и гиалуронат натрия"], ["Применение", "После очищения и тоника, перед увлажняющим кремом"]]
+  },
   rare: {
     brand: "Rare Beauty • Румяна",
     name: "Soft Pinch Liquid Blush",
@@ -106,6 +117,41 @@ const products = {
       {name: "Walk of No Shame", note: "ягодно-розовый", color: "#873D48"},
       {name: "Red Carpet Red", note: "классический красный", color: "#9E202B"}
     ]
+  },
+  clinique: {
+    brand: "Clinique • Губы",
+    name: "Almost Lipstick",
+    image: "assets/clinique-black-honey.jpg",
+    alt: "Свотчи Clinique Almost Lipstick Black Honey, Pink Honey и Nude Honey",
+    price: null,
+    priceLabel: "Цена уточняется",
+    source: "https://www.clinique.com/products/almost-lipstick-in-black-honey-pink-honey-and-nude-honey",
+    description: "Лёгкая полупрозрачная формула между помадой и блеском, которая наслаивается и по-разному раскрывается на естественном цвете губ.",
+    facts: [["Вес", "1,9 г"], ["Финиш", "Полупрозрачный, с мягким блеском"], ["Эффект", "От лёгкого оттенка до более насыщенного при наслаивании"], ["Применение", "Нанести один слой или добавить ещё для большей глубины цвета"]],
+    variants: [
+      {name: "Pink Honey", note: "мягкий прозрачный розовый", color: "#D98F96"},
+      {name: "Nude Honey", note: "тёплый прозрачный нюд", color: "#B96855"},
+      {name: "Black Honey", note: "прозрачный ягодно-коричневый", color: "#71383E"}
+    ]
+  },
+  nars: {
+    brand: "NARS • Консилер",
+    name: "Radiant Creamy Concealer",
+    image: "assets/nars-radiant-concealer.jpg",
+    alt: "Консилер NARS Radiant Creamy Concealer",
+    price: null,
+    priceLabel: "Цена уточняется",
+    source: "https://www.narscosmetics.com/USA/radiant-creamy-concealer/999NACRCC0001.html",
+    description: "Кремово-жидкий консилер с сияющим финишем и наслаиваемым покрытием для зоны под глазами и точечной коррекции.",
+    facts: [["Объём", "6 мл"], ["Покрытие", "Среднее, наслаиваемое"], ["Финиш", "Сияющий"], ["Стойкость", "До 16 часов по данным бренда"]],
+    variants: [
+      {name: "Chantilly", note: "очень светлый, нейтральный", color: "#F4D6BC"},
+      {name: "Vanilla", note: "светлый, холодно-розовый", color: "#EBC4AD"},
+      {name: "Custard", note: "светло-средний, нейтральный", color: "#D9A77D"},
+      {name: "Ginger", note: "средний, золотистый", color: "#BF8055"},
+      {name: "Caramel", note: "средне-тёмный, тёплый", color: "#9A5C3D"},
+      {name: "Amande", note: "тёмный, золотисто-оливковый", color: "#70412E"}
+    ]
   }
 };
 
@@ -132,6 +178,7 @@ const shadeTitle = document.querySelector("#shade-title");
 const shadeOptions = document.querySelector("#shade-options");
 const selectedShade = document.querySelector("#selected-shade");
 const productSource = document.querySelector("#dialog-product-source");
+const dialogAddButton = document.querySelector("#dialog-add-button");
 
 function loadCart() {
   try {
@@ -268,6 +315,8 @@ function openProduct(productId) {
   document.querySelector("#product-dialog-title").textContent = product.name;
   document.querySelector("#dialog-product-description").textContent = product.description;
   document.querySelector("#dialog-product-price").textContent = product.priceLabel;
+  dialogAddButton.disabled = !Number.isFinite(product.price);
+  dialogAddButton.textContent = Number.isFinite(product.price) ? "Добавить в корзину" : "Сначала уточним цену";
   productSource.href = product.source;
   const facts = document.querySelector("#dialog-product-facts");
   facts.replaceChildren();
@@ -317,8 +366,8 @@ document.querySelectorAll(".product-card").forEach((card) => {
   });
 });
 
-document.querySelector("#dialog-add-button").addEventListener("click", () => {
-  if (!activeProductId) return;
+dialogAddButton.addEventListener("click", () => {
+  if (!activeProductId || !Number.isFinite(products[activeProductId].price)) return;
   addToCart(activeProductId, activeVariant);
   productDialog.close();
   openCart();

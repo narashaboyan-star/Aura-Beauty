@@ -236,6 +236,7 @@ footer { width: min(1160px, calc(100% - 40px)); margin: 0 auto; padding: 30px 0 
 .product-note { margin: 0 8px 18px; color: var(--muted); line-height: 1.55; }
 .product-meta { margin-top: auto; padding: 14px 8px 0; display: flex; align-items: center; justify-content: space-between; gap: 14px; border-top: 1px solid var(--line); }
 .price { margin: 0; color: var(--ink); font-family: "Cormorant Garamond", serif; font-size: 1.65rem; font-weight: 700; }
+.price-pending { color: var(--muted); font-family: "Manrope", sans-serif; font-size: .86rem; }
 .product-source { color: var(--pink-dark); font-size: .75rem; font-weight: 800; text-decoration: none; }
 .product-source:hover, .product-source:focus-visible { text-decoration: underline; }
 .product-actions { padding: 14px 8px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -244,6 +245,7 @@ footer { width: min(1160px, calc(100% - 40px)); margin: 0 auto; padding: 30px 0 
 .add-button, .checkout-button { border: 0; background: var(--pink-dark); color: white; box-shadow: 0 8px 18px rgba(152,67,95,.16); }
 .details-button:hover, .details-button:focus-visible { background: #f3e9ed; }
 .add-button:hover, .add-button:focus-visible, .checkout-button:hover, .checkout-button:focus-visible { background: #82364f; }
+.add-button:disabled, .pending-button { background: #d9cfd3; color: #6f6269; box-shadow: none; cursor: not-allowed; }
 .back-home-button { margin-top: 20px; border: 2px solid var(--ink); }
 
 dialog { max-width: none; padding: 0; border: 0; color: var(--ink); background: transparent; }
@@ -251,22 +253,22 @@ dialog { max-width: none; padding: 0; border: 0; color: var(--ink); background: 
 dialog::backdrop { background: rgba(36, 25, 38, .58); backdrop-filter: blur(6px); }
 .dialog-close { position: absolute; z-index: 4; top: 18px; right: 18px; width: 42px; height: 42px; display: grid; place-items: center; border: 0; border-radius: 50%; background: rgba(255,255,255,.92); font-size: 1.7rem; line-height: 1; cursor: pointer; box-shadow: 0 8px 18px rgba(53,38,55,.12); }
 
-.product-dialog { width: min(920px, calc(100% - 32px)); max-height: 90vh; overflow-y: auto; border-radius: 36px; background: var(--paper); box-shadow: 0 26px 90px rgba(33,21,34,.3); }
-.product-dialog-layout { display: grid; grid-template-columns: .9fr 1.1fr; min-height: 560px; }
+.product-dialog { width: min(920px, calc(100% - 32px)); max-height: 90vh; overflow-x: hidden; overflow-y: auto; border-radius: 36px; background: var(--paper); box-shadow: 0 26px 90px rgba(33,21,34,.3); }
+.product-dialog-layout { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); min-height: 560px; }
 .dialog-product-photo { min-height: 560px; display: grid; place-items: center; overflow: hidden; border-radius: 36px 0 0 36px; background: #f0eff1; }
 .dialog-product-photo img { width: 100%; height: 100%; padding: 34px; display: block; object-fit: contain; }
-.dialog-product-copy { padding: 70px 48px 44px; }
+.dialog-product-copy { min-width: 0; padding: 70px 48px 44px; }
 .dialog-product-copy h2 { margin-bottom: 20px; font-size: clamp(2.3rem, 4vw, 3.5rem); }
 .dialog-lead { margin: 0 0 26px; color: var(--muted); line-height: 1.7; }
 .product-facts { margin: 0 0 30px; }
 .product-facts > div { padding: 12px 0; display: grid; grid-template-columns: 110px 1fr; gap: 16px; border-top: 1px solid var(--line); }
 .product-facts dt { color: var(--muted); font-size: .78rem; font-weight: 800; text-transform: uppercase; }
-.product-facts dd { margin: 0; line-height: 1.5; }
+.product-facts dd { margin: 0; overflow-wrap: anywhere; line-height: 1.5; }
 .shade-area { margin: -6px 0 24px; padding: 18px; border-radius: 20px; background: #f3e9ed; }
 .shade-heading { margin-bottom: 14px; display: flex; align-items: baseline; justify-content: space-between; gap: 14px; }
 .shade-heading strong { font-size: .92rem; }
 .shade-heading span { color: var(--pink-dark); font-size: .78rem; font-weight: 800; text-align: right; }
-.shade-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.shade-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .shade-option { min-width: 0; padding: 8px 6px; display: grid; justify-items: center; gap: 6px; border: 1px solid transparent; border-radius: 14px; background: rgba(255,255,255,.58); color: var(--ink); font-size: .67rem; line-height: 1.25; text-align: center; }
 button.shade-option { cursor: pointer; }
 .shade-option:hover, .shade-option:focus-visible, .shade-option.selected { border-color: var(--pink-dark); background: white; outline: none; box-shadow: 0 5px 14px rgba(90,39,88,.1); }

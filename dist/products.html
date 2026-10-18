@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Каталог профессиональной косметики Aura Beauty.">
   <title>Товары — Aura Beauty</title>
-  <link rel="stylesheet" href="styles.css?v=real-products-1">
+  <link rel="stylesheet" href="styles.css?v=cart-1">
 </head>
 <body>
   <header class="site-header">
@@ -19,6 +19,7 @@
     <nav class="main-nav" aria-label="Основная навигация">
       <a href="index.html">Главная</a>
       <a class="active" href="products.html">Товары</a>
+      <button class="cart-button" id="cart-button" type="button" aria-haspopup="dialog">Корзина <span class="cart-count" id="cart-count">0</span></button>
     </nav>
   </header>
 
@@ -40,26 +41,29 @@
     <section class="product-section" id="skincare" aria-labelledby="skincare-title">
       <h2 id="skincare-title">Уход за кожей</h2>
       <div class="product-grid">
-        <article class="product-card">
+        <article class="product-card" data-product-id="ordinary" tabindex="0" aria-label="Подробнее о The Ordinary Niacinamide 10% + Zinc 1%">
           <div class="product-photo brand-photo"><img src="assets/the-ordinary-niacinamide.webp" alt="Сыворотка The Ordinary Niacinamide 10% + Zinc 1%" loading="lazy"></div>
           <p class="product-kind">The Ordinary</p>
           <h3>Niacinamide 10% + Zinc 1%</h3>
           <p class="product-note">Сыворотка для контроля жирности, 30 мл</p>
           <div class="product-meta"><p class="price">$6</p><a class="product-source" href="https://www.sephora.com/product/the-ordinary-deciem-niacinamide-10-zinc-1-P427417" target="_blank" rel="noopener">Sephora ↗</a></div>
+          <div class="product-actions"><button class="details-button" type="button" data-action="details">Подробнее</button><button class="add-button" type="button" data-action="add">В корзину</button></div>
         </article>
-        <article class="product-card">
+        <article class="product-card" data-product-id="lucin" tabindex="0" aria-label="Подробнее о Lucin Organics Vitamin C Serum">
           <div class="product-photo brand-photo brand-photo-wide"><img src="assets/user-brand-skincare.jpeg" alt="Белый флакон уходовой косметики" loading="lazy"></div>
           <p class="product-kind">Lucin Organics</p>
           <h3>Vitamin C Serum</h3>
           <p class="product-note">Сыворотка с 15% стабилизированным витамином C, 30 мл</p>
           <div class="product-meta"><p class="price">36 000 ֏</p><a class="product-source" href="https://am.lucinorganics.com/products/c" target="_blank" rel="noopener">Lucin Organics ↗</a></div>
+          <div class="product-actions"><button class="details-button" type="button" data-action="details">Подробнее</button><button class="add-button" type="button" data-action="add">В корзину</button></div>
         </article>
-        <article class="product-card">
+        <article class="product-card" data-product-id="laneige" tabindex="0" aria-label="Подробнее о LANEIGE Water Sleeping Mask">
           <div class="product-photo brand-photo"><img src="assets/laneige-water-sleeping-mask.jpg" alt="Ночная маска LANEIGE Water Sleeping Mask" loading="lazy"></div>
           <p class="product-kind">LANEIGE • K-Beauty</p>
           <h3>Water Sleeping Mask</h3>
           <p class="product-note">Увлажняющая ночная маска с ниацинамидом, 70 мл</p>
           <div class="product-meta"><p class="price">$33</p><a class="product-source" href="https://www.sephora.com/product/water-sleeping-mask-reform-repack-P518721" target="_blank" rel="noopener">Sephora ↗</a></div>
+          <div class="product-actions"><button class="details-button" type="button" data-action="details">Подробнее</button><button class="add-button" type="button" data-action="add">В корзину</button></div>
         </article>
       </div>
     </section>
@@ -67,33 +71,37 @@
     <section class="product-section" id="makeup" aria-labelledby="makeup-title">
       <h2 id="makeup-title">Декоративная косметика</h2>
       <div class="product-grid">
-        <article class="product-card">
+        <article class="product-card" data-product-id="rare" tabindex="0" aria-label="Подробнее о Rare Beauty Soft Pinch Liquid Blush">
           <div class="product-photo brand-photo"><img src="assets/rare-beauty-soft-pinch-blush.jpg" alt="Жидкие румяна Rare Beauty Soft Pinch" loading="lazy"></div>
           <p class="product-kind">Rare Beauty • Румяна</p>
           <h3>Soft Pinch Liquid Blush</h3>
           <p class="product-note">Жидкие румяна, оттенок Virtue, 7,5 мл</p>
           <div class="product-meta"><p class="price">$25</p><a class="product-source" href="https://www.sephora.com/product/rare-beauty-by-selena-gomez-soft-pinch-liquid-blush-P97989778" target="_blank" rel="noopener">Sephora ↗</a></div>
+          <div class="product-actions"><button class="details-button" type="button" data-action="details">Подробнее</button><button class="add-button" type="button" data-action="add">В корзину</button></div>
         </article>
-        <article class="product-card">
+        <article class="product-card" data-product-id="fenty" tabindex="0" aria-label="Подробнее о Fenty Beauty Killawatt Freestyle Highlighter">
           <div class="product-photo brand-photo"><img src="assets/fenty-killawatt-highlighter.jpg" alt="Хайлайтер Fenty Beauty Killawatt" loading="lazy"></div>
           <p class="product-kind">Fenty Beauty • Хайлайтер</p>
           <h3>Killawatt Freestyle Highlighter</h3>
           <p class="product-note">Сияющий хайлайтер Wattabrat, 8 г</p>
           <div class="product-meta"><p class="price">$40</p><a class="product-source" href="https://www.sephora.com/product/killawatt-freestyle-highlighter-P64879845" target="_blank" rel="noopener">Sephora ↗</a></div>
+          <div class="product-actions"><button class="details-button" type="button" data-action="details">Подробнее</button><button class="add-button" type="button" data-action="add">В корзину</button></div>
         </article>
-        <article class="product-card">
+        <article class="product-card" data-product-id="urban" tabindex="0" aria-label="Подробнее о Urban Decay Naked3 Eyeshadow Palette">
           <div class="product-photo brand-photo"><img src="assets/urban-decay-naked3.jpg" alt="Палетка теней Urban Decay Naked3" loading="lazy"></div>
           <p class="product-kind">Urban Decay • Тени</p>
           <h3>Naked3 Eyeshadow Palette</h3>
           <p class="product-note">Палетка из 12 розово-нейтральных оттенков</p>
           <div class="product-meta"><p class="price">$59</p><a class="product-source" href="https://www.sephora.com/product/naked3-P384099" target="_blank" rel="noopener">Sephora ↗</a></div>
+          <div class="product-actions"><button class="details-button" type="button" data-action="details">Подробнее</button><button class="add-button" type="button" data-action="add">В корзину</button></div>
         </article>
-        <article class="product-card">
+        <article class="product-card" data-product-id="charlotte" tabindex="0" aria-label="Подробнее о Charlotte Tilbury Matte Revolution Lipstick">
           <div class="product-photo brand-photo"><img src="assets/charlotte-tilbury-pillow-talk.jpg" alt="Помада Charlotte Tilbury Matte Revolution" loading="lazy"></div>
           <p class="product-kind">Charlotte Tilbury • Помада</p>
           <h3>Matte Revolution Lipstick</h3>
           <p class="product-note">Матовая помада Pillow Talk Medium, 0,12 oz</p>
           <div class="product-meta"><p class="price">$37</p><a class="product-source" href="https://www.sephora.com/product/matte-revolution-lipstick-P433530" target="_blank" rel="noopener">Sephora ↗</a></div>
+          <div class="product-actions"><button class="details-button" type="button" data-action="details">Подробнее</button><button class="add-button" type="button" data-action="add">В корзину</button></div>
         </article>
       </div>
     </section>
@@ -101,9 +109,55 @@
     <a class="back-home-button" href="index.html">← Вернуться на главную</a>
   </main>
 
+  <dialog class="product-dialog" id="product-dialog" aria-labelledby="product-dialog-title">
+    <button class="dialog-close" type="button" data-close-dialog aria-label="Закрыть">×</button>
+    <div class="product-dialog-layout">
+      <div class="dialog-product-photo"><img id="dialog-product-image" src="" alt=""></div>
+      <div class="dialog-product-copy">
+        <p class="product-kind" id="dialog-product-brand"></p>
+        <h2 id="product-dialog-title"></h2>
+        <p class="dialog-lead" id="dialog-product-description"></p>
+        <dl class="product-facts" id="dialog-product-facts"></dl>
+        <div class="dialog-purchase"><strong id="dialog-product-price"></strong><button class="add-button" id="dialog-add-button" type="button">Добавить в корзину</button></div>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="cart-dialog" id="cart-dialog" aria-labelledby="cart-title">
+    <button class="dialog-close" type="button" data-close-cart aria-label="Закрыть">×</button>
+    <div class="cart-shell">
+      <header class="cart-heading"><p class="eyebrow">Ваш выбор</p><h2 id="cart-title">Корзина</h2></header>
+      <div class="cart-items" id="cart-items"></div>
+      <div class="cart-empty" id="cart-empty"><span aria-hidden="true">🛍️</span><p>Корзина пока пустая</p><small>Добавьте товары из каталога.</small></div>
+      <div class="cart-checkout" id="cart-checkout">
+        <div class="cart-totals" id="cart-totals"></div>
+        <form class="checkout-form" id="checkout-form" novalidate>
+          <h3>Оформление заказа</h3>
+          <p>Укажите имя и хотя бы один способ связи. Оплата подтверждается только после согласования заказа.</p>
+          <label>Имя<input id="customer-name" name="name" autocomplete="name" required></label>
+          <div class="contact-grid">
+            <label>Email<input id="customer-email" name="email" type="email" autocomplete="email" placeholder="name@example.com"></label>
+            <label>Телефон<input id="customer-phone" name="phone" type="tel" autocomplete="tel" placeholder="+374 …"></label>
+          </div>
+          <label>Комментарий<textarea id="customer-comment" name="comment" rows="3" placeholder="Например, удобное время для связи"></textarea></label>
+          <p class="form-error" id="form-error" role="alert"></p>
+          <p class="checkout-note">Демонстрационный режим: заказ сохранится в этом браузере. Автоматическое письмо или SMS подключается отдельно через сервис отправки.</p>
+          <button class="checkout-button" type="submit">Оформить заказ</button>
+        </form>
+      </div>
+      <div class="order-success" id="order-success" hidden>
+        <span aria-hidden="true">✓</span>
+        <h3>Заказ создан</h3>
+        <p id="order-success-text"></p>
+        <button class="secondary-action" type="button" data-close-cart>Вернуться в каталог</button>
+      </div>
+    </div>
+  </dialog>
+
   <footer>
     <span>Aura Beauty</span>
     <span>Профессиональная косметика для ухода и красоты</span>
   </footer>
+  <script src="app.js?v=cart-1" defer></script>
 </body>
 </html>

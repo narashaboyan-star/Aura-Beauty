@@ -228,6 +228,21 @@ const productLocales = {
   }
 };
 
+const productLocalesHy = {
+  ordinary: {brand: "The Ordinary", note: "Յուղայնությունը վերահսկող շիճուկ, 30 մլ", description: "Թեթև ջրային շիճուկ՝ տեսանելի ծակոտիների, անհարթ հյուսվածքի և ավելորդ յուղայնության համար։", facts: [["Ծավալ", "30 մլ"], ["Ակտիվներ", "Նիացինամիդ 10%, ցինկ 1%"], ["Հարմար է", "Բոլոր տեսակի մաշկերի համար"], ["Կիրառում", "Մի քանի կաթիլ՝ առավոտյան և երեկոյան, կրեմից առաջ"]], ingredients: "Հիմնական բաղադրիչներ՝ 10% նիացինամիդ, Zinc PCA, պենտիլեն գլիկոլ և թամարինդի խեժ։ Առանց բույրի և յուղերի։"},
+  lucin: {brand: "Lucin Organics", note: "Շիճուկ՝ 15% կայունացված վիտամին C-ով, 30 մլ", description: "Հայկական օրգանական շիճուկ՝ մաշկի փայլի և ավելի հավասար երանգի համար։", facts: [["Ծավալ", "30 մլ"], ["Ակտիվ", "15% կայունացված վիտամին C"], ["Արդյունք", "Փայլ, վերականգնում և հավասար երանգ"], ["Կիրառում", "Կրեմից առաջ՝ առավոտյան կամ երեկոյան"]], ingredients: "Հիմնական բաղադրիչներ՝ 15% կայունացված վիտամին C, ժոժոբայի, մասուրի, սկվալանի և կակայ յուղեր, վիտամին E ու բուսական քաղվածքներ։ Պարունակում է գրեյպֆրուտի և լայմի եթերայուղեր․ զգայուն մաշկի դեպքում փորձարկեք փոքր հատվածում։"},
+  laneige: {brand: "LANEIGE • K-Beauty", note: "Խոնավեցնող գիշերային դիմակ, 70 մլ", description: "Կորեական գելային գիշերային դիմակ՝ ինտենսիվ խոնավեցման և մաշկի պաշտպանիչ շերտի համար։", facts: [["Ծավալ", "70 մլ"], ["Բաղադրիչներ", "Սկվալան, բետա-գլյուկան և խոնավեցնող համալիր"], ["Հարմար է", "Նորմալ, չոր, համակցված և յուղոտ մաշկի համար"], ["Կիրառում", "Երեկոյան խնամքի վերջին փուլում"]], ingredients: "Հիմնական բաղադրիչներ՝ սկվալան, գլիցերին, բետա-գլյուկան և պրոբիոտիկներից ստացված համալիր։ Կարող է պարունակել բուրավետիչ։"},
+  cosrx: {brand: "COSRX • K-Beauty", note: "Էսենցիա՝ 96,3% խխունջի մուցինով, 100 մլ", description: "Թեթև կորեական էսենցիա՝ խորը խոնավեցման, ավելի հարթ հյուսվածքի և մաշկի պատնեշի համար։", facts: [["Ծավալ", "100 մլ"], ["Ակտիվ", "96,3% խխունջի սեկրեցիայի ֆիլտրատ"], ["Լրացուցիչ", "Ալանտոին, պանտենոլ և նատրիումի հիալուրոնատ"], ["Կիրառում", "Մաքրումից և տոնիկից հետո, կրեմից առաջ"]], ingredients: "Հիմնական բաղադրիչներ՝ 96,3% խխունջի սեկրեցիայի ֆիլտրատ, բետաին, բուտիլեն գլիկոլ, նատրիումի հիալուրոնատ, պանտենոլ, ալանտոին և արգինին։"},
+  rare: {brand: "Rare Beauty • Կարմրաներկ", note: "Հեղուկ կարմրաներկ, 7,5 մլ — ընտրեք երանգը", description: "Թեթև և հագեցած հեղուկ կարմրաներկ․ մեկ փոքր կաթիլը բավարար է բնական թարմ գույնի համար։", facts: [["Ծավալ", "7,5 մլ"], ["Վերջնարդյունք", "Փայլատ կամ փայլուն՝ ըստ երանգի"], ["Դիմացկունություն", "Մինչև 12 ժամ"], ["Կիրառում", "Մեկ կաթիլ և տարածել մատներով կամ վրձնով"]], ingredients: "Բանաձևը տարբերվում է ըստ երանգի։ Հիմքում կան թեթև էմոլիենտներ, սիլիկոններ և պիգմենտներ, ինչպես նաև ջրաշուշանի, գարդենիայի և լոտոսի քաղվածքներ։"},
+  fenty: {brand: "Fenty Beauty • Հայլայթեր", note: "Փայլուն հայլայթեր, 7,5 գ — ընտրեք երանգը", description: "Դիմացկուն կրեմ-փոշի հայլայթեր՝ այտոսկրերի, աչքերի և անրակների համար։", facts: [["Քաշ", "7,5 գ՝ մեկ երանգի համար"], ["Վերջնարդյունք", "Նուրբից մինչև վառ փայլ"], ["Բանաձև", "Կրեմ-փոշի"], ["Կիրառում", "Քսել վրձնով կամ մատներով"]], ingredients: "Բաղադրությունը տարբերվում է ըստ երանգի և կարող է ներառել սինթետիկ միկա, էմոլիենտներ, սիլիկոններ և գունանյութեր։"},
+  urban: {brand: "Urban Decay • Ստվերաներկ", note: "12 վարդագույն-չեզոք երանգների ներկապնակ", description: "Վարդագույն-չեզոք ներկապնակ՝ առօրյա կամ արտահայտիչ երեկոյան դիմահարդարման համար։", facts: [["Հավաքածու", "12 երանգ և երկկողմանի վրձին"], ["Գույներ", "Վարդագույն, բեժ, պղնձագույն և սալորագույն"], ["Վերջնարդյունք", "Փայլատ և փայլուն"], ["Կիրառում", "Միավորել բաց հիմքային և մուգ շեշտադրող երանգները"]], ingredients: "12 երանգներից յուրաքանչյուրն ունի իր բաղադրությունը։ Կարող են լինել միկա, սիլիկա, էմոլիենտներ և հանքային կամ սինթետիկ պիգմենտներ։"},
+  charlotte: {brand: "Charlotte Tilbury • Շրթներկ", note: "Փայլատ շրթներկ, 3,5 գ — ընտրեք երանգը", description: "Հարմարավետ և դիմացկուն փայլատ շրթներկ՝ շերտավորվող գույնով։", facts: [["Քաշ", "3,5 գ"], ["Վերջնարդյունք", "Ժամանակակից փայլատ"], ["Բանաձև", "Խոլորձի և Lipstick Tree քաղվածքներով"], ["Կիրառում", "Ուղիղ շրթներկից կամ վրձնով"]], ingredients: "Հիմնական բաղադրիչներ՝ մոմեր և էմոլիենտներ, խոլորձի ու Lipstick Tree քաղվածքներ և պիգմենտներ։ Բաղադրությունը տարբերվում է ըստ երանգի։"},
+  clinique: {brand: "Clinique • Շուրթեր", note: "Թափանցիկ շուրթերի գույն — երեք Honey երանգ", description: "Թեթև, կիսաթափանցիկ բանաձև՝ շրթներկի և փայլի միջև, որը շերտավորվում է բնական գույնի վրա։", facts: [["Քաշ", "1,9 գ"], ["Վերջնարդյունք", "Կիսաթափանցիկ, նուրբ փայլով"], ["Արդյունք", "Թեթևից մինչև ավելի հագեցած գույն"], ["Կիրառում", "Մեկ շերտ կամ մի քանի շերտ՝ խորության համար"]], ingredients: "Փափկեցնող յուղերի, մոմերի և պիգմենտների խառնուրդ։ Բրենդը նշում է 95% խնամող բաղադրիչ և բույրի բացակայություն։"},
+  nars: {brand: "NARS • Քողարկիչ", note: "Փայլուն կրեմային քողարկիչ — ընտրեք երանգը", description: "Կրեմային հեղուկ քողարկիչ՝ միջին և շերտավորվող ծածկույթով աչքերի տակ ու տեղային ուղղման համար։", facts: [["Ծավալ", "6 մլ"], ["Ծածկույթ", "Միջին, շերտավորվող"], ["Վերջնարդյունք", "Փայլուն"], ["Դիմացկունություն", "Մինչև 16 ժամ՝ ըստ բրենդի"]], ingredients: "Հիմնական բաղադրիչներ՝ ջուր, դիմետիկոն, փափկեցնող և խոնավեցնող բաղադրիչներ ու պիգմենտներ։ Գունանյութերը տարբերվում են ըստ երանգի։"},
+  beautyblender: {brand: "Beautyblender • Սպունգ", note: "Բազմակի օգտագործման սպունգ՝ տոնայինի և քողարկիչի համար", description: "Փափուկ, լատեքս չպարունակող սպունգ՝ տոնայինի, քողարկիչի և կրեմային միջոցների հավասար տարածման համար։", facts: [["Նյութ", "Փափուկ փրփուր՝ առանց լատեքսի"], ["Հարմար է", "Հեղուկ, կրեմային և փոշային հյուսվածքների համար"], ["Կիրառում", "Թրջել, քամել և քսել թեթև հարվածներով"], ["Խնամք", "Մաքրել օգտագործումից հետո և չորացնել օդում"]], ingredients: "Սա գործիք է, ոչ թե կոսմետիկ բանաձև․ պատրաստված է լատեքս չպարունակող պոլիուրեթանային փրփուրից։"},
+  rareBrush: {brand: "Rare Beauty • Վրձին", note: "Փափուկ թեք վրձին՝ հեղուկ և կրեմային կարմրաներկի համար", description: "Փափուկ թեք վրձին, որը օգնում է հավասար տարածել պիգմենտավորված հեղուկ և կրեմային կարմրաներկը։", facts: [["Մազիկներ", "Սինթետիկ, տարբեր երկարության"], ["Ձև", "Թեք՝ այտերի ուրվագծին համապատասխան"], ["Հարմար է", "Հեղուկ և կրեմային բանաձևերի համար"], ["Կիրառում", "Տարածել թեթև հարվածող կամ շրջանաձև շարժումներով"]], ingredients: "Սա գործիք է՝ փափուկ սինթետիկ մազիկներով, մետաղական օղակով և բռնակով։ Լվացեք նուրբ միջոցով և չորացրեք հորիզոնական։"}
+};
+
 const storageKey = "auraBeautyCart";
 const orderStorageKey = "auraBeautyLastOrder";
 let cart = loadCart();
@@ -261,12 +276,17 @@ const productIngredients = document.querySelector("#dialog-product-ingredients")
 const productPhoto = document.querySelector("#dialog-product-photo");
 const photoShadePreview = document.querySelector("#photo-shade-preview");
 const photoShadeName = document.querySelector("#photo-shade-name");
+const courierSchedule = document.querySelector("#courier-schedule");
+const deliveryAddress = document.querySelector("#delivery-address");
+const deliveryDate = document.querySelector("#delivery-date");
+const deliveryTime = document.querySelector("#delivery-time");
 
-function tr(ru, en) {
-  return window.AuraPreferences.text(ru, en);
+function tr(ru, en, hy) {
+  return window.AuraPreferences.text(ru, en, hy);
 }
 
 function localProduct(productId) {
+  if (window.AuraPreferences.lang === "hy") return productLocalesHy[productId];
   return productLocales[productId][window.AuraPreferences.lang];
 }
 
@@ -276,6 +296,37 @@ function formattedPrice(value) {
 
 function shadeNote(shade) {
   if (window.AuraPreferences.lang === "ru") return shade.note || "";
+  if (window.AuraPreferences.lang === "hy") {
+    const hyNotes = {
+      "пыльно-лиловый, сияющий": "փայլուն մանուշակագույն-վարդագույն",
+      "нюдово-розовый, матовый": "փայլատ նյուդ-վարդագույն",
+      "холодный розовый, сияющий": "փայլուն սառը վարդագույն",
+      "бежево-персиковый, сияющий": "փայլուն բեժ-դեղձագույն",
+      "приглушённый персиковый, сияющий": "փայլուն մեղմ դեղձագույն",
+      "глубокий ягодный, матовый": "փայլատ խորը հատապտղային",
+      "сияющий розовый": "փայլուն վարդագույն",
+      "яркое золото": "վառ ոսկեգույն",
+      "рубиново-медный": "ռուբին-պղնձագույն",
+      "шампань и ледяное сияние": "շամպայն և սառցե փայլ",
+      "нежно-розовый дуэт": "նուրբ վարդագույն դուետ",
+      "нюдово-розовый": "նյուդ-վարդագույն",
+      "тёплый ягодно-розовый": "տաք հատապտղային-վարդագույն",
+      "золотисто-коралловый": "ոսկեգույն-մարջանագույն",
+      "пастельный ягодно-красный": "պաստելային հատապտղային-կարմիր",
+      "ягодно-розовый": "հատապտղային-վարդագույն",
+      "классический красный": "դասական կարմիր",
+      "мягкий прозрачный розовый": "նուրբ թափանցիկ վարդագույն",
+      "тёплый прозрачный нюд": "տաք թափանցիկ նյուդ",
+      "прозрачный ягодно-коричневый": "թափանցիկ հատապտղային-շագանակագույն",
+      "очень светлый, нейтральный": "շատ բաց, չեզոք",
+      "светлый, холодно-розовый": "բաց, սառը վարդագույն",
+      "светло-средний, нейтральный": "բաց-միջին, չեզոք",
+      "средний, золотистый": "միջին, ոսկեգույն",
+      "средне-тёмный, тёплый": "միջին-մուգ, տաք",
+      "тёмный, золотисто-оливковый": "մուգ, ոսկեգույն-ձիթապտղային"
+    };
+    return hyNotes[shade.note] || shade.note || "";
+  }
   const notes = {
     "пыльно-лиловый, сияющий": "dewy mauve",
     "нюдово-розовый, матовый": "matte nude pink",
@@ -317,7 +368,7 @@ function applyShadePreview(shade) {
   productPhoto.style.setProperty("--selected-shade", shade.color);
   productPhoto.classList.add("has-shade-preview");
   photoShadePreview.hidden = false;
-  photoShadeName.textContent = `${tr("Выбран", "Selected")}: ${shade.name}`;
+  photoShadeName.textContent = `${tr("Выбран", "Selected", "Ընտրված")}: ${shade.name}`;
 }
 
 function loadCart() {
@@ -337,7 +388,7 @@ function saveCart() {
 function updateCartCount() {
   const count = Object.values(cart).reduce((sum, quantity) => sum + quantity, 0);
   cartCount.textContent = count;
-  cartButton.setAttribute("aria-label", tr(`Корзина: ${count} товаров`, `Cart: ${count} items`));
+  cartButton.setAttribute("aria-label", tr(`Корзина: ${count} товаров`, `Cart: ${count} items`, `Զամբյուղ՝ ${count} ապրանք`));
 }
 
 function makeCartKey(productId, variant) {
@@ -383,11 +434,11 @@ function renderCart() {
     row.className = "cart-item";
     row.innerHTML = `
       <img src="${product.image}" alt="">
-      <div class="cart-item-copy"><strong>${product.name}</strong><small>${locale.brand}${variant ? `<br>${tr("Оттенок", "Shade")}: ${variant}` : ""}</small><span>${formattedPrice(product.price)}</span></div>
-      <div class="quantity-control" aria-label="${tr("Количество", "Quantity")} ${product.name}${variant ? `, ${tr("оттенок", "shade")} ${variant}` : ""}">
-        <button type="button" data-cart-action="decrease" data-cart-key="${key}" aria-label="${tr("Уменьшить количество", "Decrease quantity")}">−</button>
+      <div class="cart-item-copy"><strong>${product.name}</strong><small>${locale.brand}${variant ? `<br>${tr("Оттенок", "Shade", "Երանգ")}: ${variant}` : ""}</small><span>${formattedPrice(product.price)}</span></div>
+      <div class="quantity-control" aria-label="${tr("Количество", "Quantity", "Քանակ")} ${product.name}${variant ? `, ${tr("оттенок", "shade", "երանգ")} ${variant}` : ""}">
+        <button type="button" data-cart-action="decrease" data-cart-key="${key}" aria-label="${tr("Уменьшить количество", "Decrease quantity", "Նվազեցնել քանակը")}">−</button>
         <span>${quantity}</span>
-        <button type="button" data-cart-action="increase" data-cart-key="${key}" aria-label="${tr("Увеличить количество", "Increase quantity")}">+</button>
+        <button type="button" data-cart-action="increase" data-cart-key="${key}" aria-label="${tr("Увеличить количество", "Increase quantity", "Ավելացնել քանակը")}">+</button>
       </div>`;
     cartItems.append(row);
   });
@@ -395,13 +446,30 @@ function renderCart() {
   const total = entries.reduce((sum, {productId, quantity}) => sum + products[productId].price * quantity, 0);
 
   cartTotals.replaceChildren();
-  if (total) cartTotals.append(createTotal(tr("Итого", "Total"), formattedPrice(total)));
+  if (total) cartTotals.append(createTotal(tr("Товары", "Products", "Ապրանքներ"), formattedPrice(total)));
+  const delivery = checkoutForm?.elements.delivery?.value;
+  if (total && delivery === "courier") {
+    const courierUsd = 1000 / window.AuraPreferences.amdRate;
+    const courierPrice = window.AuraPreferences.currency === "AMD" ? "1 000 ֏" : formattedPrice(courierUsd);
+    cartTotals.append(createTotal(tr("Курьер", "Courier", "Սուրհանդակ"), courierPrice));
+    cartTotals.append(createTotal(tr("Итого", "Total", "Ընդամենը"), formattedPrice(total + courierUsd)));
+  } else if (total && delivery === "post") {
+    cartTotals.append(createTotal(tr("Доставка", "Delivery", "Առաքում"), tr("По тарифу почты", "Postal rate", "Փոստի սակագնով")));
+  }
 }
 
 function createTotal(label, value) {
   const row = document.createElement("div");
   row.innerHTML = `<span>${label}</span><strong>${value}</strong>`;
   return row;
+}
+
+function updateDeliveryFields() {
+  const courier = checkoutForm.elements.delivery.value === "courier";
+  courierSchedule.hidden = !courier;
+  deliveryDate.required = courier;
+  deliveryTime.required = courier;
+  renderCart();
 }
 
 function renderShadeOptions(product, preferredVariant = null) {
@@ -412,12 +480,12 @@ function renderShadeOptions(product, preferredVariant = null) {
   shadeArea.hidden = shades.length === 0;
   if (!shades.length) return;
 
-  shadeTitle.textContent = selectable.length ? tr("Выберите оттенок", "Choose a shade") : tr("Цвета палетки", "Palette shades");
+  shadeTitle.textContent = selectable.length ? tr("Выберите оттенок", "Choose a shade", "Ընտրեք երանգը") : tr("Цвета палетки", "Palette shades", "Ներկապնակի գույները");
   shadeOptions.setAttribute("role", selectable.length ? "radiogroup" : "list");
   const preferredIndex = selectable.findIndex((shade) => shade.name === preferredVariant);
   const selectedIndex = preferredIndex >= 0 ? preferredIndex : 0;
   activeVariant = selectable.length ? selectable[selectedIndex].name : null;
-  selectedShade.textContent = selectable.length ? `${selectable[selectedIndex].name} — ${shadeNote(selectable[selectedIndex])}` : tr("12 настоящих оттенков", "12 authentic shades");
+  selectedShade.textContent = selectable.length ? `${selectable[selectedIndex].name} — ${shadeNote(selectable[selectedIndex])}` : tr("12 настоящих оттенков", "12 authentic shades", "12 իրական երանգ");
   applyShadePreview(selectable.length ? selectable[selectedIndex] : null);
 
   shades.forEach((shade, index) => {
@@ -465,7 +533,7 @@ function openProduct(productId, preferredVariant = null) {
   document.querySelector("#dialog-product-price").textContent = formattedPrice(product.price);
   productIngredients.textContent = locale.ingredients;
   dialogAddButton.disabled = !Number.isFinite(product.price);
-  dialogAddButton.textContent = Number.isFinite(product.price) ? tr("Добавить в корзину", "Add to cart") : tr("Сначала уточним цену", "Ask for the price first");
+  dialogAddButton.textContent = Number.isFinite(product.price) ? tr("Добавить в корзину", "Add to cart", "Ավելացնել զամբյուղ") : tr("Сначала уточним цену", "Ask for the price first", "Նախ ճշտել գինը");
   productSource.href = product.source;
   const facts = document.querySelector("#dialog-product-facts");
   facts.replaceChildren();
@@ -490,7 +558,7 @@ function openCart() {
 }
 
 function renderCatalog() {
-  document.title = tr("Товары — Aura Beauty", "Products — Aura Beauty");
+  document.title = tr("Товары — Aura Beauty", "Products — Aura Beauty", "Ապրանքներ — Aura Beauty");
   document.querySelectorAll(".product-card").forEach((card) => {
     const productId = card.dataset.productId;
     const product = products[productId];
@@ -498,13 +566,13 @@ function renderCatalog() {
     card.querySelector(".product-kind").textContent = locale.brand;
     card.querySelector(".product-note").textContent = locale.note;
     card.querySelector(".price").textContent = formattedPrice(product.price);
-    card.setAttribute("aria-label", tr(`Подробнее о ${product.name}`, `View details for ${product.name}`));
-    card.querySelector('[data-action="details"]').textContent = tr("Подробнее", "Details");
+    card.setAttribute("aria-label", tr(`Подробнее о ${product.name}`, `View details for ${product.name}`, `${product.name} մանրամասներ`));
+    card.querySelector('[data-action="details"]').textContent = tr("Подробнее", "Details", "Մանրամասներ");
     const purchase = card.querySelector('[data-action="add"], [data-action="choose"]');
-    if (purchase.dataset.action === "add") purchase.textContent = tr("В корзину", "Add to cart");
-    else if (productId === "clinique") purchase.textContent = tr("Посмотреть оттенки", "View shades");
-    else if (productId === "nars") purchase.textContent = tr("Посмотреть тона", "View shades");
-    else purchase.textContent = tr("Выбрать оттенок", "Choose shade");
+    if (purchase.dataset.action === "add") purchase.textContent = tr("В корзину", "Add to cart", "Զամբյուղ");
+    else if (productId === "clinique") purchase.textContent = tr("Посмотреть оттенки", "View shades", "Դիտել երանգները");
+    else if (productId === "nars") purchase.textContent = tr("Посмотреть тона", "View shades", "Դիտել երանգները");
+    else purchase.textContent = tr("Выбрать оттенок", "Choose shade", "Ընտրել երանգը");
   });
 }
 
@@ -515,7 +583,7 @@ document.querySelectorAll(".product-card").forEach((card) => {
       event.stopPropagation();
       addToCart(card.dataset.productId, null);
       const original = action.textContent;
-      action.textContent = tr("Добавлено ✓", "Added ✓");
+      action.textContent = tr("Добавлено ✓", "Added ✓", "Ավելացված է ✓");
       window.setTimeout(() => { action.textContent = original; }, 900);
       return;
     }
@@ -556,6 +624,9 @@ cartItems.addEventListener("click", (event) => {
   if (event.target === dialog) dialog.close();
 }));
 
+checkoutForm.querySelectorAll('input[name="delivery"]').forEach((radio) => radio.addEventListener("change", updateDeliveryFields));
+deliveryDate.min = new Date().toISOString().slice(0, 10);
+
 checkoutForm.addEventListener("submit", (event) => {
   event.preventDefault();
   formError.textContent = "";
@@ -564,25 +635,40 @@ checkoutForm.addEventListener("submit", (event) => {
   const phone = document.querySelector("#customer-phone").value.trim();
   const email = emailInput.value.trim();
   const paymentMethod = checkoutForm.elements.payment.value;
+  const deliveryMethod = checkoutForm.elements.delivery.value;
   const paymentLabels = {
-    "payment-link": tr("банковская карта по защищённой ссылке", "bank card via secure link"),
-    "on-receipt": tr("оплата при получении", "payment on receipt"),
-    "bank-transfer": tr("банковский перевод", "bank transfer")
+    "payment-link": tr("банковская карта по защищённой ссылке", "bank card via secure link", "բանկային քարտ՝ ապահով հղմամբ"),
+    "on-receipt": tr("оплата при получении", "payment on receipt", "վճարում ստանալիս"),
+    "bank-transfer": tr("банковский перевод", "bank transfer", "բանկային փոխանցում")
+  };
+  const deliveryLabels = {
+    post: tr("почтой в марзы Армении, 2–5 рабочих дней", "post to Armenia’s regions, 2–5 business days", "փոստով՝ Հայաստանի մարզեր, 2–5 աշխատանքային օր"),
+    courier: tr(`курьером по адресу ${deliveryAddress.value.trim()}, ${deliveryDate.value} в ${deliveryTime.value}`, `courier to ${deliveryAddress.value.trim()}, ${deliveryDate.value} at ${deliveryTime.value}`, `սուրհանդակով՝ ${deliveryAddress.value.trim()} հասցեով, ${deliveryDate.value}, ժամը ${deliveryTime.value}`)
   };
 
   if (!name) {
-    formError.textContent = tr("Укажите имя.", "Enter your name.");
+    formError.textContent = tr("Укажите имя.", "Enter your name.", "Նշեք ձեր անունը։");
     document.querySelector("#customer-name").focus();
     return;
   }
   if (!email && !phone) {
-    formError.textContent = tr("Укажите email или номер телефона.", "Enter an email address or phone number.");
+    formError.textContent = tr("Укажите email или номер телефона.", "Enter an email address or phone number.", "Նշեք էլ․ փոստը կամ հեռախոսահամարը։");
     emailInput.focus();
     return;
   }
   if (email && !emailInput.validity.valid) {
-    formError.textContent = tr("Проверьте адрес электронной почты.", "Check the email address.");
+    formError.textContent = tr("Проверьте адрес электронной почты.", "Check the email address.", "Ստուգեք էլ․ փոստի հասցեն։");
     emailInput.focus();
+    return;
+  }
+  if (!deliveryAddress.value.trim()) {
+    formError.textContent = tr("Укажите адрес доставки.", "Enter a delivery address.", "Նշեք առաքման հասցեն։");
+    deliveryAddress.focus();
+    return;
+  }
+  if (deliveryMethod === "courier" && (!deliveryDate.value || !deliveryTime.value)) {
+    formError.textContent = tr("Выберите удобный день и время для курьера.", "Choose a preferred courier day and time.", "Ընտրեք սուրհանդակի հարմար օրը և ժամը։");
+    (!deliveryDate.value ? deliveryDate : deliveryTime).focus();
     return;
   }
 
@@ -592,6 +678,7 @@ checkoutForm.addEventListener("submit", (event) => {
     id: orderId,
     createdAt: new Date().toISOString(),
     customer: {name, email, phone, comment: document.querySelector("#customer-comment").value.trim()},
+    delivery: {method: deliveryMethod, address: deliveryAddress.value.trim(), date: deliveryDate.value, time: deliveryTime.value},
     paymentMethod,
     currency: window.AuraPreferences.currency,
     items: entries.map(({productId, variant, quantity}) => ({id: productId, name: products[productId].name, variant, quantity, price: formattedPrice(products[productId].price)}))
@@ -601,14 +688,16 @@ checkoutForm.addEventListener("submit", (event) => {
   cart = {};
   saveCart();
   checkoutForm.reset();
+  updateDeliveryFields();
   cartItems.hidden = true;
   cartCheckout.hidden = true;
   cartEmpty.hidden = true;
   orderSuccess.hidden = false;
   const contact = email || phone;
   orderSuccessText.textContent = tr(
-    `Номер ${orderId}. Способ оплаты: ${paymentLabels[paymentMethod]}. Контакт для подтверждения: ${contact}. Заказ сохранён на этом устройстве.`,
-    `Order ${orderId}. Payment method: ${paymentLabels[paymentMethod]}. Confirmation contact: ${contact}. The order is saved on this device.`
+    `Номер ${orderId}. Доставка: ${deliveryLabels[deliveryMethod]}. Способ оплаты: ${paymentLabels[paymentMethod]}. Контакт для подтверждения: ${contact}. Заказ сохранён на этом устройстве.`,
+    `Order ${orderId}. Delivery: ${deliveryLabels[deliveryMethod]}. Payment method: ${paymentLabels[paymentMethod]}. Confirmation contact: ${contact}. The order is saved on this device.`,
+    `Պատվեր ${orderId}։ Առաքում՝ ${deliveryLabels[deliveryMethod]}։ Վճարման եղանակ՝ ${paymentLabels[paymentMethod]}։ Հաստատման կապ՝ ${contact}։ Պատվերը պահպանվել է այս սարքում։`
   );
 });
 
@@ -624,7 +713,7 @@ function addConsultantMessage(text, type = "assistant") {
   consultantChat.scrollTop = consultantChat.scrollHeight;
 }
 
-function showConsultantResults(recommendations, intro = tr("Подобрала два подходящих варианта. Откройте карточку, чтобы посмотреть состав, применение и цену.", "I found two suitable options. Open a card to see ingredients, directions and price.")) {
+function showConsultantResults(recommendations, intro = tr("Подобрала два подходящих варианта. Откройте карточку, чтобы посмотреть состав, применение и цену.", "I found two suitable options. Open a card to see ingredients, directions and price.", "Ընտրեցի երկու հարմար տարբերակ։ Բացեք քարտը՝ բաղադրությունը, կիրառումը և գինը տեսնելու համար։")) {
   addConsultantMessage(intro);
   const resultList = document.createElement("div");
   resultList.className = "consultant-results";
@@ -651,61 +740,68 @@ function showConsultantResults(recommendations, intro = tr("Подобрала �
 
 function answerConsultantQuestion(question) {
   const text = question.toLocaleLowerCase();
-  const asksForLips = /(помад|губ|lip|оттен)/.test(text);
-  const isLight = /(светл|бледн|fair|light)/.test(text);
-  const isMedium = /(средн|оливк|medium|olive)/.test(text);
-  const isDeep = /(смугл|т[её]мн|deep|dark)/.test(text);
+  const asksForLips = /(помад|губ|lip|оттен|շրթ|երանգ)/.test(text);
+  const isLight = /(светл|бледн|fair|light|բաց)/.test(text);
+  const isMedium = /(средн|оливк|medium|olive|միջին|ձիթապտղ)/.test(text);
+  const isDeep = /(смугл|т[её]мн|deep|dark|մուգ|թուխ)/.test(text);
 
   if (asksForLips && isLight) {
     showConsultantResults([
-      {id: "clinique", variant: "Pink Honey", reason: {ru: "мягкий прозрачный розовый для светлого тона кожи", en: "a soft sheer pink for fair skin"}},
-      {id: "charlotte", variant: "Pillow Talk Original", reason: {ru: "спокойный нюдово-розовый для повседневного макияжа", en: "an easy nude pink for everyday wear"}}
-    ], tr("Для светлой кожи я бы начала с мягких розовых оттенков. Они выглядят естественно и их легко наслаивать.", "For fair skin, I would start with soft pink shades. They look natural and are easy to build."));
+      {id: "clinique", variant: "Pink Honey", reason: {ru: "мягкий прозрачный розовый для светлого тона кожи", en: "a soft sheer pink for fair skin", hy: "նուրբ թափանցիկ վարդագույն՝ բաց մաշկի համար"}},
+      {id: "charlotte", variant: "Pillow Talk Original", reason: {ru: "спокойный нюдово-розовый для повседневного макияжа", en: "an easy nude pink for everyday wear", hy: "հանգիստ նյուդային վարդագույն՝ ամենօրյա դիմահարդարման համար"}}
+    ], tr("Для светлой кожи я бы начала с мягких розовых оттенков. Они выглядят естественно и их легко наслаивать.", "For fair skin, I would start with soft pink shades. They look natural and are easy to build.", "Բաց մաշկի համար խորհուրդ կտամ նուրբ վարդագույն երանգներ․ դրանք բնական են երևում և հեշտ են շերտավորվում։"));
     return;
   }
   if (asksForLips && isMedium) {
     showConsultantResults([
-      {id: "clinique", variant: "Nude Honey", reason: {ru: "тёплый прозрачный нюд", en: "a warm sheer nude"}},
-      {id: "charlotte", variant: "Pillow Talk Medium", reason: {ru: "выразительный тёплый розово-ягодный оттенок", en: "a richer warm berry pink"}}
-    ], tr("Для среднего или оливкового тона кожи подойдут более тёплые нюдовые и розово-ягодные оттенки.", "Medium or olive skin tones often suit warmer nudes and berry pinks."));
+      {id: "clinique", variant: "Nude Honey", reason: {ru: "тёплый прозрачный нюд", en: "a warm sheer nude", hy: "տաք, թափանցիկ նյուդ"}},
+      {id: "charlotte", variant: "Pillow Talk Medium", reason: {ru: "выразительный тёплый розово-ягодный оттенок", en: "a richer warm berry pink", hy: "արտահայտիչ տաք վարդագույն-հատապտղային երանգ"}}
+    ], tr("Для среднего или оливкового тона кожи подойдут более тёплые нюдовые и розово-ягодные оттенки.", "Medium or olive skin tones often suit warmer nudes and berry pinks.", "Միջին կամ ձիթապտղային մաշկի համար հարմար են ավելի տաք նյուդային և հատապտղային վարդագույն երանգները։"));
     return;
   }
   if (asksForLips && isDeep) {
     showConsultantResults([
-      {id: "clinique", variant: "Black Honey", reason: {ru: "полупрозрачный ягодно-коричневый цвет", en: "a sheer berry-brown tint"}},
-      {id: "charlotte", variant: "Walk of No Shame", reason: {ru: "глубокий ягодно-розовый оттенок", en: "a deep berry-pink shade"}}
-    ], tr("Для смуглой или тёмной кожи предлагаю насыщенные ягодные оттенки, которые сохраняют глубину цвета.", "For deep skin tones, try richer berry shades that keep their depth."));
+      {id: "clinique", variant: "Black Honey", reason: {ru: "полупрозрачный ягодно-коричневый цвет", en: "a sheer berry-brown tint", hy: "թափանցիկ հատապտղային-շագանակագույն երանգ"}},
+      {id: "charlotte", variant: "Walk of No Shame", reason: {ru: "глубокий ягодно-розовый оттенок", en: "a deep berry-pink shade", hy: "խորը հատապտղային վարդագույն երանգ"}}
+    ], tr("Для смуглой или тёмной кожи предлагаю насыщенные ягодные оттенки, которые сохраняют глубину цвета.", "For deep skin tones, try richer berry shades that keep their depth.", "Թուխ կամ մուգ մաշկի համար առաջարկում եմ հագեցած հատապտղային երանգներ։"));
     return;
   }
-  if (/(сух|обезвож|увлаж|dry|dehydrat|moistur)/.test(text)) {
-    showConsultantResults(["laneige", "cosrx"], tr("Для сухости и обезвоженности начните с увлажняющей эссенции и ночной маски.", "For dryness or dehydration, start with a hydrating essence and an overnight mask."));
+  if (/(сух|обезвож|увлаж|dry|dehydrat|moistur|չոր|խոնավ)/.test(text)) {
+    showConsultantResults(["laneige", "cosrx"], tr("Для сухости и обезвоженности начните с увлажняющей эссенции и ночной маски.", "For dryness or dehydration, start with a hydrating essence and an overnight mask.", "Չորության և ջրազրկման դեպքում սկսեք խոնավեցնող էսենցիայից և գիշերային դիմակից։"));
     return;
   }
-  if (/(жирн|комбинир|пор|ниацинамид|oily|combination|pore|niacinamide)/.test(text)) {
-    showConsultantResults(["ordinary", "cosrx"], tr("Для жирной или комбинированной кожи предлагаю лёгкие формулы без тяжёлого финиша.", "For oily or combination skin, try lightweight formulas without a heavy finish."));
+  if (/(жирн|комбинир|пор|ниацинамид|oily|combination|pore|niacinamide|յուղոտ|կոմբինացված|ծակոտի)/.test(text)) {
+    showConsultantResults(["ordinary", "cosrx"], tr("Для жирной или комбинированной кожи предлагаю лёгкие формулы без тяжёлого финиша.", "For oily or combination skin, try lightweight formulas without a heavy finish.", "Յուղոտ կամ կոմբինացված մաշկի համար առաջարկում եմ թեթև բանաձևեր՝ առանց ծանր վերջնարդյունքի։"));
     return;
   }
-  if (/(чувств|раздраж|покрасн|sensitive|irritat|redness)/.test(text)) {
-    showConsultantResults(["cosrx", "laneige"], tr("Для чувствительной кожи выбирайте мягкое увлажнение и обязательно проверяйте новый продукт на небольшом участке.", "For sensitive skin, choose gentle hydration and always patch-test a new product."));
+  if (/(чувств|раздраж|покрасн|sensitive|irritat|redness|զգայուն|գրգռ|կարմր)/.test(text)) {
+    showConsultantResults(["cosrx", "laneige"], tr("Для чувствительной кожи выбирайте мягкое увлажнение и обязательно проверяйте новый продукт на небольшом участке.", "For sensitive skin, choose gentle hydration and always patch-test a new product.", "Զգայուն մաշկի համար ընտրեք նուրբ խոնավեցում և նոր միջոցը նախ փորձարկեք փոքր հատվածում։"));
     return;
   }
-  if (/(кист|спонж|растуш|brush|sponge|blend)/.test(text)) {
-    showConsultantResults(["beautyblender", "rareBrush"], tr("Для ровной растушёвки собрала спонж для тона и кисть для жидких или кремовых румян.", "For even blending, here is a base sponge and a brush for liquid or cream blush."));
+  if (/(сияни|блеск|glow|radiant|փայլ|շող)/.test(text)) {
+    showConsultantResults(["lucin", "laneige"], tr("Для более свежего сияния предлагаю мягкое увлажнение и сыворотку. Наносите средства постепенно и используйте SPF днём.", "For a fresher glow, try gentle hydration and a serum. Introduce products gradually and wear SPF during the day.", "Թարմ փայլի համար առաջարկում եմ նուրբ խոնավեցում և շիճուկ։ Միջոցները ներմուծեք աստիճանաբար և ցերեկը օգտագործեք SPF։"));
+    return;
+  }
+  if (/(румян|хайлайт|blush|highlight|կարմրաներկ|հայլայթ)/.test(text)) {
+    showConsultantResults(["rare", "fenty"], tr("Для живого макияжа выбрала румяна и хайлайтер с наглядными вариантами оттенков.", "For a fresh makeup look, try this blush and highlighter with visible shade choices.", "Թարմ դիմահարդարման համար ընտրեցի կարմրաներկ և հայլայթեր՝ տեսանելի երանգներով։"));
+    return;
+  }
+  if (/(кист|спонж|растуш|brush|sponge|blend|վրձին|սպունգ|տուշ)/.test(text)) {
+    showConsultantResults(["beautyblender", "rareBrush"], tr("Для ровной растушёвки собрала спонж для тона и кисть для жидких или кремовых румян.", "For even blending, here is a base sponge and a brush for liquid or cream blush.", "Հավասար տարածման համար ընտրեցի տոնային սպունգ և հեղուկ կամ կրեմային կարմրաներկի վրձին։"));
     return;
   }
   if (asksForLips) {
-    addConsultantMessage(tr("Чтобы точнее выбрать помаду, напишите, какой у вас тон кожи: светлый, средний/оливковый или смуглый/тёмный.", "To narrow down lipstick shades, tell me whether your skin tone is fair, medium/olive or deep."));
+    addConsultantMessage(tr("Чтобы точнее выбрать помаду, напишите, какой у вас тон кожи: светлый, средний/оливковый или смуглый/тёмный.", "To narrow down lipstick shades, tell me whether your skin tone is fair, medium/olive or deep.", "Շրթներկն ավելի ճշգրիտ ընտրելու համար նշեք մաշկի երանգը՝ բաց, միջին/ձիթապտղային կամ թուխ/մուգ։"));
     consultantQuestionInput.focus();
     return;
   }
-  addConsultantMessage(tr("Я лучше всего отвечаю на вопросы о типе кожи, уходе, оттенках помады, кистях и спонжах. Например: «У меня светлая кожа — какая помада подойдёт?»", "I can help with skin types, skincare, lipstick shades, brushes and sponges. For example: “I have fair skin—which lipstick shade suits me?”"));
-  consultantQuestionInput.focus();
+  showConsultantResults(["ordinary", "rare"], tr("Я не хочу оставлять вопрос без ответа: начните с этих популярных вариантов. Для более точного совета напишите тип кожи, желаемый результат или оттенок.", "I do not want to leave your question unanswered, so start with these popular options. For a more precise suggestion, mention your skin type, desired result or shade.", "Չեմ ուզում հարցը թողնել անպատասխան․ սկսեք այս հայտնի տարբերակներից։ Ավելի ճշգրիտ խորհրդի համար նշեք մաշկի տեսակը, ցանկալի արդյունքը կամ երանգը։"));
 }
 
 function startConsultant() {
   consultantChat.replaceChildren();
   consultantQuestionInput.value = "";
-  addConsultantMessage(tr("Здравствуйте! Напишите свой вопрос о коже, оттенке или способе нанесения — я предложу подходящие товары из каталога.", "Hello! Ask your own question about skin, shades or application, and I’ll suggest suitable products from the catalog."));
+  addConsultantMessage(tr("Здравствуйте! Напишите свой вопрос о коже, оттенке или способе нанесения — я предложу подходящие товары из каталога.", "Hello! Ask your own question about skin, shades or application, and I’ll suggest suitable products from the catalog.", "Բարև՛։ Գրեք մաշկի, երանգի կամ կիրառման մասին ձեր հարցը, և ես կառաջարկեմ կատալոգի հարմար ապրանքներ։"));
   window.setTimeout(() => consultantQuestionInput.focus(), 0);
 }
 
@@ -736,4 +832,5 @@ document.addEventListener("aura:preferences", () => {
 
 renderCatalog();
 updateCartCount();
+updateDeliveryFields();
 renderCart();

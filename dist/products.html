@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Каталог профессиональной косметики Aura Beauty.">
   <title>Товары — Aura Beauty</title>
-  <link rel="stylesheet" href="styles.css?v=consultant-1">
+  <link rel="stylesheet" href="styles.css?v=i18n-1">
 </head>
 <body>
   <header class="site-header">
@@ -13,34 +13,38 @@
       <span class="brand-mark" aria-hidden="true">A</span>
       <span class="brand-copy">
         <strong>Aura Beauty</strong>
-        <small>Главный каталог косметики</small>
+        <small data-ru="Главный каталог косметики" data-en="Beauty essentials catalog">Главный каталог косметики</small>
       </span>
     </a>
     <nav class="main-nav" aria-label="Основная навигация">
-      <a href="index.html">Главная</a>
-      <a class="active" href="products.html">Товары</a>
-      <button class="cart-button" id="cart-button" type="button" aria-haspopup="dialog">Корзина <span class="cart-count" id="cart-count">0</span></button>
+      <a href="index.html" data-ru="Главная" data-en="Home">Главная</a>
+      <a class="active" href="products.html" data-ru="Товары" data-en="Products">Товары</a>
+      <button class="cart-button icon-cart-button" id="cart-button" type="button" aria-haspopup="dialog"><span class="cart-icon" aria-hidden="true">🛍️</span><span class="sr-only" data-ru="Корзина" data-en="Cart">Корзина</span><span class="cart-count" id="cart-count">0</span></button>
+      <div class="locale-controls" aria-label="Language and currency">
+        <div class="language-switch"><button type="button" data-lang="ru">RU</button><button type="button" data-lang="en">EN</button></div>
+        <select data-currency-select><option value="RUB">₽ RUB</option><option value="USD">$ USD</option></select>
+      </div>
     </nav>
   </header>
 
   <main class="catalog-page">
-    <a class="back-link" href="index.html"><span aria-hidden="true">←</span> На главную</a>
+    <a class="back-link" href="index.html"><span aria-hidden="true">←</span> <span data-ru="На главную" data-en="Back home">На главную</span></a>
     <header class="catalog-heading">
-      <a class="catalog-badge" href="#skincare">Каталог Aura Beauty <span aria-hidden="true">↓</span></a>
-      <h1>Товары</h1>
-      <p>Настоящие продукты известных брендов для ухода и макияжа — с понятными описаниями и ценами.</p>
+      <a class="catalog-badge" href="#skincare"><span data-ru="Каталог Aura Beauty" data-en="Aura Beauty catalog">Каталог Aura Beauty</span> <span aria-hidden="true">↓</span></a>
+      <h1 data-ru="Товары" data-en="Products">Товары</h1>
+      <p data-ru="Настоящие продукты известных брендов для ухода и макияжа — с понятными описаниями и ценами." data-en="Authentic skincare and makeup from well-known brands, with clear descriptions and prices.">Настоящие продукты известных брендов для ухода и макияжа — с понятными описаниями и ценами.</p>
     </header>
 
     <nav class="category-links" aria-label="Категории товаров">
-      <a href="#skincare">Уход за кожей</a>
-      <a href="#makeup">Макияж</a>
-      <a href="#tools">Кисти и аксессуары</a>
+      <a href="#skincare" data-ru="Уход за кожей" data-en="Skincare">Уход за кожей</a>
+      <a href="#makeup" data-ru="Макияж" data-en="Makeup">Макияж</a>
+      <a href="#tools" data-ru="Кисти и аксессуары" data-en="Brushes and tools">Кисти и аксессуары</a>
     </nav>
 
-    <p class="price-note"><strong>Все цены указаны в долларах США.</strong> Они совпадают с обычной ценой на официальном сайте каждого бренда на 19 октября 2026 года. Акции, налоги и доставка не включены.</p>
+    <p class="price-note" data-ru="Цены в USD совпадают с обычной ценой на официальном сайте бренда на 19 октября 2026 года. Цены в RUB являются ориентировочным пересчётом по курсу Банка России 83,6177 ₽ за $1 от 17 октября 2026 года. Акции, налоги и доставка не включены." data-en="USD prices match each brand’s regular official-site price as checked on October 19, 2026. RUB prices are estimates converted at the Bank of Russia rate of ₽83.6177 per $1 dated October 17, 2026. Promotions, taxes and delivery are not included.">Цены в USD совпадают с обычной ценой на официальном сайте бренда на 19 октября 2026 года. Цены в RUB являются ориентировочным пересчётом по курсу Банка России 83,6177 ₽ за $1 от 17 октября 2026 года. Акции, налоги и доставка не включены.</p>
 
     <section class="product-section" id="skincare" aria-labelledby="skincare-title">
-      <h2 id="skincare-title">Уход за кожей</h2>
+      <h2 id="skincare-title" data-ru="Уход за кожей" data-en="Skincare">Уход за кожей</h2>
       <div class="product-grid">
         <article class="product-card" data-product-id="ordinary" tabindex="0" aria-label="Подробнее о The Ordinary Niacinamide 10% + Zinc 1%">
           <div class="product-photo brand-photo"><img src="assets/the-ordinary-niacinamide.webp" alt="Сыворотка The Ordinary Niacinamide 10% + Zinc 1%" loading="lazy"></div>
@@ -78,7 +82,7 @@
     </section>
 
     <section class="product-section" id="makeup" aria-labelledby="makeup-title">
-      <h2 id="makeup-title">Декоративная косметика</h2>
+      <h2 id="makeup-title" data-ru="Декоративная косметика" data-en="Makeup">Декоративная косметика</h2>
       <div class="product-grid">
         <article class="product-card" data-product-id="rare" tabindex="0" aria-label="Подробнее о Rare Beauty Soft Pinch Liquid Blush">
           <div class="product-photo brand-photo"><img src="assets/rare-beauty-soft-pinch-blush.jpg" alt="Жидкие румяна Rare Beauty Soft Pinch" loading="lazy"></div>
@@ -132,7 +136,7 @@
     </section>
 
     <section class="product-section" id="tools" aria-labelledby="tools-title">
-      <h2 id="tools-title">Кисти и аксессуары</h2>
+      <h2 id="tools-title" data-ru="Кисти и аксессуары" data-en="Brushes and tools">Кисти и аксессуары</h2>
       <div class="product-grid">
         <article class="product-card" data-product-id="beautyblender" tabindex="0" aria-label="Подробнее о спонже Beautyblender Original">
           <div class="product-photo brand-photo"><img src="assets/beautyblender-original.png" alt="Розовый спонж Beautyblender Original в упаковке" loading="lazy"></div>
@@ -153,7 +157,7 @@
       </div>
     </section>
 
-    <a class="back-home-button" href="index.html">← Вернуться на главную</a>
+    <a class="back-home-button" href="index.html" data-ru="← Вернуться на главную" data-en="← Back to home">← Вернуться на главную</a>
   </main>
 
   <dialog class="product-dialog" id="product-dialog" aria-labelledby="product-dialog-title">
@@ -165,72 +169,78 @@
         <h2 id="product-dialog-title"></h2>
         <p class="dialog-lead" id="dialog-product-description"></p>
         <dl class="product-facts" id="dialog-product-facts"></dl>
+        <section class="ingredients-panel" aria-labelledby="ingredients-title">
+          <h3 id="ingredients-title" data-ru="Состав и важное" data-en="Ingredients and important notes">Состав и важное</h3>
+          <p id="dialog-product-ingredients"></p>
+          <small data-ru="Формулы могут обновляться, а состав оттенков — различаться. Перед покупкой проверьте полный INCI на упаковке или официальном сайте бренда." data-en="Formulas may be updated and shade ingredients can vary. Before purchase, check the complete INCI on the packaging or the brand’s official website.">Формулы могут обновляться, а состав оттенков — различаться. Перед покупкой проверьте полный INCI на упаковке или официальном сайте бренда.</small>
+        </section>
         <div class="shade-area" id="dialog-shade-area" hidden>
           <div class="shade-heading"><strong id="shade-title">Выберите оттенок</strong><span id="selected-shade"></span></div>
           <div class="shade-options" id="shade-options" role="radiogroup" aria-labelledby="shade-title"></div>
-          <small>Цвет на экране может немного отличаться. Названия оттенков соответствуют официальному сайту бренда.</small>
+          <small data-ru="Цвет на экране может немного отличаться. Названия оттенков соответствуют официальному сайту бренда." data-en="On-screen color may vary slightly. Shade names match the brand’s official website.">Цвет на экране может немного отличаться. Названия оттенков соответствуют официальному сайту бренда.</small>
         </div>
-        <a class="official-product-link" id="dialog-product-source" href="#" target="_blank" rel="noopener">Открыть на официальном сайте бренда ↗</a>
+        <a class="official-product-link" id="dialog-product-source" href="#" target="_blank" rel="noopener" data-ru="Открыть на официальном сайте бренда ↗" data-en="Open on the brand’s official website ↗">Открыть на официальном сайте бренда ↗</a>
         <div class="dialog-purchase"><strong id="dialog-product-price"></strong><button class="add-button" id="dialog-add-button" type="button">Добавить в корзину</button></div>
       </div>
     </div>
   </dialog>
 
-  <button class="consultant-launcher" id="consultant-launcher" type="button" aria-haspopup="dialog"><span aria-hidden="true">✦</span><span>Онлайн-консультант</span></button>
+  <button class="consultant-launcher" id="consultant-launcher" type="button" aria-haspopup="dialog"><span aria-hidden="true">✦</span><span data-ru="Онлайн-консультант" data-en="Beauty consultant">Онлайн-консультант</span></button>
 
   <dialog class="consultant-dialog" id="consultant-dialog" aria-labelledby="consultant-title">
     <button class="dialog-close" type="button" data-close-consultant aria-label="Закрыть">×</button>
     <div class="consultant-shell">
       <header class="consultant-heading">
         <span class="consultant-avatar" aria-hidden="true">A</span>
-        <div><p class="eyebrow">Aura Beauty</p><h2 id="consultant-title">Виртуальный консультант</h2></div>
+        <div><p class="eyebrow">Aura Beauty</p><h2 id="consultant-title" data-ru="Виртуальный консультант" data-en="Virtual consultant">Виртуальный консультант</h2></div>
       </header>
       <div class="consultant-chat" id="consultant-chat" aria-live="polite"></div>
       <form class="consultant-question" id="consultant-question-form">
-        <label for="consultant-question-input">Задайте свой вопрос</label>
-        <div><input id="consultant-question-input" type="text" autocomplete="off" placeholder="Например: у меня светлая кожа — какая помада подойдёт?" required><button type="submit" aria-label="Отправить вопрос">→</button></div>
+        <label for="consultant-question-input" data-ru="Задайте свой вопрос" data-en="Ask your question">Задайте свой вопрос</label>
+        <div><input id="consultant-question-input" type="text" autocomplete="off" data-placeholder-ru="Например: у меня светлая кожа — какая помада подойдёт?" data-placeholder-en="For example: I have fair skin—which lipstick shade suits me?" placeholder="Например: у меня светлая кожа — какая помада подойдёт?" required><button type="submit" aria-label="Отправить вопрос">→</button></div>
       </form>
       <div class="consultant-options" id="consultant-options"></div>
-      <button class="consultant-restart" id="consultant-restart" type="button" hidden>Начать заново</button>
-      <p class="consultant-note">Консультант подбирает товары из этого каталога и не заменяет совет врача. При чувствительной коже сначала сделайте тест на небольшом участке.</p>
+      <button class="consultant-restart" id="consultant-restart" type="button" hidden data-ru="Начать заново" data-en="Start over">Начать заново</button>
+      <p class="consultant-note" data-ru="Консультант подбирает товары из этого каталога и не заменяет совет врача. При чувствительной коже сначала сделайте тест на небольшом участке." data-en="The consultant recommends items from this catalog and does not replace medical advice. For sensitive skin, patch-test first.">Консультант подбирает товары из этого каталога и не заменяет совет врача. При чувствительной коже сначала сделайте тест на небольшом участке.</p>
     </div>
   </dialog>
 
   <dialog class="cart-dialog" id="cart-dialog" aria-labelledby="cart-title">
     <button class="dialog-close" type="button" data-close-cart aria-label="Закрыть">×</button>
     <div class="cart-shell">
-      <header class="cart-heading"><p class="eyebrow">Ваш выбор</p><h2 id="cart-title">Корзина</h2></header>
+      <header class="cart-heading"><p class="eyebrow" data-ru="Ваш выбор" data-en="Your selection">Ваш выбор</p><h2 id="cart-title" data-ru="Корзина" data-en="Cart">Корзина</h2></header>
       <div class="cart-items" id="cart-items"></div>
-      <div class="cart-empty" id="cart-empty"><span aria-hidden="true">🛍️</span><p>Корзина пока пустая</p><small>Добавьте товары из каталога.</small></div>
+      <div class="cart-empty" id="cart-empty"><span aria-hidden="true">🛍️</span><p data-ru="Корзина пока пустая" data-en="Your cart is empty">Корзина пока пустая</p><small data-ru="Добавьте товары из каталога." data-en="Add products from the catalog.">Добавьте товары из каталога.</small></div>
       <div class="cart-checkout" id="cart-checkout">
         <div class="cart-totals" id="cart-totals"></div>
         <form class="checkout-form" id="checkout-form" novalidate>
-          <h3>Оформление заказа</h3>
-          <p>Укажите имя и хотя бы один способ связи. Оплата подтверждается только после согласования заказа.</p>
-          <label>Имя<input id="customer-name" name="name" autocomplete="name" required></label>
+          <h3 data-ru="Оформление заказа" data-en="Checkout">Оформление заказа</h3>
+          <p data-ru="Укажите имя и хотя бы один способ связи. Оплата подтверждается только после согласования заказа." data-en="Enter your name and at least one contact method. Payment is confirmed only after the order is agreed.">Укажите имя и хотя бы один способ связи. Оплата подтверждается только после согласования заказа.</p>
+          <label><span data-ru="Имя" data-en="Name">Имя</span><input id="customer-name" name="name" autocomplete="name" required></label>
           <div class="contact-grid">
             <label>Email<input id="customer-email" name="email" type="email" autocomplete="email" placeholder="name@example.com"></label>
-            <label>Телефон<input id="customer-phone" name="phone" type="tel" autocomplete="tel" placeholder="+374 …"></label>
+            <label><span data-ru="Телефон" data-en="Phone">Телефон</span><input id="customer-phone" name="phone" type="tel" autocomplete="tel" placeholder="+374 …"></label>
           </div>
-          <label>Комментарий<textarea id="customer-comment" name="comment" rows="3" placeholder="Например, удобное время для связи"></textarea></label>
+          <label><span data-ru="Комментарий" data-en="Comment">Комментарий</span><textarea id="customer-comment" name="comment" rows="3" data-placeholder-ru="Например, удобное время для связи" data-placeholder-en="For example, your preferred contact time" placeholder="Например, удобное время для связи"></textarea></label>
           <p class="form-error" id="form-error" role="alert"></p>
-          <p class="checkout-note">Демонстрационный режим: заказ сохранится в этом браузере. Автоматическое письмо или SMS подключается отдельно через сервис отправки.</p>
-          <button class="checkout-button" type="submit">Оформить заказ</button>
+          <p class="checkout-note" data-ru="Демонстрационный режим: заказ сохранится в этом браузере. Автоматическое письмо или SMS подключается отдельно через сервис отправки." data-en="Demo mode: the order is saved in this browser. Automatic email or SMS requires a separate delivery service.">Демонстрационный режим: заказ сохранится в этом браузере. Автоматическое письмо или SMS подключается отдельно через сервис отправки.</p>
+          <button class="checkout-button" type="submit" data-ru="Оформить заказ" data-en="Place order">Оформить заказ</button>
         </form>
       </div>
       <div class="order-success" id="order-success" hidden>
         <span aria-hidden="true">✓</span>
-        <h3>Заказ создан</h3>
+        <h3 data-ru="Заказ создан" data-en="Order created">Заказ создан</h3>
         <p id="order-success-text"></p>
-        <button class="secondary-action" type="button" data-close-cart>Вернуться в каталог</button>
+        <button class="secondary-action" type="button" data-close-cart data-ru="Вернуться в каталог" data-en="Back to catalog">Вернуться в каталог</button>
       </div>
     </div>
   </dialog>
 
   <footer>
     <span>Aura Beauty</span>
-    <span>Профессиональная косметика для ухода и красоты</span>
+    <span data-ru="Профессиональная косметика для ухода и красоты" data-en="Professional skincare and beauty products">Профессиональная косметика для ухода и красоты</span>
   </footer>
-  <script src="app.js?v=consultant-1" defer></script>
+  <script src="site.js?v=i18n-1" defer></script>
+  <script src="app.js?v=i18n-1" defer></script>
 </body>
 </html>

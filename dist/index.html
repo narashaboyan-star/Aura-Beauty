@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Aura Beauty — профессиональная косметика для ухода и красоты.">
   <title>Aura Beauty — профессиональная косметика</title>
-  <link rel="stylesheet" href="styles.css?v=cards-1">
+  <link rel="stylesheet" href="styles.css?v=i18n-1">
 </head>
 <body>
   <header class="site-header">
@@ -13,22 +13,26 @@
       <span class="brand-mark" aria-hidden="true">A</span>
       <span class="brand-copy">
         <strong>Aura Beauty</strong>
-        <small>Главный каталог косметики</small>
+        <small data-ru="Главный каталог косметики" data-en="Beauty essentials catalog">Главный каталог косметики</small>
       </span>
     </a>
     <nav class="main-nav" aria-label="Основная навигация">
-      <a class="active" href="index.html">Главная</a>
-      <a href="products.html">Товары</a>
+      <a class="active" href="index.html" data-ru="Главная" data-en="Home">Главная</a>
+      <a href="products.html" data-ru="Товары" data-en="Products">Товары</a>
+      <div class="locale-controls" aria-label="Language and currency">
+        <div class="language-switch"><button type="button" data-lang="ru">RU</button><button type="button" data-lang="en">EN</button></div>
+        <select data-currency-select><option value="RUB">₽ RUB</option><option value="USD">$ USD</option></select>
+      </div>
     </nav>
   </header>
 
   <main>
     <section class="hero">
       <div class="hero-copy">
-        <p class="eyebrow">Aura Beauty • профессиональная косметика</p>
-        <h1>Красота, в которую легко влюбиться</h1>
-        <p class="hero-text">Уход за кожей и декоративная косметика известных брендов — в одном понятном и красивом каталоге.</p>
-        <a class="primary-button" href="products.html">Смотреть товары <span aria-hidden="true">→</span></a>
+        <p class="eyebrow" data-ru="Aura Beauty • профессиональная косметика" data-en="Aura Beauty • professional cosmetics">Aura Beauty • профессиональная косметика</p>
+        <h1 data-ru="Красота, в которую легко влюбиться" data-en="Beauty made easy to love">Красота, в которую легко влюбиться</h1>
+        <p class="hero-text" data-ru="Уход за кожей и декоративная косметика известных брендов — в одном понятном и красивом каталоге." data-en="Skincare and makeup from well-known brands in one clear, beautiful catalog.">Уход за кожей и декоративная косметика известных брендов — в одном понятном и красивом каталоге.</p>
+        <a class="primary-button" href="products.html"><span data-ru="Смотреть товары" data-en="Shop products">Смотреть товары</span> <span aria-hidden="true">→</span></a>
       </div>
       <div class="hero-art">
         <img class="hero-photo" src="assets/hero-products.png" alt="Уходовая косметика и помада в спокойных ягодных оттенках">
@@ -38,59 +42,60 @@
     <section class="category-section" aria-labelledby="category-title">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">Выберите своё</p>
-          <h2 id="category-title">Всё для ежедневного ухода и ярких образов</h2>
+          <p class="eyebrow" data-ru="Выберите своё" data-en="Choose yours">Выберите своё</p>
+          <h2 id="category-title" data-ru="Всё для ежедневного ухода и ярких образов" data-en="Everything for daily care and expressive looks">Всё для ежедневного ухода и ярких образов</h2>
         </div>
-        <a class="text-link" href="products.html">Все товары →</a>
+        <a class="text-link" href="products.html" data-ru="Все товары →" data-en="All products →">Все товары →</a>
       </div>
 
       <div class="category-grid">
         <a class="category-card pink" href="products.html#skincare">
           <span class="category-visual" aria-hidden="true">
             <span class="category-icon">🧖‍♀️</span>
-            <span class="category-mini">Уход</span>
+            <span class="category-mini" data-ru="Уход" data-en="Skincare">Уход</span>
           </span>
-          <strong>Уход за кожей</strong>
-          <span>Сыворотки, маски и ежедневная забота</span>
+          <strong data-ru="Уход за кожей" data-en="Skincare">Уход за кожей</strong>
+          <span data-ru="Сыворотки, маски и ежедневная забота" data-en="Serums, masks and everyday care">Сыворотки, маски и ежедневная забота</span>
         </a>
         <a class="category-card lilac" href="products.html#skincare">
           <span class="category-visual" aria-hidden="true">
             <span class="category-icon">💧</span>
-            <span class="category-mini">Сыворотки</span>
+            <span class="category-mini" data-ru="Сыворотки" data-en="Serums">Сыворотки</span>
           </span>
-          <strong>Активный уход</strong>
-          <span>Ниацинамид, витамин C и увлажнение</span>
+          <strong data-ru="Активный уход" data-en="Targeted care">Активный уход</strong>
+          <span data-ru="Ниацинамид, витамин C и увлажнение" data-en="Niacinamide, vitamin C and hydration">Ниацинамид, витамин C и увлажнение</span>
         </a>
         <a class="category-card mint" href="products.html#makeup">
           <span class="category-visual" aria-hidden="true">
             <span class="category-icon">✨</span>
-            <span class="category-mini">Сияние</span>
+            <span class="category-mini" data-ru="Сияние" data-en="Glow">Сияние</span>
           </span>
-          <strong>Румяна и хайлайтеры</strong>
-          <span>Цвет и естественное сияние</span>
+          <strong data-ru="Румяна и хайлайтеры" data-en="Blush and highlighter">Румяна и хайлайтеры</strong>
+          <span data-ru="Цвет и естественное сияние" data-en="Color and natural-looking glow">Цвет и естественное сияние</span>
         </a>
         <a class="category-card peach" href="products.html#makeup">
           <span class="category-visual" aria-hidden="true">
             <span class="category-icon">💄</span>
-            <span class="category-mini">Образ</span>
+            <span class="category-mini" data-ru="Образ" data-en="Look">Образ</span>
           </span>
-          <strong>Глаза и губы</strong>
-          <span>Тени и помады известных брендов</span>
+          <strong data-ru="Глаза и губы" data-en="Eyes and lips">Глаза и губы</strong>
+          <span data-ru="Тени и помады известных брендов" data-en="Eyeshadow and lipstick from renowned brands">Тени и помады известных брендов</span>
         </a>
       </div>
     </section>
 
     <section class="promise">
-      <p class="eyebrow">Почему Aura Beauty</p>
-      <h2>Не просто красиво. Профессионально.</h2>
-      <p>Мы собираем качественную косметику для обычных покупателей, бьюти-энтузиастов и мастеров — без искусственного деления аудитории.</p>
-      <a class="secondary-button" href="products.html">Перейти в каталог</a>
+      <p class="eyebrow" data-ru="Почему Aura Beauty" data-en="Why Aura Beauty">Почему Aura Beauty</p>
+      <h2 data-ru="Не просто красиво. Профессионально." data-en="More than beautiful. Professional.">Не просто красиво. Профессионально.</h2>
+      <p data-ru="Мы собираем качественную косметику для обычных покупателей, бьюти-энтузиастов и мастеров — без искусственного деления аудитории." data-en="We curate quality cosmetics for everyday shoppers, beauty enthusiasts and professionals—without artificial labels.">Мы собираем качественную косметику для обычных покупателей, бьюти-энтузиастов и мастеров — без искусственного деления аудитории.</p>
+      <a class="secondary-button" href="products.html" data-ru="Перейти в каталог" data-en="Open catalog">Перейти в каталог</a>
     </section>
   </main>
 
   <footer>
     <span>Aura Beauty</span>
-    <span>Профессиональная косметика для ухода и красоты</span>
+    <span data-ru="Профессиональная косметика для ухода и красоты" data-en="Professional skincare and beauty products">Профессиональная косметика для ухода и красоты</span>
   </footer>
+  <script src="site.js?v=i18n-1" defer></script>
 </body>
 </html>

@@ -358,10 +358,18 @@ button.shade-option { cursor: pointer; }
 .consultant-launcher { position: fixed; z-index: 20; right: 18px; bottom: 66px; width: 138px; padding: 0; display: grid; justify-items: center; gap: 0; border: 0; background: transparent; color: white; cursor: pointer; font-weight: 800; filter: drop-shadow(0 14px 22px rgba(44, 28, 46, .22)); }
 .consultant-mini { width: 116px; height: 112px; display: grid; place-items: end center; overflow: hidden; border: 3px solid rgba(255,255,255,.92); border-radius: 50% 50% 44% 44%; background: linear-gradient(145deg, #f5e5e9, #fff9f3); box-shadow: 0 0 0 2px rgba(152,67,95,.18); transition: transform .2s ease; }
 .consultant-mini img { width: 126px; height: 116px; object-fit: contain; object-position: center bottom; }
+.consultant-wave { position: absolute; z-index: 2; top: 18px; right: 2px; width: 38px; height: 38px; display: grid; place-items: center; border: 2px solid white; border-radius: 50%; background: #fff7ed; font-size: 1.35rem; transform-origin: 65% 80%; animation: consultant-wave 1s ease-in-out 3; box-shadow: 0 8px 18px rgba(44,28,46,.18); }
 .consultant-callout { margin-top: -5px; padding: 9px 15px; border: 2px solid white; border-radius: 999px; background: var(--ink); white-space: nowrap; font-size: .76rem; box-shadow: 0 10px 22px rgba(44,28,46,.22); }
 .consultant-launcher:hover .consultant-mini, .consultant-launcher:focus-visible .consultant-mini { transform: translateY(-4px) rotate(-1deg); }
+.consultant-launcher:hover .consultant-wave, .consultant-launcher:focus-visible .consultant-wave { animation: consultant-wave .85s ease-in-out infinite; }
 .consultant-launcher:hover .consultant-callout, .consultant-launcher:focus-visible .consultant-callout { background: var(--pink-dark); }
 .consultant-launcher:focus-visible { outline: 3px solid rgba(152,67,95,.28); outline-offset: 6px; border-radius: 32px; }
+@keyframes consultant-wave {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(18deg) scale(1.08); }
+  50% { transform: rotate(-10deg) scale(1.04); }
+  75% { transform: rotate(16deg) scale(1.08); }
+}
 .consultant-dialog { width: min(560px, calc(100% - 28px)); max-height: 88vh; margin: 5vh auto auto; border-radius: 32px; background: var(--paper); box-shadow: 0 26px 90px rgba(33,21,34,.3); }
 .consultant-shell { max-height: 88vh; padding: 34px; overflow-y: auto; }
 .consultant-heading { padding-right: 50px; display: flex; align-items: center; gap: 14px; }
@@ -451,6 +459,7 @@ button.shade-option { cursor: pointer; }
   .consultant-launcher { right: 10px; bottom: 68px; width: 92px; }
   .consultant-mini { width: 82px; height: 80px; }
   .consultant-mini img { width: 90px; height: 84px; }
+  .consultant-wave { top: 8px; right: -2px; width: 31px; height: 31px; font-size: 1rem; }
   .consultant-callout { padding: 7px 10px; font-size: .62rem; }
   .consultant-shell { padding: 28px 18px 22px; }
   .consultant-heading h2 { font-size: 1.4rem; }
@@ -458,5 +467,5 @@ button.shade-option { cursor: pointer; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  *, *::before, *::after { transition: none !important; }
+  *, *::before, *::after { transition: none !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }

@@ -255,11 +255,12 @@ const dialogAddButton = document.querySelector("#dialog-add-button");
 const consultantLauncher = document.querySelector("#consultant-launcher");
 const consultantDialog = document.querySelector("#consultant-dialog");
 const consultantChat = document.querySelector("#consultant-chat");
-const consultantOptions = document.querySelector("#consultant-options");
-const consultantRestart = document.querySelector("#consultant-restart");
 const consultantQuestionForm = document.querySelector("#consultant-question-form");
 const consultantQuestionInput = document.querySelector("#consultant-question-input");
 const productIngredients = document.querySelector("#dialog-product-ingredients");
+const productPhoto = document.querySelector("#dialog-product-photo");
+const photoShadePreview = document.querySelector("#photo-shade-preview");
+const photoShadeName = document.querySelector("#photo-shade-name");
 
 function tr(ru, en) {
   return window.AuraPreferences.text(ru, en);
@@ -304,6 +305,19 @@ function shadeNote(shade) {
     "тёмный, золотисто-оливковый": "deep, golden olive"
   };
   return notes[shade.note] || shade.note || "";
+}
+
+function applyShadePreview(shade) {
+  if (!shade) {
+    productPhoto.classList.remove("has-shade-preview");
+    productPhoto.style.removeProperty("--selected-shade");
+    photoShadePreview.hidden = true;
+    return;
+  }
+  productPhoto.style.setProperty("--selected-shade", shade.color);
+  productPhoto.classList.add("has-shade-preview");
+  photoShadePreview.hidden = false;
+  photoShadeName.textContent = `${tr("Выбран", "Selected")}: ${shade.name}`;
 }
 
 function loadCart() {
@@ -404,6 +418,7 @@ function renderShadeOptions(product, preferredVariant = null) {
   const selectedIndex = preferredIndex >= 0 ? preferredIndex : 0;
   activeVariant = selectable.length ? selectable[selectedIndex].name : null;
   selectedShade.textContent = selectable.length ? `${selectable[selectedIndex].name} — ${shadeNote(selectable[selectedIndex])}` : tr("12 настоящих оттенков", "12 authentic shades");
+  applyShadePreview(selectable.length ? selectable[selectedIndex] : null);
 
   shades.forEach((shade, index) => {
     const item = document.createElement(selectable.length ? "button" : "div");
@@ -420,6 +435,7 @@ function renderShadeOptions(product, preferredVariant = null) {
       item.addEventListener("click", () => {
         activeVariant = shade.name;
         selectedShade.textContent = `${shade.name} — ${shadeNote(shade)}`;
+        applyShadePreview(shade);
         shadeOptions.querySelectorAll(".shade-option").forEach((option) => {
           const isSelected = option === item;
           option.classList.toggle("selected", isSelected);
@@ -439,6 +455,7 @@ function openProduct(productId, preferredVariant = null) {
   const locale = localProduct(productId);
   activeProductId = productId;
   activeVariant = null;
+  applyShadePreview(null);
   const image = document.querySelector("#dialog-product-image");
   image.src = product.image;
   image.alt = `${locale.brand} ${product.name}`;
@@ -546,6 +563,12 @@ checkoutForm.addEventListener("submit", (event) => {
   const emailInput = document.querySelector("#customer-email");
   const phone = document.querySelector("#customer-phone").value.trim();
   const email = emailInput.value.trim();
+  const paymentMethod = checkoutForm.elements.payment.value;
+  const paymentLabels = {
+    "payment-link": tr("банковская карта по защищённой ссылке", "bank card via secure link"),
+    "on-receipt": tr("оплата при получении", "payment on receipt"),
+    "bank-transfer": tr("банковский перевод", "bank transfer")
+  };
 
   if (!name) {
     formError.textContent = tr("Укажите имя.", "Enter your name.");
@@ -569,6 +592,7 @@ checkoutForm.addEventListener("submit", (event) => {
     id: orderId,
     createdAt: new Date().toISOString(),
     customer: {name, email, phone, comment: document.querySelector("#customer-comment").value.trim()},
+    paymentMethod,
     currency: window.AuraPreferences.currency,
     items: entries.map(({productId, variant, quantity}) => ({id: productId, name: products[productId].name, variant, quantity, price: formattedPrice(products[productId].price)}))
   };
@@ -583,39 +607,10 @@ checkoutForm.addEventListener("submit", (event) => {
   orderSuccess.hidden = false;
   const contact = email || phone;
   orderSuccessText.textContent = tr(
-    `Номер ${orderId}. Контакт для подтверждения: ${contact}. Заказ сохранён на этом устройстве; автоматическая отправка будет подключена следующим этапом.`,
-    `Order ${orderId}. Confirmation contact: ${contact}. The order is saved on this device; automatic delivery will be connected in a later step.`
+    `Номер ${orderId}. Способ оплаты: ${paymentLabels[paymentMethod]}. Контакт для подтверждения: ${contact}. Заказ сохранён на этом устройстве.`,
+    `Order ${orderId}. Payment method: ${paymentLabels[paymentMethod]}. Confirmation contact: ${contact}. The order is saved on this device.`
   );
 });
-
-const consultantFlows = {
-  skincare: {
-    question: {ru: "Как бы вы описали кожу сейчас?", en: "How would you describe your skin right now?"},
-    options: [
-      {label: {ru: "Сухая или обезвоженная", en: "Dry or dehydrated"}, ids: ["laneige", "cosrx"]},
-      {label: {ru: "Жирная или комбинированная", en: "Oily or combination"}, ids: ["ordinary", "cosrx"]},
-      {label: {ru: "Тусклая, хочется сияния", en: "Dull, needs radiance"}, ids: ["lucin", "laneige"]},
-      {label: {ru: "Чувствительная", en: "Sensitive"}, ids: ["cosrx", "laneige"]}
-    ]
-  },
-  makeup: {
-    question: {ru: "Что хотите подобрать для макияжа?", en: "What would you like for your makeup routine?"},
-    options: [
-      {label: {ru: "Румяна", en: "Blush"}, ids: ["rare", "rareBrush"]},
-      {label: {ru: "Сияние", en: "Glow"}, ids: ["fenty", "beautyblender"]},
-      {label: {ru: "Губы", en: "Lips"}, ids: ["clinique", "charlotte"]},
-      {label: {ru: "Тон и консилер", en: "Base and concealer"}, ids: ["nars", "beautyblender"]},
-      {label: {ru: "Тени", en: "Eyeshadow"}, ids: ["urban", "rareBrush"]}
-    ]
-  },
-  tools: {
-    question: {ru: "Какой инструмент нужен?", en: "Which tool do you need?"},
-    options: [
-      {label: {ru: "Для тона и консилера", en: "For foundation and concealer"}, ids: ["beautyblender", "nars"]},
-      {label: {ru: "Для румян", en: "For blush"}, ids: ["rareBrush", "rare"]}
-    ]
-  }
-};
 
 function localizedLabel(value) {
   return typeof value === "string" ? value : value[window.AuraPreferences.lang];
@@ -629,19 +624,7 @@ function addConsultantMessage(text, type = "assistant") {
   consultantChat.scrollTop = consultantChat.scrollHeight;
 }
 
-function showConsultantOptions(options, onSelect) {
-  consultantOptions.replaceChildren();
-  options.forEach((option) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.textContent = localizedLabel(option.label);
-    button.addEventListener("click", () => onSelect(option));
-    consultantOptions.append(button);
-  });
-}
-
 function showConsultantResults(recommendations, intro = tr("Подобрала два подходящих варианта. Откройте карточку, чтобы посмотреть состав, применение и цену.", "I found two suitable options. Open a card to see ingredients, directions and price.")) {
-  consultantOptions.replaceChildren();
   addConsultantMessage(intro);
   const resultList = document.createElement("div");
   resultList.className = "consultant-results";
@@ -663,7 +646,6 @@ function showConsultantResults(recommendations, intro = tr("Подобрала �
     resultList.append(button);
   });
   consultantChat.append(resultList);
-  consultantRestart.hidden = false;
   consultantChat.scrollTop = consultantChat.scrollHeight;
 }
 
@@ -713,33 +695,18 @@ function answerConsultantQuestion(question) {
   }
   if (asksForLips) {
     addConsultantMessage(tr("Чтобы точнее выбрать помаду, напишите, какой у вас тон кожи: светлый, средний/оливковый или смуглый/тёмный.", "To narrow down lipstick shades, tell me whether your skin tone is fair, medium/olive or deep."));
-    consultantOptions.replaceChildren();
     consultantQuestionInput.focus();
     return;
   }
   addConsultantMessage(tr("Я лучше всего отвечаю на вопросы о типе кожи, уходе, оттенках помады, кистях и спонжах. Например: «У меня светлая кожа — какая помада подойдёт?»", "I can help with skin types, skincare, lipstick shades, brushes and sponges. For example: “I have fair skin—which lipstick shade suits me?”"));
-  consultantOptions.replaceChildren();
   consultantQuestionInput.focus();
 }
 
 function startConsultant() {
   consultantChat.replaceChildren();
-  consultantRestart.hidden = true;
   consultantQuestionInput.value = "";
-  addConsultantMessage(tr("Здравствуйте! Я помогу собрать понятный набор из товаров Aura Beauty. Что вы хотите подобрать?", "Hello! I can help you build a simple Aura Beauty routine. What are you looking for?"));
-  showConsultantOptions([
-    {label: {ru: "Уход за кожей", en: "Skincare"}, flow: "skincare"},
-    {label: {ru: "Макияж", en: "Makeup"}, flow: "makeup"},
-    {label: {ru: "Кисти и спонжи", en: "Brushes and sponges"}, flow: "tools"}
-  ], (choice) => {
-    addConsultantMessage(localizedLabel(choice.label), "user");
-    const flow = consultantFlows[choice.flow];
-    addConsultantMessage(localizedLabel(flow.question));
-    showConsultantOptions(flow.options, (answer) => {
-      addConsultantMessage(localizedLabel(answer.label), "user");
-      showConsultantResults(answer.ids);
-    });
-  });
+  addConsultantMessage(tr("Здравствуйте! Напишите свой вопрос о коже, оттенке или способе нанесения — я предложу подходящие товары из каталога.", "Hello! Ask your own question about skin, shades or application, and I’ll suggest suitable products from the catalog."));
+  window.setTimeout(() => consultantQuestionInput.focus(), 0);
 }
 
 consultantLauncher.addEventListener("click", () => {
@@ -754,7 +721,6 @@ consultantQuestionForm.addEventListener("submit", (event) => {
   consultantQuestionInput.value = "";
   answerConsultantQuestion(question);
 });
-consultantRestart.addEventListener("click", startConsultant);
 document.querySelectorAll("[data-close-consultant]").forEach((button) => button.addEventListener("click", () => consultantDialog.close()));
 consultantDialog.addEventListener("click", (event) => {
   if (event.target === consultantDialog) consultantDialog.close();

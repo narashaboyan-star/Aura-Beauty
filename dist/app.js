@@ -4,9 +4,9 @@ const products = {
     name: "Niacinamide 10% + Zinc 1%",
     image: "assets/the-ordinary-niacinamide.webp",
     alt: "Сыворотка The Ordinary Niacinamide 10% + Zinc 1%",
-    price: 2200,
-    priceLabel: "2 200 ֏",
-    source: "https://theordinary.com/en-us/niacinamide-10-zinc-1-serum-100436.html",
+    price: 6,
+    priceLabel: "$6.00",
+    source: "https://theordinary.com/en-us/category/skincare/serums",
     description: "Лёгкая водная сыворотка для кожи с расширенными порами, неровной текстурой и избыточной жирностью.",
     facts: [["Объём", "30 мл"], ["Активы", "Ниацинамид 10%, цинк 1%"], ["Подходит", "Для всех типов кожи"], ["Применение", "Несколько капель утром и вечером перед кремом"]]
   },
@@ -15,9 +15,9 @@ const products = {
     name: "Vitamin C Serum",
     image: "assets/user-brand-skincare.jpeg",
     alt: "Сыворотка Lucin Organics Vitamin C",
-    price: 36000,
-    priceLabel: "36 000 ֏",
-    source: "https://am.lucinorganics.com/products/c",
+    price: 90,
+    priceLabel: "$90.00",
+    source: "https://lucinorganics.com/products/vitamin-c-serum-repair-and-brighten",
     description: "Армянская органическая сыворотка для сияния кожи и более ровного тона с растительными маслами и стабилизированным витамином C.",
     facts: [["Объём", "30 мл"], ["Актив", "15% стабилизированный витамин C"], ["Эффект", "Сияние, восстановление и более ровный тон"], ["Применение", "Наносить перед кремом утром или вечером"]]
   },
@@ -26,8 +26,8 @@ const products = {
     name: "Water Sleeping Mask",
     image: "assets/laneige-water-sleeping-mask.jpg",
     alt: "Ночная маска LANEIGE Water Sleeping Mask",
-    price: 12000,
-    priceLabel: "12 000 ֏",
+    price: 33,
+    priceLabel: "$33.00",
     source: "https://us.laneige.com/products/water-sleeping-mask",
     description: "Корейская ночная гель-маска, которая интенсивно увлажняет кожу и поддерживает защитный барьер во время сна.",
     facts: [["Объём", "70 мл"], ["Активы", "Ниацинамид, сквалан и гиалуроновая кислота"], ["Подходит", "Для нормальной, сухой, комбинированной и жирной кожи"], ["Применение", "Наносить вечером завершающим этапом ухода"]]
@@ -37,8 +37,8 @@ const products = {
     name: "Advanced Snail 96 Mucin Essence",
     image: "assets/cosrx-snail-96.jpg",
     alt: "Эссенция COSRX Advanced Snail 96 Mucin Power Essence",
-    price: null,
-    priceLabel: "Цена уточняется",
+    price: 25,
+    priceLabel: "$25.00",
     source: "https://www.cosrx.com/collections/snail-mucin/products/advanced-snail-96-mucin-power-essence",
     description: "Лёгкая корейская эссенция для глубокого увлажнения, более ровной текстуры и поддержки защитного барьера кожи.",
     facts: [["Объём", "100 мл"], ["Актив", "96,3% фильтрата секреции улитки"], ["Дополнительно", "Аллантоин, пантенол и гиалуронат натрия"], ["Применение", "После очищения и тоника, перед увлажняющим кремом"]]
@@ -48,8 +48,8 @@ const products = {
     name: "Soft Pinch Liquid Blush",
     image: "assets/rare-beauty-soft-pinch-blush.jpg",
     alt: "Жидкие румяна Rare Beauty Soft Pinch",
-    price: 9100,
-    priceLabel: "9 100 ֏",
+    price: 25,
+    priceLabel: "$25.00",
     source: "https://www.rarebeauty.com/products/soft-pinch-liquid-blush",
     description: "Невесомые жидкие румяна с насыщенным цветом: одной небольшой точки достаточно для естественного свежего оттенка.",
     facts: [["Объём", "7,5 мл"], ["Финиш", "Матовый или сияющий — зависит от оттенка"], ["Стойкость", "До 12 часов"], ["Применение", "Нанести одну точку и растушевать пальцами или кистью"]],
@@ -67,8 +67,8 @@ const products = {
     name: "Killawatt Freestyle Highlighter",
     image: "assets/fenty-killawatt-highlighter.jpg",
     alt: "Хайлайтер Fenty Beauty Killawatt",
-    price: 14500,
-    priceLabel: "14 500 ֏",
+    price: 40,
+    priceLabel: "$40.00",
     source: "https://fentybeauty.com/products/killawatt-freestyle-highlighter-wattabrat",
     description: "Стойкий кремово-пудровый хайлайтер с мелким сиянием для скул, глаз и ключиц.",
     facts: [["Вес", "7,5 г для одиночного оттенка"], ["Финиш", "От мягкого до яркого сияния"], ["Формула", "Кремово-пудровая"], ["Применение", "Наносить на выступающие части лица кистью или пальцами"]],
@@ -85,8 +85,8 @@ const products = {
     name: "Naked3 Eyeshadow Palette",
     image: "assets/urban-decay-naked3.jpg",
     alt: "Палетка теней Urban Decay Naked3",
-    price: 21400,
-    priceLabel: "21 400 ֏",
+    price: 59,
+    priceLabel: "$59.00",
     source: "https://www.urbandecay.com/naked-3-palette-by-urban-decay/409.html",
     description: "Палетка из розово-нейтральных оттенков для спокойного дневного или выразительного вечернего макияжа.",
     facts: [["Состав", "12 оттенков и двусторонняя кисть"], ["Цвета", "Розовые, бежевые, медные и сливовые"], ["Финиши", "Матовые и сияющие"], ["Применение", "Сочетать светлые базовые и более глубокие акцентные оттенки"]],
@@ -104,8 +104,8 @@ const products = {
     name: "Matte Revolution Lipstick",
     image: "assets/charlotte-tilbury-pillow-talk.jpg",
     alt: "Помада Charlotte Tilbury Matte Revolution",
-    price: 13400,
-    priceLabel: "13 400 ֏",
+    price: 37,
+    priceLabel: "$37.00",
     source: "https://www.charlottetilbury.com/us/product/matte-revolution-lipstick-pillowtalk",
     description: "Стойкая матовая помада с комфортной текстурой и возможностью наслаивать цвет от лёгкого до насыщенного.",
     facts: [["Вес", "3,5 г"], ["Финиш", "Современный матовый"], ["Формула", "С экстрактами орхидеи и Lipstick Tree"], ["Применение", "Наносить прямо из стика или кистью для более точного контура"]],
@@ -121,10 +121,10 @@ const products = {
   clinique: {
     brand: "Clinique • Губы",
     name: "Almost Lipstick",
-    image: "assets/clinique-black-honey.jpg",
-    alt: "Свотчи Clinique Almost Lipstick Black Honey, Pink Honey и Nude Honey",
-    price: null,
-    priceLabel: "Цена уточняется",
+    image: "assets/clinique-almost-lipstick.png",
+    alt: "Помада Clinique Almost Lipstick в оттенке Black Honey",
+    price: 25,
+    priceLabel: "$25.00",
     source: "https://www.clinique.com/products/almost-lipstick-in-black-honey-pink-honey-and-nude-honey",
     description: "Лёгкая полупрозрачная формула между помадой и блеском, которая наслаивается и по-разному раскрывается на естественном цвете губ.",
     facts: [["Вес", "1,9 г"], ["Финиш", "Полупрозрачный, с мягким блеском"], ["Эффект", "От лёгкого оттенка до более насыщенного при наслаивании"], ["Применение", "Нанести один слой или добавить ещё для большей глубины цвета"]],
@@ -139,8 +139,8 @@ const products = {
     name: "Radiant Creamy Concealer",
     image: "assets/nars-radiant-concealer.jpg",
     alt: "Консилер NARS Radiant Creamy Concealer",
-    price: null,
-    priceLabel: "Цена уточняется",
+    price: 36,
+    priceLabel: "$36.00",
     source: "https://www.narscosmetics.com/USA/radiant-creamy-concealer/999NACRCC0001.html",
     description: "Кремово-жидкий консилер с сияющим финишем и наслаиваемым покрытием для зоны под глазами и точечной коррекции.",
     facts: [["Объём", "6 мл"], ["Покрытие", "Среднее, наслаиваемое"], ["Финиш", "Сияющий"], ["Стойкость", "До 16 часов по данным бренда"]],
@@ -152,6 +152,28 @@ const products = {
       {name: "Caramel", note: "средне-тёмный, тёплый", color: "#9A5C3D"},
       {name: "Amande", note: "тёмный, золотисто-оливковый", color: "#70412E"}
     ]
+  },
+  beautyblender: {
+    brand: "Beautyblender • Спонж",
+    name: "Original Makeup Sponge",
+    image: "assets/beautyblender-original.png",
+    alt: "Розовый спонж Beautyblender Original в упаковке",
+    price: 20,
+    priceLabel: "$20.00",
+    source: "https://beautyblender.com/products/beautyblender-original",
+    description: "Мягкий многоразовый спонж без латекса для равномерной растушёвки тонального средства, консилера и кремовых продуктов.",
+    facts: [["Материал", "Мягкая пена без латекса"], ["Подходит", "Для жидких, кремовых и пудровых текстур"], ["Применение", "Намочить, хорошо отжать и наносить продукт похлопывающими движениями"], ["Уход", "Очищать после использования и сушить на воздухе"]]
+  },
+  rareBrush: {
+    brand: "Rare Beauty • Кисть",
+    name: "Soft Pinch Blush Brush",
+    image: "assets/rare-beauty-blush-brush.jpg",
+    alt: "Кисть Rare Beauty Soft Pinch Blush Brush",
+    price: 26,
+    priceLabel: "$26.00",
+    source: "https://www.rarebeauty.com/collections/soft-pinch-collection-1/products/soft-pinch-blush-brush",
+    description: "Мягкая скошенная кисть, которая помогает аккуратно растушевать пигментированные жидкие и кремовые румяна.",
+    facts: [["Ворс", "Синтетический, разной длины"], ["Форма", "Скошенная, повторяет контуры щёк"], ["Подходит", "Для жидких и кремовых формул"], ["Применение", "Растушёвывать лёгкими вбивающими и круговыми движениями"]]
   }
 };
 
@@ -179,6 +201,13 @@ const shadeOptions = document.querySelector("#shade-options");
 const selectedShade = document.querySelector("#selected-shade");
 const productSource = document.querySelector("#dialog-product-source");
 const dialogAddButton = document.querySelector("#dialog-add-button");
+const consultantLauncher = document.querySelector("#consultant-launcher");
+const consultantDialog = document.querySelector("#consultant-dialog");
+const consultantChat = document.querySelector("#consultant-chat");
+const consultantOptions = document.querySelector("#consultant-options");
+const consultantRestart = document.querySelector("#consultant-restart");
+const consultantQuestionForm = document.querySelector("#consultant-question-form");
+const consultantQuestionInput = document.querySelector("#consultant-question-input");
 
 function loadCart() {
   try {
@@ -254,7 +283,7 @@ function renderCart() {
   const total = entries.reduce((sum, {productId, quantity}) => sum + products[productId].price * quantity, 0);
 
   cartTotals.replaceChildren();
-  if (total) cartTotals.append(createTotal("Итого", `${new Intl.NumberFormat("ru-RU").format(total)} ֏`));
+  if (total) cartTotals.append(createTotal("Итого", `$${total.toFixed(2)}`));
 }
 
 function createTotal(label, value) {
@@ -263,7 +292,7 @@ function createTotal(label, value) {
   return row;
 }
 
-function renderShadeOptions(product) {
+function renderShadeOptions(product, preferredVariant = null) {
   const selectable = product.variants || [];
   const displayOnly = product.displayShades || [];
   const shades = selectable.length ? selectable : displayOnly;
@@ -273,12 +302,14 @@ function renderShadeOptions(product) {
 
   shadeTitle.textContent = selectable.length ? "Выберите оттенок" : "Цвета палетки";
   shadeOptions.setAttribute("role", selectable.length ? "radiogroup" : "list");
-  activeVariant = selectable.length ? selectable[0].name : null;
-  selectedShade.textContent = selectable.length ? `${selectable[0].name} — ${selectable[0].note}` : "12 настоящих оттенков";
+  const preferredIndex = selectable.findIndex((shade) => shade.name === preferredVariant);
+  const selectedIndex = preferredIndex >= 0 ? preferredIndex : 0;
+  activeVariant = selectable.length ? selectable[selectedIndex].name : null;
+  selectedShade.textContent = selectable.length ? `${selectable[selectedIndex].name} — ${selectable[selectedIndex].note}` : "12 настоящих оттенков";
 
   shades.forEach((shade, index) => {
     const item = document.createElement(selectable.length ? "button" : "div");
-    item.className = `shade-option${selectable.length && index === 0 ? " selected" : ""}`;
+    item.className = `shade-option${selectable.length && index === selectedIndex ? " selected" : ""}`;
     item.style.setProperty("--swatch", shade.color);
     item.title = shade.note ? `${shade.name} — ${shade.note}` : shade.name;
     item.setAttribute("aria-label", shade.note ? `${shade.name}, ${shade.note}` : shade.name);
@@ -286,7 +317,7 @@ function renderShadeOptions(product) {
     if (selectable.length) {
       item.type = "button";
       item.setAttribute("role", "radio");
-      item.setAttribute("aria-checked", index === 0 ? "true" : "false");
+      item.setAttribute("aria-checked", index === selectedIndex ? "true" : "false");
       item.addEventListener("click", () => {
         activeVariant = shade.name;
         selectedShade.textContent = `${shade.name} — ${shade.note}`;
@@ -303,7 +334,7 @@ function renderShadeOptions(product) {
   });
 }
 
-function openProduct(productId) {
+function openProduct(productId, preferredVariant = null) {
   const product = products[productId];
   if (!product) return;
   activeProductId = productId;
@@ -329,7 +360,7 @@ function openProduct(productId) {
     wrapper.append(dt, dd);
     facts.append(wrapper);
   });
-  renderShadeOptions(product);
+  renderShadeOptions(product, preferredVariant);
   productDialog.showModal();
 }
 
@@ -431,6 +462,173 @@ checkoutForm.addEventListener("submit", (event) => {
   orderSuccess.hidden = false;
   const contact = email || phone;
   orderSuccessText.textContent = `Номер ${orderId}. Контакт для подтверждения: ${contact}. Заказ сохранён на этом устройстве; автоматическая отправка будет подключена следующим этапом.`;
+});
+
+const consultantFlows = {
+  skincare: {
+    question: "Как бы вы описали кожу сейчас?",
+    options: [
+      {label: "Сухая или обезвоженная", ids: ["laneige", "cosrx"]},
+      {label: "Жирная или комбинированная", ids: ["ordinary", "cosrx"]},
+      {label: "Тусклая, хочется сияния", ids: ["lucin", "laneige"]},
+      {label: "Чувствительная", ids: ["cosrx", "laneige"]}
+    ]
+  },
+  makeup: {
+    question: "Что хотите подобрать для макияжа?",
+    options: [
+      {label: "Румяна", ids: ["rare", "rareBrush"]},
+      {label: "Сияние", ids: ["fenty", "beautyblender"]},
+      {label: "Губы", ids: ["clinique", "charlotte"]},
+      {label: "Тон и консилер", ids: ["nars", "beautyblender"]},
+      {label: "Тени", ids: ["urban", "rareBrush"]}
+    ]
+  },
+  tools: {
+    question: "Какой инструмент нужен?",
+    options: [
+      {label: "Для тона и консилера", ids: ["beautyblender", "nars"]},
+      {label: "Для румян", ids: ["rareBrush", "rare"]}
+    ]
+  }
+};
+
+function addConsultantMessage(text, type = "assistant") {
+  const message = document.createElement("div");
+  message.className = `consultant-message ${type}`;
+  message.textContent = text;
+  consultantChat.append(message);
+  consultantChat.scrollTop = consultantChat.scrollHeight;
+}
+
+function showConsultantOptions(options, onSelect) {
+  consultantOptions.replaceChildren();
+  options.forEach((option) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = option.label;
+    button.addEventListener("click", () => onSelect(option));
+    consultantOptions.append(button);
+  });
+}
+
+function showConsultantResults(recommendations, intro = "Подобрала два подходящих варианта. Откройте карточку, чтобы посмотреть состав, применение и цену.") {
+  consultantOptions.replaceChildren();
+  addConsultantMessage(intro);
+  const resultList = document.createElement("div");
+  resultList.className = "consultant-results";
+  recommendations.forEach((recommendation) => {
+    const item = typeof recommendation === "string" ? {id: recommendation} : recommendation;
+    const {id, variant, reason} = item;
+    const product = products[id];
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "consultant-result";
+    const variantLabel = variant ? ` · ${variant}` : "";
+    const reasonLabel = reason ? `<em>${reason}</em>` : "";
+    button.innerHTML = `<img src="${product.image}" alt=""><span><strong>${product.name}${variantLabel}</strong><small>${product.brand} · ${product.priceLabel}</small>${reasonLabel}</span><span aria-hidden="true">→</span>`;
+    button.addEventListener("click", () => {
+      consultantDialog.close();
+      openProduct(id, variant || null);
+    });
+    resultList.append(button);
+  });
+  consultantChat.append(resultList);
+  consultantRestart.hidden = false;
+  consultantChat.scrollTop = consultantChat.scrollHeight;
+}
+
+function answerConsultantQuestion(question) {
+  const text = question.toLocaleLowerCase("ru-RU");
+  const asksForLips = /(помад|губ|lip|оттен)/.test(text);
+  const isLight = /(светл|бледн|fair|light)/.test(text);
+  const isMedium = /(средн|оливк|medium|olive)/.test(text);
+  const isDeep = /(смугл|т[её]мн|deep|dark)/.test(text);
+
+  if (asksForLips && isLight) {
+    showConsultantResults([
+      {id: "clinique", variant: "Pink Honey", reason: "мягкий прозрачный розовый не перегружает светлый тон кожи"},
+      {id: "charlotte", variant: "Pillow Talk Original", reason: "спокойный нюдово-розовый оттенок для повседневного макияжа"}
+    ], "Для светлой кожи я бы начала с мягких розовых оттенков. Они выглядят естественно и их легко наслаивать.");
+    return;
+  }
+  if (asksForLips && isMedium) {
+    showConsultantResults([
+      {id: "clinique", variant: "Nude Honey", reason: "тёплый прозрачный нюд"},
+      {id: "charlotte", variant: "Pillow Talk Medium", reason: "более выразительный тёплый розово-ягодный оттенок"}
+    ], "Для среднего или оливкового тона кожи подойдут более тёплые нюдовые и розово-ягодные оттенки.");
+    return;
+  }
+  if (asksForLips && isDeep) {
+    showConsultantResults([
+      {id: "clinique", variant: "Black Honey", reason: "полупрозрачный ягодно-коричневый цвет"},
+      {id: "charlotte", variant: "Walk of No Shame", reason: "глубокий ягодно-розовый оттенок"}
+    ], "Для смуглой или тёмной кожи предлагаю насыщенные ягодные оттенки, которые сохраняют глубину цвета.");
+    return;
+  }
+  if (/(сух|обезвож|увлаж)/.test(text)) {
+    showConsultantResults(["laneige", "cosrx"], "Для сухости и обезвоженности начните с увлажняющей эссенции и ночной маски.");
+    return;
+  }
+  if (/(жирн|комбинир|пор|ниацинамид)/.test(text)) {
+    showConsultantResults(["ordinary", "cosrx"], "Для жирной или комбинированной кожи предлагаю лёгкие формулы без тяжёлого финиша.");
+    return;
+  }
+  if (/(чувств|раздраж|покрасн)/.test(text)) {
+    showConsultantResults(["cosrx", "laneige"], "Для чувствительной кожи выбирайте мягкое увлажнение и обязательно проверяйте новый продукт на небольшом участке.");
+    return;
+  }
+  if (/(кист|спонж|растуш)/.test(text)) {
+    showConsultantResults(["beautyblender", "rareBrush"], "Для ровной растушёвки собрала спонж для тона и кисть для жидких или кремовых румян.");
+    return;
+  }
+  if (asksForLips) {
+    addConsultantMessage("Чтобы точнее выбрать помаду, напишите, какой у вас тон кожи: светлый, средний/оливковый или смуглый/тёмный.");
+    consultantOptions.replaceChildren();
+    consultantQuestionInput.focus();
+    return;
+  }
+  addConsultantMessage("Я лучше всего отвечаю на вопросы о типе кожи, уходе, оттенках помады, кистях и спонжах. Например: «У меня светлая кожа — какая помада подойдёт?»");
+  consultantOptions.replaceChildren();
+  consultantQuestionInput.focus();
+}
+
+function startConsultant() {
+  consultantChat.replaceChildren();
+  consultantRestart.hidden = true;
+  consultantQuestionInput.value = "";
+  addConsultantMessage("Здравствуйте! Я помогу собрать понятный набор из товаров Aura Beauty. Что вы хотите подобрать?");
+  showConsultantOptions([
+    {label: "Уход за кожей", flow: "skincare"},
+    {label: "Макияж", flow: "makeup"},
+    {label: "Кисти и спонжи", flow: "tools"}
+  ], (choice) => {
+    addConsultantMessage(choice.label, "user");
+    const flow = consultantFlows[choice.flow];
+    addConsultantMessage(flow.question);
+    showConsultantOptions(flow.options, (answer) => {
+      addConsultantMessage(answer.label, "user");
+      showConsultantResults(answer.ids);
+    });
+  });
+}
+
+consultantLauncher.addEventListener("click", () => {
+  startConsultant();
+  consultantDialog.showModal();
+});
+consultantQuestionForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const question = consultantQuestionInput.value.trim();
+  if (!question) return;
+  addConsultantMessage(question, "user");
+  consultantQuestionInput.value = "";
+  answerConsultantQuestion(question);
+});
+consultantRestart.addEventListener("click", startConsultant);
+document.querySelectorAll("[data-close-consultant]").forEach((button) => button.addEventListener("click", () => consultantDialog.close()));
+consultantDialog.addEventListener("click", (event) => {
+  if (event.target === consultantDialog) consultantDialog.close();
 });
 
 updateCartCount();

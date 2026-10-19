@@ -741,9 +741,27 @@ function showConsultantResults(recommendations, intro = tr("Подобрала �
 function answerConsultantQuestion(question) {
   const text = question.toLocaleLowerCase();
   const asksForLips = /(помад|губ|lip|оттен|շրթ|երանգ)/.test(text);
+  const asksForHair = /(волос|кож[аи] головы|шампун|hair|scalp|մազ|գլխամաշկ|շամպուն)/.test(text);
   const isLight = /(светл|бледн|fair|light|բաց)/.test(text);
   const isMedium = /(средн|оливк|medium|olive|միջին|ձիթապտղ)/.test(text);
   const isDeep = /(смугл|т[её]мн|deep|dark|մուգ|թուխ)/.test(text);
+
+  if (asksForHair) {
+    const isBrittle = /(ломк|секущ|сух|поврежд|brittle|split|dry|damag|փխրուն|չոր|վնասված|կոտր)/.test(text);
+    addConsultantMessage(isBrittle
+      ? tr(
+        "Для ломких или сухих волос обычно ищут мягкий шампунь, восстанавливающую маску или кондиционер и несмываемую термозащиту. В каталоге Aura Beauty пока нет средств для волос, поэтому я не буду предлагать вам товары для лица. Когда раздел для волос появится, я покажу варианты именно из него.",
+        "For brittle or dry hair, people usually look for a gentle shampoo, a repairing mask or conditioner, and leave-in heat protection. Aura Beauty does not yet have hair products in the catalog, so I will not suggest face products. When the hair section is added, I will recommend items from it.",
+        "Փխրուն կամ չոր մազերի համար սովորաբար ընտրում են նուրբ շամպուն, վերականգնող դիմակ կամ կոնդիցիոներ և չլվացվող ջերմապաշտպան միջոց։ Aura Beauty-ի կատալոգում մազերի միջոցներ դեռ չկան, ուստի դեմքի խնամքի ապրանք չեմ առաջարկի։ Երբ մազերի բաժինը ավելացվի, կառաջարկեմ հենց այնտեղի տարբերակները։"
+      )
+      : tr(
+        "Я поняла, что вопрос о волосах. В каталоге пока нет средств для волос, поэтому не буду заменять их уходом для лица. Можно уточнить состояние волос — например, ломкость, сухость или жирность кожи головы — и после добавления раздела я смогу подобрать подходящий тип средства.",
+        "I understand that your question is about hair. There are no hair products in the catalog yet, so I will not replace them with face care. You can describe the concern—for example brittleness, dryness or an oily scalp—and I can match it to the right product type once the hair section is added.",
+        "Հասկացա, որ հարցը մազերի մասին է։ Կատալոգում մազերի միջոցներ դեռ չկան, ուստի դրանք դեմքի խնամքով չեմ փոխարինի։ Կարող եք նշել խնդիրը՝ օրինակ փխրունություն, չորություն կամ գլխամաշկի յուղոտություն, և մազերի բաժինն ավելացնելուց հետո կընտրեմ հարմար միջոցի տեսակը։"
+      ));
+    consultantQuestionInput.focus();
+    return;
+  }
 
   if (asksForLips && isLight) {
     showConsultantResults([
@@ -801,7 +819,7 @@ function answerConsultantQuestion(question) {
 function startConsultant() {
   consultantChat.replaceChildren();
   consultantQuestionInput.value = "";
-  addConsultantMessage(tr("Здравствуйте! Напишите свой вопрос о коже, оттенке или способе нанесения — я предложу подходящие товары из каталога.", "Hello! Ask your own question about skin, shades or application, and I’ll suggest suitable products from the catalog.", "Բարև՛։ Գրեք մաշկի, երանգի կամ կիրառման մասին ձեր հարցը, և ես կառաջարկեմ կատալոգի հարմար ապրանքներ։"));
+  addConsultantMessage(tr("Здравствуйте! Напишите свой вопрос о коже, волосах, оттенке или способе нанесения — я отвечу и предложу подходящие товары, если они есть в каталоге.", "Hello! Ask about skin, hair, shades or application. I’ll answer and suggest suitable products when they are available in the catalog.", "Բարև՛։ Գրեք մաշկի, մազերի, երանգի կամ կիրառման մասին ձեր հարցը։ Կպատասխանեմ և կառաջարկեմ հարմար ապրանքներ, եթե դրանք կան կատալոգում։"));
   window.setTimeout(() => consultantQuestionInput.focus(), 0);
 }
 

@@ -153,6 +153,39 @@ const products = {
       {name: "Amande", note: "тёмный, золотисто-оливковый", color: "#70412E"}
     ]
   },
+  k18: {
+    brand: "K18 • Уход за волосами",
+    name: "Leave-In Molecular Repair Hair Mask",
+    image: "assets/k18-leave-in-mask.webp",
+    alt: "Несмываемая маска K18 Leave-In Molecular Repair Hair Mask",
+    price: 75,
+    priceLabel: "$75.00",
+    source: "https://www.k18hair.com/collections/treatment-routine/products/leave-in-molecular-repair-hair-mask-50-ml",
+    description: "Несмываемая четырёхминутная маска для повреждённых волос, созданная для восстановления силы, мягкости и эластичности.",
+    facts: [["Объём", "50 мл"], ["Подходит", "Для повреждённых и ломких волос"], ["Время", "4 минуты, не смывать"], ["Применение", "После шампуня без кондиционера; 1–3 нажатия на подсушенные полотенцем волосы"]]
+  },
+  kerastase: {
+    brand: "Kérastase • Уход за волосами",
+    name: "Résistance Masque Force Architecte",
+    image: "assets/kerastase-masque-force-architecte.webp",
+    alt: "Маска Kérastase Résistance Masque Force Architecte",
+    price: 67,
+    priceLabel: "$67.00",
+    source: "https://www.kerastase-usa.com/collections/resistance/masque-force-architecte-hair-mask.html",
+    description: "Восстанавливающая маска для повреждённых и чрезмерно обработанных волос, помогающая уменьшить ломкость и появление секущихся концов.",
+    facts: [["Объём", "200 мл"], ["Подходит", "Для повреждённых и ослабленных волос"], ["Ключевые компоненты", "Про-кератиновый комплекс и керамиды"], ["Применение", "На влажную длину и концы на 5–10 минут, затем смыть"]]
+  },
+  olaplex: {
+    brand: "OLAPLEX • Уход за волосами",
+    name: "N°.3PLUS Complete Repair Treatment",
+    image: "assets/olaplex-n3plus.webp",
+    alt: "Восстанавливающий уход OLAPLEX N°.3PLUS Complete Repair Treatment",
+    price: 34,
+    priceLabel: "$34.00",
+    source: "https://olaplex.com/collections/the-holiday-shop/products/olaplex-n-3plus-complete-repair-treatment-100ml",
+    description: "Трёхминутный уход перед шампунем для более мягких и крепких волос и уменьшения будущей ломкости.",
+    facts: [["Объём", "100 мл"], ["Подходит", "Для всех типов волос"], ["Формула", "Без протеинов и SLS/SLES"], ["Применение", "Нанести на влажные волосы до шампуня на 3 минуты, смыть"]]
+  },
   beautyblender: {
     brand: "Beautyblender • Спонж",
     name: "Original Makeup Sponge",
@@ -218,6 +251,18 @@ const productLocales = {
     ru: {brand: "NARS • Консилер", note: "Сияющий кремовый консилер — выберите тон", description: "Кремово-жидкий консилер с сияющим финишем и наслаиваемым покрытием для зоны под глазами и точечной коррекции.", facts: [["Объём", "6 мл"], ["Покрытие", "Среднее, наслаиваемое"], ["Финиш", "Сияющий"], ["Стойкость", "До 16 часов по данным бренда"]], ingredients: "Ключевые компоненты: вода, диметикон, смягчающие и увлажняющие компоненты, а также пигменты. Точный список красителей зависит от оттенка."},
     en: {brand: "NARS • Concealer", note: "Radiant creamy concealer — choose a shade", description: "A creamy liquid concealer with a radiant finish and buildable coverage for under-eyes and spot correction.", facts: [["Size", "6 ml"], ["Coverage", "Medium, buildable"], ["Finish", "Radiant"], ["Wear", "Up to 16 hours, according to the brand"]], ingredients: "Key components include water, dimethicone, conditioning and hydrating ingredients, plus pigments. The exact colorant list varies by shade."}
   },
+  k18: {
+    ru: {brand: "K18 • Уход за волосами", note: "Несмываемая восстанавливающая маска, 50 мл", description: "Несмываемая четырёхминутная маска для повреждённых волос, созданная для восстановления силы, мягкости и эластичности.", facts: [["Объём", "50 мл"], ["Подходит", "Для повреждённых и ломких волос"], ["Время", "4 минуты, не смывать"], ["Применение", "После шампуня без кондиционера; 1–3 нажатия на подсушенные полотенцем волосы"]], ingredients: "INCI с официальной страницы: Water, Alcohol Denat., Propylene Glycol, Cetearyl Alcohol, Dicaprylyl Ether, Cetyl Esters, Behentrimonium Chloride, Polysorbate 20, sh-Oligopeptide-78, Hydrolyzed Wheat Protein, Hydrolyzed Wheat Starch, Isopropyl Alcohol, Tocopherol, Phenoxyethanol, Potassium Sorbate, Citric Acid, Fragrance, Geraniol, Linalool, Hexyl Cinnamal, Benzyl Alcohol, Amyl Salicylate, Benzaldehyde."},
+    en: {brand: "K18 • Hair care", note: "Leave-in repair mask, 50 ml", description: "A four-minute leave-in treatment for damaged hair, designed to restore strength, softness and bounce.", facts: [["Size", "50 ml"], ["Suitable for", "Damaged and brittle hair"], ["Timing", "Leave in for 4 minutes; do not rinse"], ["How to use", "Shampoo without conditioner; apply 1–3 pumps to towel-dried hair"]], ingredients: "Official INCI: Water, Alcohol Denat., Propylene Glycol, Cetearyl Alcohol, Dicaprylyl Ether, Cetyl Esters, Behentrimonium Chloride, Polysorbate 20, sh-Oligopeptide-78, Hydrolyzed Wheat Protein, Hydrolyzed Wheat Starch, Isopropyl Alcohol, Tocopherol, Phenoxyethanol, Potassium Sorbate, Citric Acid, Fragrance, Geraniol, Linalool, Hexyl Cinnamal, Benzyl Alcohol, Amyl Salicylate, Benzaldehyde."}
+  },
+  kerastase: {
+    ru: {brand: "Kérastase • Уход за волосами", note: "Восстанавливающая маска, 200 мл", description: "Маска для повреждённых и чрезмерно обработанных волос, помогающая уменьшить ломкость и появление секущихся концов.", facts: [["Объём", "200 мл"], ["Подходит", "Для повреждённых и ослабленных волос"], ["Ключевые компоненты", "Про-кератиновый комплекс и керамиды"], ["Применение", "На влажную длину и концы на 5–10 минут, затем смыть"]], ingredients: "Бренд выделяет про-кератиновый комплекс, керамиды и сок растения воскрешения. Полный актуальный INCI проверьте на упаковке или официальной странице перед покупкой."},
+    en: {brand: "Kérastase • Hair care", note: "Repairing hair mask, 200 ml", description: "A mask for damaged and over-processed hair that helps reduce breakage and the look of split ends.", facts: [["Size", "200 ml"], ["Suitable for", "Damaged and weakened hair"], ["Key ingredients", "Pro-keratin complex and ceramides"], ["How to use", "Apply to wet mid-lengths and ends for 5–10 minutes, then rinse"]], ingredients: "The brand highlights a pro-keratin complex, ceramides and resurrection plant sap. Check the current full INCI on the packaging or official page before purchase."}
+  },
+  olaplex: {
+    ru: {brand: "OLAPLEX • Уход за волосами", note: "Трёхминутный уход перед шампунем, 100 мл", description: "Уход перед шампунем для более мягких и крепких волос и уменьшения будущей ломкости.", facts: [["Объём", "100 мл"], ["Подходит", "Для всех типов волос"], ["Формула", "Без протеинов и SLS/SLES"], ["Применение", "Нанести на влажные волосы до шампуня на 3 минуты, смыть"]], ingredients: "В формуле используется фирменная технология OLAPLEX для поддержки связей волос и смесь аминокислот. Полный актуальный INCI проверьте на упаковке или официальной странице."},
+    en: {brand: "OLAPLEX • Hair care", note: "Three-minute pre-shampoo treatment, 100 ml", description: "A pre-shampoo treatment for softer, stronger-looking hair and reduced future breakage.", facts: [["Size", "100 ml"], ["Suitable for", "All hair types"], ["Formula", "Protein-free and SLS/SLES-free"], ["How to use", "Apply to wet hair before shampoo, wait 3 minutes, then rinse"]], ingredients: "The formula uses OLAPLEX bond-building technology and an amino-acid blend. Check the current full INCI on the packaging or official page."}
+  },
   beautyblender: {
     ru: {brand: "Beautyblender • Спонж", note: "Многоразовый спонж для тона и консилера", description: "Мягкий многоразовый спонж без латекса для равномерной растушёвки тонального средства, консилера и кремовых продуктов.", facts: [["Материал", "Мягкая пена без латекса"], ["Подходит", "Для жидких, кремовых и пудровых текстур"], ["Применение", "Намочить, хорошо отжать и наносить похлопывающими движениями"], ["Уход", "Очищать после использования и сушить на воздухе"]], ingredients: "Это инструмент, а не косметическая формула: спонж изготовлен из пенополиуретана без латекса с водорастворимыми красителями. Регулярно мойте и заменяйте при повреждении."},
     en: {brand: "Beautyblender • Sponge", note: "Reusable sponge for foundation and concealer", description: "A soft, reusable latex-free sponge for even blending of foundation, concealer and cream products.", facts: [["Material", "Soft latex-free foam"], ["Suitable for", "Liquid, cream and powder textures"], ["How to use", "Wet, squeeze well and bounce product onto skin"], ["Care", "Clean after use and air-dry"]], ingredients: "This is a tool, not a cosmetic formula: the sponge is made from latex-free polyurethane foam with water-soluble dyes. Wash regularly and replace if damaged."}
@@ -240,7 +285,10 @@ const productLocalesHy = {
   clinique: {brand: "Clinique • Շուրթեր", note: "Թափանցիկ շուրթերի գույն — երեք Honey երանգ", description: "Թեթև, կիսաթափանցիկ բանաձև՝ շրթներկի և փայլի միջև, որը շերտավորվում է բնական գույնի վրա։", facts: [["Քաշ", "1,9 գ"], ["Վերջնարդյունք", "Կիսաթափանցիկ, նուրբ փայլով"], ["Արդյունք", "Թեթևից մինչև ավելի հագեցած գույն"], ["Կիրառում", "Մեկ շերտ կամ մի քանի շերտ՝ խորության համար"]], ingredients: "Փափկեցնող յուղերի, մոմերի և պիգմենտների խառնուրդ։ Բրենդը նշում է 95% խնամող բաղադրիչ և բույրի բացակայություն։"},
   nars: {brand: "NARS • Քողարկիչ", note: "Փայլուն կրեմային քողարկիչ — ընտրեք երանգը", description: "Կրեմային հեղուկ քողարկիչ՝ միջին և շերտավորվող ծածկույթով աչքերի տակ ու տեղային ուղղման համար։", facts: [["Ծավալ", "6 մլ"], ["Ծածկույթ", "Միջին, շերտավորվող"], ["Վերջնարդյունք", "Փայլուն"], ["Դիմացկունություն", "Մինչև 16 ժամ՝ ըստ բրենդի"]], ingredients: "Հիմնական բաղադրիչներ՝ ջուր, դիմետիկոն, փափկեցնող և խոնավեցնող բաղադրիչներ ու պիգմենտներ։ Գունանյութերը տարբերվում են ըստ երանգի։"},
   beautyblender: {brand: "Beautyblender • Սպունգ", note: "Բազմակի օգտագործման սպունգ՝ տոնայինի և քողարկիչի համար", description: "Փափուկ, լատեքս չպարունակող սպունգ՝ տոնայինի, քողարկիչի և կրեմային միջոցների հավասար տարածման համար։", facts: [["Նյութ", "Փափուկ փրփուր՝ առանց լատեքսի"], ["Հարմար է", "Հեղուկ, կրեմային և փոշային հյուսվածքների համար"], ["Կիրառում", "Թրջել, քամել և քսել թեթև հարվածներով"], ["Խնամք", "Մաքրել օգտագործումից հետո և չորացնել օդում"]], ingredients: "Սա գործիք է, ոչ թե կոսմետիկ բանաձև․ պատրաստված է լատեքս չպարունակող պոլիուրեթանային փրփուրից։"},
-  rareBrush: {brand: "Rare Beauty • Վրձին", note: "Փափուկ թեք վրձին՝ հեղուկ և կրեմային կարմրաներկի համար", description: "Փափուկ թեք վրձին, որը օգնում է հավասար տարածել պիգմենտավորված հեղուկ և կրեմային կարմրաներկը։", facts: [["Մազիկներ", "Սինթետիկ, տարբեր երկարության"], ["Ձև", "Թեք՝ այտերի ուրվագծին համապատասխան"], ["Հարմար է", "Հեղուկ և կրեմային բանաձևերի համար"], ["Կիրառում", "Տարածել թեթև հարվածող կամ շրջանաձև շարժումներով"]], ingredients: "Սա գործիք է՝ փափուկ սինթետիկ մազիկներով, մետաղական օղակով և բռնակով։ Լվացեք նուրբ միջոցով և չորացրեք հորիզոնական։"}
+  rareBrush: {brand: "Rare Beauty • Վրձին", note: "Փափուկ թեք վրձին՝ հեղուկ և կրեմային կարմրաներկի համար", description: "Փափուկ թեք վրձին, որը օգնում է հավասար տարածել պիգմենտավորված հեղուկ և կրեմային կարմրաներկը։", facts: [["Մազիկներ", "Սինթետիկ, տարբեր երկարության"], ["Ձև", "Թեք՝ այտերի ուրվագծին համապատասխան"], ["Հարմար է", "Հեղուկ և կրեմային բանաձևերի համար"], ["Կիրառում", "Տարածել թեթև հարվածող կամ շրջանաձև շարժումներով"]], ingredients: "Սա գործիք է՝ փափուկ սինթետիկ մազիկներով, մետաղական օղակով և բռնակով։ Լվացեք նուրբ միջոցով և չորացրեք հորիզոնական։"},
+  k18: {brand: "K18 • Մազերի խնամք", note: "Չլվացվող վերականգնող դիմակ, 50 մլ", description: "Չորս րոպեանոց չլվացվող միջոց՝ վնասված մազերի ամրության, փափկության և առաձգականության համար։", facts: [["Ծավալ", "50 մլ"], ["Հարմար է", "Վնասված և փխրուն մազերի համար"], ["Ժամանակ", "4 րոպե, չլվանալ"], ["Կիրառում", "Շամպունից հետո՝ առանց կոնդիցիոների, 1–3 սեղմում սրբիչով չորացրած մազերին"]], ingredients: "Հիմնական բաղադրիչները ներառում են sh-Oligopeptide-78, հիդրոլիզացված ցորենի սպիտակուց և օժանդակ բաղադրիչներ։ Պարունակում է բուրավետիչ․ ստուգեք ամբողջ INCI-ն պաշտոնական էջում։"},
+  kerastase: {brand: "Kérastase • Մազերի խնամք", note: "Վերականգնող դիմակ, 200 մլ", description: "Դիմակ՝ վնասված և քիմիական մշակման ենթարկված մազերի համար, որը օգնում է նվազեցնել կոտրվելն ու ճյուղավորված ծայրերը։", facts: [["Ծավալ", "200 մլ"], ["Հարմար է", "Վնասված և թուլացած մազերի համար"], ["Հիմնական բաղադրիչներ", "Պրո-կերատինային համալիր և կերամիդներ"], ["Կիրառում", "Խոնավ մազերի երկարությանը և ծայրերին՝ 5–10 րոպե, ապա լվանալ"]], ingredients: "Բրենդը նշում է պրո-կերատինային համալիր, կերամիդներ և վերածնվող բույսի հյութ։ Ստուգեք ամբողջ INCI-ն պաշտոնական էջում։"},
+  olaplex: {brand: "OLAPLEX • Մազերի խնամք", note: "Երեք րոպեանոց նախաշամպունային խնամք, 100 մլ", description: "Նախաշամպունային խնամք՝ ավելի փափուկ և ամուր մազերի ու ապագա կոտրվելու նվազեցման համար։", facts: [["Ծավալ", "100 մլ"], ["Հարմար է", "Բոլոր տեսակի մազերի համար"], ["Բանաձև", "Առանց պրոտեինների և SLS/SLES-ի"], ["Կիրառում", "Քսել խոնավ մազերին մինչև շամպունը, սպասել 3 րոպե և լվանալ"]], ingredients: "Բանաձևը օգտագործում է OLAPLEX-ի կապերը պահպանող տեխնոլոգիան և ամինաթթուների խառնուրդ։ Ստուգեք ամբողջ INCI-ն պաշտոնական էջում։"}
 };
 
 const storageKey = "auraBeautyCart";
@@ -748,18 +796,12 @@ function answerConsultantQuestion(question) {
 
   if (asksForHair) {
     const isBrittle = /(ломк|секущ|сух|поврежд|brittle|split|dry|damag|փխրուն|չոր|վնասված|կոտր)/.test(text);
-    addConsultantMessage(isBrittle
-      ? tr(
-        "Для ломких или сухих волос обычно ищут мягкий шампунь, восстанавливающую маску или кондиционер и несмываемую термозащиту. В каталоге Aura Beauty пока нет средств для волос, поэтому я не буду предлагать вам товары для лица. Когда раздел для волос появится, я покажу варианты именно из него.",
-        "For brittle or dry hair, people usually look for a gentle shampoo, a repairing mask or conditioner, and leave-in heat protection. Aura Beauty does not yet have hair products in the catalog, so I will not suggest face products. When the hair section is added, I will recommend items from it.",
-        "Փխրուն կամ չոր մազերի համար սովորաբար ընտրում են նուրբ շամպուն, վերականգնող դիմակ կամ կոնդիցիոներ և չլվացվող ջերմապաշտպան միջոց։ Aura Beauty-ի կատալոգում մազերի միջոցներ դեռ չկան, ուստի դեմքի խնամքի ապրանք չեմ առաջարկի։ Երբ մազերի բաժինը ավելացվի, կառաջարկեմ հենց այնտեղի տարբերակները։"
-      )
-      : tr(
-        "Я поняла, что вопрос о волосах. В каталоге пока нет средств для волос, поэтому не буду заменять их уходом для лица. Можно уточнить состояние волос — например, ломкость, сухость или жирность кожи головы — и после добавления раздела я смогу подобрать подходящий тип средства.",
-        "I understand that your question is about hair. There are no hair products in the catalog yet, so I will not replace them with face care. You can describe the concern—for example brittleness, dryness or an oily scalp—and I can match it to the right product type once the hair section is added.",
-        "Հասկացա, որ հարցը մազերի մասին է։ Կատալոգում մազերի միջոցներ դեռ չկան, ուստի դրանք դեմքի խնամքով չեմ փոխարինի։ Կարող եք նշել խնդիրը՝ օրինակ փխրունություն, չորություն կամ գլխամաշկի յուղոտություն, և մազերի բաժինն ավելացնելուց հետո կընտրեմ հարմար միջոցի տեսակը։"
-      ));
-    consultantQuestionInput.focus();
+    showConsultantResults(
+      isBrittle ? ["k18", "kerastase", "olaplex"] : ["olaplex", "k18", "kerastase"],
+      isBrittle
+        ? tr("Для ломких или повреждённых волос я выбрала восстанавливающие средства именно из раздела ухода за волосами:", "For brittle or damaged hair, I selected repair treatments specifically from the hair-care section:", "Փխրուն կամ վնասված մազերի համար ընտրեցի վերականգնող միջոցներ հենց մազերի խնամքի բաժնից․")
+        : tr("Вот средства из раздела ухода за волосами. Откройте карточку, чтобы сравнить способ применения:", "Here are products from the hair-care section. Open a card to compare how each one is used:", "Ահա մազերի խնամքի բաժնի միջոցները։ Բացեք քարտը՝ կիրառման ձևերը համեմատելու համար․")
+    );
     return;
   }
 

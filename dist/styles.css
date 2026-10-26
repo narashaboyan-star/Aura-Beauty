@@ -355,45 +355,18 @@ button.shade-option { cursor: pointer; }
 .order-success p { max-width: 500px; margin: 0 auto 24px; color: var(--muted); line-height: 1.65; }
 .secondary-action { padding: 11px 18px; border: 1px solid var(--ink); background: white; }
 
-.consultant-launcher { position: fixed; z-index: 20; right: 12px; bottom: 48px; width: 250px; padding: 0; display: grid; justify-items: center; gap: 0; border: 0; background: transparent; color: white; cursor: pointer; font-weight: 800; filter: drop-shadow(0 18px 30px rgba(44, 28, 46, .25)); }
-.consultant-mini { position: relative; width: 228px; height: 342px; display: grid; place-items: end center; overflow: hidden; border: 3px solid rgba(255,255,255,.94); border-radius: 48% 48% 30px 30px; background: linear-gradient(145deg, #f5e5e9, #fff9f3); box-shadow: 0 0 0 2px rgba(152,67,95,.18); transform-origin: 50% 100%; animation: consultant-alive 8s ease-in-out infinite; transition: transform .25s ease; }
-.consultant-mini::after { content: ""; position: absolute; inset: 12px 22px 46px; pointer-events: none; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.2), transparent 66%); opacity: 0; animation: consultant-glow 8s ease-in-out infinite; }
-.consultant-mini img { width: 100%; height: 100%; object-fit: cover; object-position: center top; transform-origin: 50% 72%; animation: consultant-breathe 5s ease-in-out infinite; }
-.consultant-wave { position: absolute; z-index: 2; top: 96px; left: 5px; width: 38px; height: 58px; transform: rotate(-18deg); opacity: 0; animation: consultant-wave-lines 8s ease-in-out infinite; }
-.consultant-wave i { position: absolute; inset: 0; display: block; border: 2px solid transparent; border-top-color: rgba(255,255,255,.95); border-radius: 50%; }
-.consultant-wave i:nth-child(2) { inset: 8px -7px -8px 7px; opacity: .72; }
-.consultant-wave i:nth-child(3) { inset: 16px -14px -16px 14px; opacity: .45; }
-.consultant-callout { margin-top: -8px; padding: 10px 16px; border: 2px solid white; border-radius: 999px; background: var(--ink); white-space: nowrap; font-size: .76rem; box-shadow: 0 10px 22px rgba(44,28,46,.22); animation: consultant-callout 8s ease-in-out infinite; }
-.consultant-launcher:hover .consultant-mini, .consultant-launcher:focus-visible .consultant-mini { animation-play-state: paused; transform: translateY(-6px) scale(1.02); }
-.consultant-launcher:hover .consultant-mini img, .consultant-launcher:focus-visible .consultant-mini img { animation-play-state: paused; }
-.consultant-launcher:hover .consultant-wave, .consultant-launcher:focus-visible .consultant-wave { opacity: 1; animation: consultant-wave-lines .9s ease-in-out infinite; }
+.consultant-launcher { position: fixed; z-index: 20; right: 10px; bottom: 42px; width: 218px; padding: 0; display: grid; justify-items: center; gap: 0; border: 0; background: transparent; color: white; cursor: pointer; font-weight: 800; filter: drop-shadow(0 14px 18px rgba(44, 28, 46, .23)); }
+.consultant-mini { width: 188px; height: 376px; display: block; background-image: url("assets/aura-consultant-wave-sprite.png"); background-repeat: no-repeat; background-position: 0 0; background-size: 400% 100%; transform-origin: 50% 100%; animation: consultant-wave-sprite 7s steps(1, end) infinite; transition: filter .2s ease, transform .2s ease; }
+.consultant-callout { margin-top: -20px; padding: 10px 16px; border: 2px solid white; border-radius: 999px; background: var(--ink); white-space: nowrap; font-size: .76rem; box-shadow: 0 10px 22px rgba(44,28,46,.22); animation: consultant-callout 7s ease-in-out infinite; }
+.consultant-launcher:hover .consultant-mini, .consultant-launcher:focus-visible .consultant-mini { filter: brightness(1.05); transform: translateY(-5px) scale(1.02); }
 .consultant-launcher:hover .consultant-callout, .consultant-launcher:focus-visible .consultant-callout { background: var(--pink-dark); }
 .consultant-launcher:focus-visible { outline: 3px solid rgba(152,67,95,.28); outline-offset: 6px; border-radius: 32px; }
-@keyframes consultant-wave {
-  0%, 100% { transform: rotate(0deg) scale(1); }
-  25% { transform: rotate(18deg) scale(1.08); }
-  50% { transform: rotate(-10deg) scale(1.04); }
-  75% { transform: rotate(16deg) scale(1.08); }
-}
-@keyframes consultant-alive {
-  0%, 62%, 100% { transform: translateY(0) rotate(0deg); }
-  68% { transform: translateY(-5px) rotate(-1.4deg); }
-  74% { transform: translateY(-3px) rotate(1.2deg); }
-  80% { transform: translateY(-5px) rotate(-.8deg); }
-  86% { transform: translateY(0) rotate(0deg); }
-}
-@keyframes consultant-breathe {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.012); }
-}
-@keyframes consultant-wave-lines {
-  0%, 60%, 88%, 100% { opacity: 0; transform: rotate(-18deg) scale(.8); }
-  68%, 82% { opacity: 1; transform: rotate(-6deg) scale(1); }
-  75% { opacity: .55; transform: rotate(-24deg) scale(.92); }
-}
-@keyframes consultant-glow {
-  0%, 60%, 88%, 100% { opacity: 0; }
-  72%, 82% { opacity: 1; }
+@keyframes consultant-wave-sprite {
+  0%, 58%, 100% { background-position: 0 0; transform: translateY(0); }
+  64%, 88% { background-position: 33.333% 0; transform: translateY(-2px); }
+  70%, 82% { background-position: 66.666% 0; transform: translateY(-3px); }
+  76% { background-position: 100% 0; transform: translateY(-2px); }
+  94% { background-position: 0 0; transform: translateY(0); }
 }
 @keyframes consultant-callout {
   0%, 8%, 92%, 100% { transform: translateY(0); }
@@ -404,8 +377,7 @@ button.shade-option { cursor: pointer; }
 .consultant-heading { padding-right: 50px; display: flex; align-items: center; gap: 14px; }
 .consultant-heading .eyebrow { margin: 0 0 2px; }
 .consultant-heading h2 { margin: 0; font-size: 1.7rem; }
-.consultant-avatar { width: 62px; height: 62px; flex: 0 0 auto; display: grid; place-items: center; overflow: hidden; border: 2px solid white; border-radius: 50%; background: #f3e3e8; box-shadow: 0 0 0 2px rgba(152,67,95,.16); }
-.consultant-avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center 9%; }
+.consultant-avatar { width: 62px; height: 62px; flex: 0 0 auto; display: block; border: 2px solid white; border-radius: 50%; background-color: #f3e3e8; background-image: url("assets/aura-consultant-wave-sprite.png"); background-repeat: no-repeat; background-position: 0 7%; background-size: 400% 200%; box-shadow: 0 0 0 2px rgba(152,67,95,.16); }
 .consultant-chat { max-height: 48vh; margin: 26px 0 16px; display: grid; gap: 10px; overflow-y: auto; }
 .consultant-message { max-width: 88%; padding: 12px 15px; border-radius: 18px 18px 18px 5px; background: white; box-shadow: 0 7px 20px rgba(90,39,88,.07); line-height: 1.5; }
 .consultant-message.user { margin-left: auto; border-radius: 18px 18px 5px 18px; background: #eadde2; font-weight: 700; }
@@ -485,10 +457,8 @@ button.shade-option { cursor: pointer; }
   .quantity-control { grid-column: 1 / -1; justify-content: end; }
   .contact-grid { grid-template-columns: 1fr; }
   .courier-schedule { grid-template-columns: 1fr; }
-  .consultant-launcher { right: 5px; bottom: 64px; width: 136px; }
-  .consultant-mini { width: 122px; height: 180px; border-radius: 48% 48% 22px 22px; }
-  .consultant-mini img { width: 100%; height: 100%; }
-  .consultant-wave { top: 48px; left: -2px; width: 25px; height: 38px; }
+  .consultant-launcher { right: 4px; bottom: 62px; width: 128px; }
+  .consultant-mini { width: 116px; height: 232px; }
   .consultant-callout { max-width: 134px; padding: 7px 10px; overflow: hidden; text-overflow: ellipsis; font-size: .61rem; }
   .consultant-shell { padding: 28px 18px 22px; }
   .consultant-heading h2 { font-size: 1.4rem; }

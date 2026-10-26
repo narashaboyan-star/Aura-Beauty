@@ -315,7 +315,12 @@ const shadeOptions = document.querySelector("#shade-options");
 const selectedShade = document.querySelector("#selected-shade");
 const productSource = document.querySelector("#dialog-product-source");
 const dialogAddButton = document.querySelector("#dialog-add-button");
+const consultantWidget = document.querySelector("#consultant-widget");
 const consultantLauncher = document.querySelector("#consultant-launcher");
+const consultantMini = document.querySelector(".consultant-mini");
+const consultantSmaller = document.querySelector("#consultant-smaller");
+const consultantLarger = document.querySelector("#consultant-larger");
+const consultantReset = document.querySelector("#consultant-reset");
 const consultantDialog = document.querySelector("#consultant-dialog");
 const consultantChat = document.querySelector("#consultant-chat");
 const consultantQuestionForm = document.querySelector("#consultant-question-form");
@@ -865,7 +870,130 @@ function startConsultant() {
   window.setTimeout(() => consultantQuestionInput.focus(), 0);
 }
 
-consultantLauncher.addEventListener("click", () => {
+const consultantWidgetStorageKey = "auraBeautyConsultantWidget";
+let consultantWasDragged = false;
+let consultantWidgetState = { scale: 1, x: null, y: null };
+
+try {
+  const savedWidgetState = JSON.parse(localStorage.getItem(consultantWidgetStorageKey));
+  if (savedWidgetState && Number.isFinite(savedWidgetState.scale)) {
+    consultantWidgetState = {
+      scale: Math.min(1.3, Math.max(.7, savedWidgetState.scale)),
+      x: Number.isFinite(savedWidgetState.x) ? savedWidgetState.x : null,
+      y: Number.isFinite(savedWidgetState.y) ? savedWidgetState.y : null
+    };
+  }
+} catch {}
+
+function saveConsultantWidgetState() {
+  localStorage.setItem(consultantWidgetStorageKey, JSON.stringify(consultantWidgetState));
+}
+
+function clampConsultantPosition(x, y) {
+  const rect = consultantWidget.getBoundingClientRect();
+  return {
+    x: Math.min(Math.max(0, x), Math.max(0, window.innerWidth - rect.width)),
+    y: Math.min(Math.max(0, y), Math.max(0, window.innerHeight - rect.height))
+  };
+}
+
+function applyConsultantWidgetState() {
+  consultantWidget.style.setProperty("--consultant-scale", consultantWidgetState.scale);
+  if (Number.isFinite(consultantWidgetState.x) && Number.isFinite(consultantWidgetState.y)) {
+    consultantWidget.style.right = "auto";
+    consultantWidget.style.bottom = "auto";
+    const position = clampConsultantPosition(consultantWidgetState.x, consultantWidgetState.y);
+    consultantWidgetState.x = position.x;
+    consultantWidgetState.y = position.y;
+    consultantWidget.style.left = `${position.x}px`;
+    consultantWidget.style.top = `${position.y}px`;
+  }
+}
+
+function changeConsultantScale(delta) {
+  const oldRect = consultantWidget.getBoundingClientRect();
+  const nextScale = Math.round(Math.min(1.3, Math.max(.7, consultantWidgetState.scale + delta)) * 10) / 10;
+  if (nextScale === consultantWidgetState.scale) return;
+  consultantWidgetState.scale = nextScale;
+  consultantWidget.style.setProperty("--consultant-scale", nextScale);
+  if (Number.isFinite(consultantWidgetState.x) && Number.isFinite(consultantWidgetState.y)) {
+    const newRect = consultantWidget.getBoundingClientRect();
+    const position = clampConsultantPosition(oldRect.left - (newRect.width - oldRect.width) / 2, oldRect.top - (newRect.height - oldRect.height) / 2);
+    consultantWidgetState.x = position.x;
+    consultantWidgetState.y = position.y;
+    consultantWidget.style.left = `${position.x}px`;
+    consultantWidget.style.top = `${position.y}px`;
+  }
+  saveConsultantWidgetState();
+}
+
+consultantSmaller.addEventListener("click", () => changeConsultantScale(-.1));
+consultantLarger.addEventListener("click", () => changeConsultantScale(.1));
+consultantReset.addEventListener("click", () => {
+  consultantWidgetState = { scale: 1, x: null, y: null };
+  consultantWidget.style.removeProperty("--consultant-scale");
+  consultantWidget.style.removeProperty("left");
+  consultantWidget.style.removeProperty("top");
+  consultantWidget.style.removeProperty("right");
+  consultantWidget.style.removeProperty("bottom");
+  saveConsultantWidgetState();
+});
+
+consultantMini.addEventListener("pointerdown", (event) => {
+  if (event.button !== undefined && event.button !== 0) return;
+  const startRect = consultantWidget.getBoundingClientRect();
+  const startX = event.clientX;
+  const startY = event.clientY;
+  let moved = false;
+  consultantMini.setPointerCapture(event.pointerId);
+
+  const move = (moveEvent) => {
+    const deltaX = moveEvent.clientX - startX;
+    const deltaY = moveEvent.clientY - startY;
+    if (!moved && Math.hypot(deltaX, deltaY) < 5) return;
+    moved = true;
+    consultantWasDragged = true;
+    consultantWidget.classList.add("is-dragging");
+    consultantWidget.style.right = "auto";
+    consultantWidget.style.bottom = "auto";
+    const position = clampConsultantPosition(startRect.left + deltaX, startRect.top + deltaY);
+    consultantWidgetState.x = position.x;
+    consultantWidgetState.y = position.y;
+    consultantWidget.style.left = `${position.x}px`;
+    consultantWidget.style.top = `${position.y}px`;
+  };
+
+  const end = () => {
+    consultantMini.removeEventListener("pointermove", move);
+    consultantMini.removeEventListener("pointerup", end);
+    consultantMini.removeEventListener("pointercancel", end);
+    consultantWidget.classList.remove("is-dragging");
+    if (moved) saveConsultantWidgetState();
+    window.setTimeout(() => { consultantWasDragged = false; }, 0);
+  };
+
+  consultantMini.addEventListener("pointermove", move);
+  consultantMini.addEventListener("pointerup", end);
+  consultantMini.addEventListener("pointercancel", end);
+});
+
+window.addEventListener("resize", () => {
+  if (!Number.isFinite(consultantWidgetState.x) || !Number.isFinite(consultantWidgetState.y)) return;
+  const position = clampConsultantPosition(consultantWidgetState.x, consultantWidgetState.y);
+  consultantWidgetState.x = position.x;
+  consultantWidgetState.y = position.y;
+  consultantWidget.style.left = `${position.x}px`;
+  consultantWidget.style.top = `${position.y}px`;
+  saveConsultantWidgetState();
+});
+
+applyConsultantWidgetState();
+
+consultantLauncher.addEventListener("click", (event) => {
+  if (consultantWasDragged) {
+    event.preventDefault();
+    return;
+  }
   startConsultant();
   consultantDialog.showModal();
 });

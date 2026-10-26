@@ -355,12 +355,19 @@ button.shade-option { cursor: pointer; }
 .order-success p { max-width: 500px; margin: 0 auto 24px; color: var(--muted); line-height: 1.65; }
 .secondary-action { padding: 11px 18px; border: 1px solid var(--ink); background: white; }
 
-.consultant-launcher { position: fixed; z-index: 20; right: 10px; bottom: 42px; width: 218px; padding: 0; display: grid; justify-items: center; gap: 0; border: 0; background: transparent; color: white; cursor: pointer; font-weight: 800; filter: drop-shadow(0 14px 18px rgba(44, 28, 46, .23)); }
-.consultant-mini { width: 188px; height: 376px; display: block; background-image: url("assets/aura-consultant-wave-sprite.png"); background-repeat: no-repeat; background-position: 0 0; background-size: 400% 100%; transform-origin: 50% 100%; animation: consultant-wave-sprite 7s steps(1, end) infinite; transition: filter .2s ease, transform .2s ease; }
+.consultant-widget { --consultant-scale: 1; --consultant-person-width: 188px; --consultant-person-height: 376px; position: fixed; z-index: 20; right: 10px; bottom: 42px; width: calc(218px * var(--consultant-scale)); display: grid; justify-items: center; user-select: none; }
+.consultant-launcher { width: 100%; padding: 0; display: grid; justify-items: center; gap: 0; border: 0; background: transparent; color: white; cursor: pointer; font-weight: 800; filter: drop-shadow(0 14px 18px rgba(44, 28, 46, .23)); }
+.consultant-mini { width: calc(var(--consultant-person-width) * var(--consultant-scale)); height: calc(var(--consultant-person-height) * var(--consultant-scale)); display: block; background-image: url("assets/aura-consultant-wave-sprite.png"); background-repeat: no-repeat; background-position: 0 0; background-size: 400% 100%; cursor: grab; touch-action: none; transform-origin: 50% 100%; animation: consultant-wave-sprite 7s steps(1, end) infinite; transition: filter .2s ease, transform .2s ease; }
+.consultant-mini:active { cursor: grabbing; }
+.consultant-controls { position: absolute; z-index: 3; top: 18px; right: 0; display: grid; gap: 6px; }
+.consultant-controls button { width: 34px; height: 34px; padding: 0; border: 2px solid white; border-radius: 50%; background: rgba(57,39,58,.92); color: white; cursor: pointer; box-shadow: 0 7px 18px rgba(44,28,46,.22); font-size: 1.05rem; font-weight: 900; }
+.consultant-controls button:hover, .consultant-controls button:focus-visible { background: var(--pink-dark); outline: 3px solid rgba(152,67,95,.18); }
+.consultant-drag-hint { margin: -30px 0 4px; padding: 5px 9px; border: 1px solid rgba(255,255,255,.9); border-radius: 999px; background: rgba(255,255,255,.9); color: var(--ink); font-size: .62rem; box-shadow: 0 5px 14px rgba(44,28,46,.12); opacity: .88; }
 .consultant-callout { margin-top: -20px; padding: 10px 16px; border: 2px solid white; border-radius: 999px; background: var(--ink); white-space: nowrap; font-size: .76rem; box-shadow: 0 10px 22px rgba(44,28,46,.22); animation: consultant-callout 7s ease-in-out infinite; }
 .consultant-launcher:hover .consultant-mini, .consultant-launcher:focus-visible .consultant-mini { filter: brightness(1.05); transform: translateY(-5px) scale(1.02); }
 .consultant-launcher:hover .consultant-callout, .consultant-launcher:focus-visible .consultant-callout { background: var(--pink-dark); }
 .consultant-launcher:focus-visible { outline: 3px solid rgba(152,67,95,.28); outline-offset: 6px; border-radius: 32px; }
+.consultant-widget.is-dragging .consultant-mini { animation-play-state: paused; filter: brightness(1.06); }
 @keyframes consultant-wave-sprite {
   0%, 58%, 100% { background-position: 0 0; transform: translateY(0); }
   64%, 88% { background-position: 33.333% 0; transform: translateY(-2px); }
@@ -457,8 +464,10 @@ button.shade-option { cursor: pointer; }
   .quantity-control { grid-column: 1 / -1; justify-content: end; }
   .contact-grid { grid-template-columns: 1fr; }
   .courier-schedule { grid-template-columns: 1fr; }
-  .consultant-launcher { right: 4px; bottom: 62px; width: 128px; }
-  .consultant-mini { width: 116px; height: 232px; }
+  .consultant-widget { --consultant-person-width: 116px; --consultant-person-height: 232px; right: 4px; bottom: 62px; width: calc(128px * var(--consultant-scale)); }
+  .consultant-controls { top: 4px; right: -2px; gap: 4px; }
+  .consultant-controls button { width: 29px; height: 29px; font-size: .9rem; }
+  .consultant-drag-hint { margin-top: -22px; font-size: .54rem; }
   .consultant-callout { max-width: 134px; padding: 7px 10px; overflow: hidden; text-overflow: ellipsis; font-size: .61rem; }
   .consultant-shell { padding: 28px 18px 22px; }
   .consultant-heading h2 { font-size: 1.4rem; }

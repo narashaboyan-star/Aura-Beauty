@@ -355,17 +355,18 @@ button.shade-option { cursor: pointer; }
 .order-success p { max-width: 500px; margin: 0 auto 24px; color: var(--muted); line-height: 1.65; }
 .secondary-action { padding: 11px 18px; border: 1px solid var(--ink); background: white; }
 
-.consultant-widget { --consultant-scale: 1; --consultant-person-width: 188px; --consultant-person-height: 376px; position: fixed; z-index: 20; right: 10px; bottom: 42px; width: calc(218px * var(--consultant-scale)); display: grid; justify-items: center; user-select: none; }
-.consultant-launcher { width: 100%; padding: 0; display: grid; justify-items: center; gap: 0; border: 0; background: transparent; color: white; cursor: pointer; font-weight: 800; filter: drop-shadow(0 14px 18px rgba(44, 28, 46, .23)); }
+.consultant-widget { --consultant-scale: 1; --consultant-person-width: 188px; --consultant-person-height: 376px; position: fixed; z-index: 20; right: 10px; bottom: 42px; width: calc(218px * var(--consultant-scale)); padding-top: 64px; display: grid; justify-items: center; user-select: none; }
+.consultant-launcher { position: relative; width: 100%; padding: 0; display: grid; justify-items: center; gap: 0; border: 0; background: transparent; color: white; cursor: pointer; font-weight: 800; filter: drop-shadow(0 14px 18px rgba(44, 28, 46, .23)); }
 .consultant-mini { width: calc(var(--consultant-person-width) * var(--consultant-scale)); height: calc(var(--consultant-person-height) * var(--consultant-scale)); display: block; background-image: url("assets/aura-consultant-wave-sprite.png"); background-repeat: no-repeat; background-position: 0 0; background-size: 400% 100%; cursor: grab; touch-action: none; transform-origin: 50% 100%; animation: consultant-wave-sprite 7s steps(1, end) infinite; transition: filter .2s ease, transform .2s ease; }
 .consultant-mini:active { cursor: grabbing; }
-.consultant-controls { position: absolute; z-index: 3; top: 18px; right: 0; display: grid; gap: 6px; }
+.consultant-controls { position: absolute; z-index: 3; top: 82px; right: 0; display: grid; gap: 6px; }
 .consultant-controls button { width: 34px; height: 34px; padding: 0; border: 2px solid white; border-radius: 50%; background: rgba(57,39,58,.92); color: white; cursor: pointer; box-shadow: 0 7px 18px rgba(44,28,46,.22); font-size: 1.05rem; font-weight: 900; }
 .consultant-controls button:hover, .consultant-controls button:focus-visible { background: var(--pink-dark); outline: 3px solid rgba(152,67,95,.18); }
 .consultant-drag-hint { margin: -30px 0 4px; padding: 5px 9px; border: 1px solid rgba(255,255,255,.9); border-radius: 999px; background: rgba(255,255,255,.9); color: var(--ink); font-size: .62rem; box-shadow: 0 5px 14px rgba(44,28,46,.12); opacity: .88; }
-.consultant-callout { margin-top: -20px; padding: 10px 16px; border: 2px solid white; border-radius: 999px; background: var(--ink); white-space: nowrap; font-size: .76rem; box-shadow: 0 10px 22px rgba(44,28,46,.22); animation: consultant-callout 7s ease-in-out infinite; }
+.consultant-callout { position: absolute; z-index: 2; top: -58px; right: 45%; width: max-content; max-width: 220px; padding: 13px 17px; border: 2px solid #d9a8b8; border-radius: 24px 24px 9px 24px; background: rgba(255,250,247,.97); color: var(--ink); white-space: normal; text-align: center; font-size: .78rem; line-height: 1.25; box-shadow: 0 12px 28px rgba(44,28,46,.2); pointer-events: none; transform-origin: 84% 100%; animation: consultant-callout 9s ease-in-out infinite; }
+.consultant-callout::after { content: ""; position: absolute; right: 27%; bottom: -9px; width: 17px; height: 17px; border-right: 2px solid #d9a8b8; border-bottom: 2px solid #d9a8b8; background: rgba(255,250,247,.97); transform: rotate(45deg); }
 .consultant-launcher:hover .consultant-mini, .consultant-launcher:focus-visible .consultant-mini { filter: brightness(1.05); transform: translateY(-5px) scale(1.02); }
-.consultant-launcher:hover .consultant-callout, .consultant-launcher:focus-visible .consultant-callout { background: var(--pink-dark); }
+.consultant-launcher:hover .consultant-callout, .consultant-launcher:focus-visible .consultant-callout { border-color: var(--pink-dark); background: white; }
 .consultant-launcher:focus-visible { outline: 3px solid rgba(152,67,95,.28); outline-offset: 6px; border-radius: 32px; }
 .consultant-widget.is-dragging .consultant-mini { animation-play-state: paused; filter: brightness(1.06); }
 @keyframes consultant-wave-sprite {
@@ -376,8 +377,9 @@ button.shade-option { cursor: pointer; }
   94% { background-position: 0 0; transform: translateY(0); }
 }
 @keyframes consultant-callout {
-  0%, 8%, 92%, 100% { transform: translateY(0); }
-  70%, 82% { transform: translateY(-4px); }
+  0%, 8%, 90%, 100% { opacity: 0; transform: translateY(8px) scale(.86); }
+  16%, 76% { opacity: 1; transform: translateY(0) scale(1); }
+  82% { opacity: 1; transform: translateY(-3px) scale(1); }
 }
 .consultant-dialog { width: min(560px, calc(100% - 28px)); max-height: 88vh; margin: 5vh auto auto; border-radius: 32px; background: var(--paper); box-shadow: 0 26px 90px rgba(33,21,34,.3); }
 .consultant-shell { max-height: 88vh; padding: 34px; overflow-y: auto; }
@@ -464,11 +466,11 @@ button.shade-option { cursor: pointer; }
   .quantity-control { grid-column: 1 / -1; justify-content: end; }
   .contact-grid { grid-template-columns: 1fr; }
   .courier-schedule { grid-template-columns: 1fr; }
-  .consultant-widget { --consultant-person-width: 116px; --consultant-person-height: 232px; right: 4px; bottom: 62px; width: calc(128px * var(--consultant-scale)); }
-  .consultant-controls { top: 4px; right: -2px; gap: 4px; }
+  .consultant-widget { --consultant-person-width: 116px; --consultant-person-height: 232px; right: 4px; bottom: 62px; width: calc(128px * var(--consultant-scale)); padding-top: 52px; }
+  .consultant-controls { top: 58px; right: -2px; gap: 4px; }
   .consultant-controls button { width: 29px; height: 29px; font-size: .9rem; }
   .consultant-drag-hint { margin-top: -22px; font-size: .54rem; }
-  .consultant-callout { max-width: 134px; padding: 7px 10px; overflow: hidden; text-overflow: ellipsis; font-size: .61rem; }
+  .consultant-callout { top: -46px; max-width: 160px; padding: 9px 11px; border-radius: 18px 18px 18px 7px; font-size: .62rem; }
   .consultant-shell { padding: 28px 18px 22px; }
   .consultant-heading h2 { font-size: 1.4rem; }
 }

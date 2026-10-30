@@ -336,6 +336,8 @@ button.shade-option { cursor: pointer; }
 .checkout-form label { display: grid; gap: 7px; font-size: .82rem; font-weight: 800; }
 .checkout-form input, .checkout-form textarea { width: 100%; padding: 13px 14px; border: 1px solid var(--line); border-radius: 14px; background: white; color: var(--ink); outline: none; }
 .checkout-form input:focus, .checkout-form textarea:focus { border-color: var(--pink-dark); box-shadow: 0 0 0 3px rgba(152,67,95,.1); }
+.checkout-form input.is-invalid { border-color: #a42f42; box-shadow: 0 0 0 3px rgba(164,47,66,.1); }
+.checkout-form .field-hint { color: var(--muted); font-size: .68rem; font-weight: 500; line-height: 1.35; }
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .payment-methods, .delivery-methods { margin: 0; padding: 0; display: grid; gap: 9px; border: 0; }
 .payment-methods legend, .delivery-methods legend { margin-bottom: 9px; font-size: .92rem; font-weight: 800; }

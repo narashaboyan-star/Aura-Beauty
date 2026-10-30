@@ -306,6 +306,8 @@ const cartCheckout = document.querySelector("#cart-checkout");
 const cartTotals = document.querySelector("#cart-totals");
 const checkoutForm = document.querySelector("#checkout-form");
 const formError = document.querySelector("#form-error");
+const customerEmail = document.querySelector("#customer-email");
+const customerPhone = document.querySelector("#customer-phone");
 const orderSuccess = document.querySelector("#order-success");
 const orderSuccessText = document.querySelector("#order-success-text");
 const productDialog = document.querySelector("#product-dialog");
@@ -680,13 +682,65 @@ cartItems.addEventListener("click", (event) => {
 checkoutForm.querySelectorAll('input[name="delivery"]').forEach((radio) => radio.addEventListener("change", updateDeliveryFields));
 deliveryDate.min = new Date().toISOString().slice(0, 10);
 
+const emailFormat = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+const armenianPhoneFormat = /^\+374 \d{2} \d{3} \d{3}$/;
+
+function markContactValidity(input, valid) {
+  input.classList.toggle("is-invalid", !valid && Boolean(input.value.trim()));
+  input.setAttribute("aria-invalid", String(!valid && Boolean(input.value.trim())));
+}
+
+customerEmail.addEventListener("input", () => {
+  const cursor = customerEmail.selectionStart;
+  const cleaned = customerEmail.value.replace(/[^A-Za-z0-9.!#$%&'*+/=?^_`{|}~@-]/g, "");
+  if (cleaned !== customerEmail.value) {
+    customerEmail.value = cleaned;
+    customerEmail.setSelectionRange(Math.min(cursor, cleaned.length), Math.min(cursor, cleaned.length));
+  }
+  customerEmail.setCustomValidity("");
+  markContactValidity(customerEmail, !cleaned || emailFormat.test(cleaned));
+});
+
+customerEmail.addEventListener("blur", () => {
+  const valid = !customerEmail.value || emailFormat.test(customerEmail.value);
+  customerEmail.setCustomValidity(valid ? "" : tr("Введите email в формате name@example.com.", "Enter an email in the format name@example.com.", "Մուտքագրեք էլ․ փոստը name@example.com ձևաչափով։"));
+  markContactValidity(customerEmail, valid);
+});
+
+function formatArmenianPhone(value) {
+  let digits = value.replace(/\D/g, "");
+  if (value.trim().startsWith("+") && digits && !digits.startsWith("374")) return "+374 ";
+  if (digits.startsWith("374")) digits = digits.slice(3);
+  else if (digits.startsWith("0")) digits = digits.slice(1);
+  digits = digits.slice(0, 8);
+  if (!digits && !value.includes("374")) return "";
+  const parts = [digits.slice(0, 2), digits.slice(2, 5), digits.slice(5, 8)].filter(Boolean);
+  return `+374${parts.length ? ` ${parts.join(" ")}` : " "}`;
+}
+
+customerPhone.addEventListener("focus", () => {
+  if (!customerPhone.value) customerPhone.value = "+374 ";
+});
+
+customerPhone.addEventListener("input", () => {
+  customerPhone.value = formatArmenianPhone(customerPhone.value);
+  customerPhone.setCustomValidity("");
+  markContactValidity(customerPhone, !customerPhone.value.trim() || armenianPhoneFormat.test(customerPhone.value));
+});
+
+customerPhone.addEventListener("blur", () => {
+  if (customerPhone.value.trim() === "+374") customerPhone.value = "";
+  const valid = !customerPhone.value || armenianPhoneFormat.test(customerPhone.value);
+  customerPhone.setCustomValidity(valid ? "" : tr("Введите армянский номер в формате +374 XX XXX XXX.", "Enter an Armenian number in the format +374 XX XXX XXX.", "Մուտքագրեք հայկական համարը +374 XX XXX XXX ձևաչափով։"));
+  markContactValidity(customerPhone, valid);
+});
+
 checkoutForm.addEventListener("submit", (event) => {
   event.preventDefault();
   formError.textContent = "";
   const name = document.querySelector("#customer-name").value.trim();
-  const emailInput = document.querySelector("#customer-email");
-  const phone = document.querySelector("#customer-phone").value.trim();
-  const email = emailInput.value.trim();
+  const phone = customerPhone.value.trim();
+  const email = customerEmail.value.trim();
   const paymentMethod = checkoutForm.elements.payment.value;
   const deliveryMethod = checkoutForm.elements.delivery.value;
   const paymentLabels = {
@@ -706,12 +760,19 @@ checkoutForm.addEventListener("submit", (event) => {
   }
   if (!email && !phone) {
     formError.textContent = tr("Укажите email или номер телефона.", "Enter an email address or phone number.", "Նշեք էլ․ փոստը կամ հեռախոսահամարը։");
-    emailInput.focus();
+    customerEmail.focus();
     return;
   }
-  if (email && !emailInput.validity.valid) {
-    formError.textContent = tr("Проверьте адрес электронной почты.", "Check the email address.", "Ստուգեք էլ․ փոստի հասցեն։");
-    emailInput.focus();
+  if (email && !emailFormat.test(email)) {
+    formError.textContent = tr("Введите email в формате name@example.com.", "Enter an email in the format name@example.com.", "Մուտքագրեք էլ․ փոստը name@example.com ձևաչափով։");
+    markContactValidity(customerEmail, false);
+    customerEmail.focus();
+    return;
+  }
+  if (phone && !armenianPhoneFormat.test(phone)) {
+    formError.textContent = tr("Введите армянский номер в формате +374 XX XXX XXX.", "Enter an Armenian number in the format +374 XX XXX XXX.", "Մուտքագրեք հայկական համարը +374 XX XXX XXX ձևաչափով։");
+    markContactValidity(customerPhone, false);
+    customerPhone.focus();
     return;
   }
   if (!deliveryAddress.value.trim()) {

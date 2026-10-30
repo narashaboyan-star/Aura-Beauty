@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Каталог профессиональной косметики Aura Beauty.">
   <title>Товары — Aura Beauty</title>
-  <link rel="stylesheet" href="styles.css?v=speech-bubble-1">
+  <link rel="stylesheet" href="styles.css?v=contact-validation-1">
 </head>
 <body>
   <header class="site-header">
@@ -264,8 +264,8 @@
           <p data-ru="Укажите имя и хотя бы один способ связи. Оплата подтверждается только после согласования заказа." data-en="Enter your name and at least one contact method. Payment is confirmed only after the order is agreed." data-hy="Նշեք անունը և կապի առնվազն մեկ միջոց։ Վճարումը հաստատվում է պատվերը համաձայնեցնելուց հետո։">Укажите имя и хотя бы один способ связи. Оплата подтверждается только после согласования заказа.</p>
           <label><span data-ru="Имя" data-en="Name" data-hy="Անուն">Имя</span><input id="customer-name" name="name" autocomplete="name" required></label>
           <div class="contact-grid">
-            <label>Email<input id="customer-email" name="email" type="email" autocomplete="email" placeholder="name@example.com"></label>
-            <label><span data-ru="Телефон" data-en="Phone" data-hy="Հեռախոս">Телефон</span><input id="customer-phone" name="phone" type="tel" autocomplete="tel" placeholder="+374 …"></label>
+            <label>Email<input id="customer-email" name="email" type="email" inputmode="email" autocomplete="email" maxlength="254" pattern="[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}" placeholder="name@example.com" title="name@example.com"><small class="field-hint" data-ru="Формат: name@example.com" data-en="Format: name@example.com" data-hy="Ձևաչափ՝ name@example.com">Формат: name@example.com</small></label>
+            <label><span data-ru="Телефон" data-en="Phone" data-hy="Հեռախոս">Телефон</span><input id="customer-phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="15" pattern="\+374 [0-9]{2} [0-9]{3} [0-9]{3}" placeholder="+374 XX XXX XXX" title="+374 XX XXX XXX"><small class="field-hint" data-ru="Только армянский номер: +374 XX XXX XXX" data-en="Armenian number only: +374 XX XXX XXX" data-hy="Միայն հայկական համար՝ +374 XX XXX XXX">Только армянский номер: +374 XX XXX XXX</small></label>
           </div>
           <label><span data-ru="Комментарий" data-en="Comment" data-hy="Մեկնաբանություն">Комментарий</span><textarea id="customer-comment" name="comment" rows="3" data-placeholder-ru="Например, удобное время для связи" data-placeholder-en="For example, your preferred contact time" data-placeholder-hy="Օրինակ՝ կապվելու հարմար ժամը" placeholder="Например, удобное время для связи"></textarea></label>
           <fieldset class="delivery-methods">
@@ -303,6 +303,6 @@
     <span data-ru="Профессиональная косметика для ухода и красоты" data-en="Professional skincare and beauty products" data-hy="Պրոֆեսիոնալ խնամքի և գեղեցկության միջոցներ">Профессиональная косметика для ухода и красоты</span>
   </footer>
   <script src="site.js?v=hy-delivery-1" defer></script>
-  <script src="app.js?v=movable-consultant-1" defer></script>
+  <script src="app.js?v=contact-validation-1" defer></script>
 </body>
 </html>

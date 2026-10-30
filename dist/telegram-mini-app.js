@@ -9,6 +9,11 @@
   const retryButton = document.querySelector("#telegram-session-retry");
   const checkoutGate = document.querySelector("#telegram-checkout-gate");
   const checkoutButton = document.querySelector(".checkout-button");
+  const ordersOpen = document.querySelector("#telegram-orders-open");
+  const ordersDialog = document.querySelector("#telegram-orders-dialog");
+  const ordersClose = document.querySelector("#telegram-orders-close");
+  const ordersMessage = document.querySelector("#telegram-orders-message");
+  const ordersList = document.querySelector("#telegram-orders-list");
 
   const state = {
     active,
@@ -67,6 +72,7 @@
     checkoutGate.hidden = state.createOrders;
     checkoutButton.disabled = !state.createOrders;
     checkoutButton.setAttribute("aria-disabled", String(!state.createOrders));
+    ordersOpen.hidden = !state.viewOrders;
     retryButton.hidden = !["missing", "unavailable", "rejected"].includes(state.messageKey);
     statusPanel.dataset.state = state.messageKey;
     statusMessage.textContent = messages[state.messageKey]();
@@ -128,11 +134,58 @@
     }
   }
 
+  async function apiRequest(path, options = {}) {
+    if (!telegram?.initData || !state.verified) throw new Error("telegram-session-unavailable");
+    const response = await fetch(path, {
+      ...options,
+      headers: {
+        "Authorization": `tma ${telegram.initData}`,
+        "Content-Type": "application/json",
+        ...(options.headers || {})
+      },
+      credentials: "same-origin"
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(payload?.error || "request-failed");
+    return payload;
+  }
+
+  async function createOrder(order) {
+    if (!state.createOrders) throw new Error("checkout-unavailable");
+    const payload = await apiRequest("/api/orders", {method: "POST", body: JSON.stringify(order)});
+    return payload.order;
+  }
+
+  async function openOrders() {
+    ordersDialog.showModal();
+    ordersList.replaceChildren();
+    ordersMessage.textContent = tr("Загружаем заказы…", "Loading orders…", "Պատվերները բեռնվում են…");
+    try {
+      const payload = await apiRequest("/api/orders");
+      ordersMessage.textContent = payload.orders.length ? "" : tr("Заказов пока нет.", "No orders yet.", "Պատվերներ դեռ չկան։");
+      payload.orders.forEach((order) => {
+        const card = document.createElement("article");
+        card.className = "telegram-order-card";
+        const status = {
+          new: tr("Новый", "New", "Նոր"), confirmed: tr("Подтверждён", "Confirmed", "Հաստատված"),
+          preparing: tr("Собирается", "Preparing", "Հավաքվում է"), sent: tr("В доставке", "Shipped", "Առաքման մեջ"),
+          completed: tr("Выполнен", "Completed", "Կատարված"), cancelled: tr("Отменён", "Cancelled", "Չեղարկված")
+        }[order.status] || order.status;
+        card.innerHTML = `<strong>${order.id}</strong><span>${status}</span><small>$${Number(order.totalUsd).toFixed(2)} · ${new Date(order.createdAt).toLocaleDateString()}</small>`;
+        ordersList.append(card);
+      });
+    } catch {
+      ordersMessage.textContent = tr("Не удалось загрузить заказы. Попробуйте позже.", "Could not load orders. Try again later.", "Չհաջողվեց բեռնել պատվերները։ Փորձեք ավելի ուշ։");
+    }
+  }
+
   window.AuraTelegram = {
     get active() { return state.active; },
     get verified() { return state.verified; },
     canCreateOrders() { return !state.active || state.createOrders; },
     canViewOrders() { return state.active && state.viewOrders; },
+    createOrder,
+    loadOrders() { return apiRequest("/api/orders"); },
     guardCheckout() {
       if (!state.active || state.createOrders) return true;
       checkoutGate.hidden = false;
@@ -149,6 +202,8 @@
   applyTelegramViewport();
   telegram?.onEvent?.("viewportChanged", applyTelegramViewport);
   retryButton.addEventListener("click", connectSession);
+  ordersOpen.addEventListener("click", openOrders);
+  ordersClose.addEventListener("click", () => ordersDialog.close());
   document.addEventListener("aura:preferences", renderState);
   connectSession();
 })();

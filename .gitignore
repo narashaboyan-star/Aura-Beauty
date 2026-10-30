@@ -4,3 +4,9 @@ candy-glow-site*.zip
 .env
 .env.*
 !.env.example
+
+# Local server runtime files.
+*.db
+*.sqlite3
+__pycache__/
+.venv/

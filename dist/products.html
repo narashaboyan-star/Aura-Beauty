@@ -34,7 +34,10 @@
       <strong data-ru="Aura Beauty в Telegram" data-en="Aura Beauty in Telegram" data-hy="Aura Beauty-ն Telegram-ում">Aura Beauty в Telegram</strong>
       <p id="telegram-session-message"></p>
     </div>
-    <button id="telegram-session-retry" type="button" hidden data-ru="Повторить" data-en="Retry" data-hy="Կրկնել">Повторить</button>
+    <div class="telegram-status-actions">
+      <button id="telegram-orders-open" type="button" hidden data-ru="Мои заказы" data-en="My orders" data-hy="Իմ պատվերները">Мои заказы</button>
+      <button id="telegram-session-retry" type="button" hidden data-ru="Повторить" data-en="Retry" data-hy="Կրկնել">Повторить</button>
+    </div>
   </section>
 
   <main class="catalog-page">
@@ -320,6 +323,15 @@
         <p id="order-success-text"></p>
         <button class="secondary-action" type="button" data-close-cart data-ru="Вернуться в каталог" data-en="Back to catalog" data-hy="Վերադառնալ կատալոգ">Вернуться в каталог</button>
       </div>
+    </div>
+  </dialog>
+
+  <dialog class="telegram-orders-dialog" id="telegram-orders-dialog" aria-labelledby="telegram-orders-title">
+    <button class="dialog-close" type="button" id="telegram-orders-close" aria-label="Закрыть">×</button>
+    <div class="cart-shell">
+      <header class="cart-heading"><p class="eyebrow">Aura Beauty</p><h2 id="telegram-orders-title" data-ru="Мои заказы" data-en="My orders" data-hy="Իմ պատվերները">Мои заказы</h2></header>
+      <p id="telegram-orders-message" aria-live="polite"></p>
+      <div class="telegram-orders-list" id="telegram-orders-list"></div>
     </div>
   </dialog>
 

@@ -741,7 +741,7 @@ customerPhone.addEventListener("blur", () => {
   markContactValidity(customerPhone, valid);
 });
 
-checkoutForm.addEventListener("submit", (event) => {
+checkoutForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   formError.textContent = "";
   if (window.AuraTelegram && !window.AuraTelegram.guardCheckout()) {
@@ -797,7 +797,7 @@ checkoutForm.addEventListener("submit", (event) => {
   }
 
   const entries = getCartEntries();
-  const orderId = `AB-${Date.now().toString().slice(-8)}`;
+  let orderId = `AB-${Date.now().toString().slice(-8)}`;
   const order = {
     id: orderId,
     createdAt: new Date().toISOString(),
@@ -808,7 +808,20 @@ checkoutForm.addEventListener("submit", (event) => {
     items: entries.map(({productId, variant, quantity}) => ({id: productId, name: products[productId].name, variant, quantity, price: formattedPrice(products[productId].price)}))
   };
 
-  localStorage.setItem(orderStorageKey, JSON.stringify(order));
+  let storedNote = tr("Заказ сохранён на этом устройстве.", "The order is saved on this device.", "Պատվերը պահպանվել է այս սարքում։");
+  if (window.AuraTelegram?.active) {
+    try {
+      const created = await window.AuraTelegram.createOrder(order);
+      orderId = created.id;
+      order.id = created.id;
+      storedNote = tr("Заказ сохранён в Aura Beauty и доступен в разделе «Мои заказы».", "The order is saved in Aura Beauty and is available under My orders.", "Պատվերը պահպանվել է Aura Beauty-ում և հասանելի է «Իմ պատվերները» բաժնում։");
+    } catch {
+      formError.textContent = tr("Не удалось сохранить заказ на сервере. Корзина не изменена — попробуйте ещё раз.", "The order could not be saved. Your cart is unchanged—please try again.", "Չհաջողվեց պահպանել պատվերը։ Զամբյուղը չի փոխվել, փորձեք կրկին։");
+      return;
+    }
+  } else {
+    localStorage.setItem(orderStorageKey, JSON.stringify(order));
+  }
   cart = {};
   saveCart();
   checkoutForm.reset();
@@ -823,9 +836,9 @@ checkoutForm.addEventListener("submit", (event) => {
     ? tr("После подтверждения заказа защищённая ссылка на оплату будет отправлена на указанный контакт.", "After the order is confirmed, a secure payment link will be sent to your contact.", "Պատվերի հաստատումից հետո վճարման ապահով հղումը կուղարկվի նշված կապի միջոցով։")
     : tr("Магазин уточнит детали оплаты при подтверждении заказа.", "The store will confirm the payment details with your order.", "Խանութը պատվերը հաստատելիս կհստակեցնի վճարման մանրամասները։");
   orderSuccessText.textContent = tr(
-    `Номер ${orderId}. Доставка: ${deliveryLabels[deliveryMethod]}. Способ оплаты: ${paymentLabels[paymentMethod]}. Контакт: ${contact}. ${paymentNextStep} Заказ сохранён на этом устройстве.`,
-    `Order ${orderId}. Delivery: ${deliveryLabels[deliveryMethod]}. Payment method: ${paymentLabels[paymentMethod]}. Contact: ${contact}. ${paymentNextStep} The order is saved on this device.`,
-    `Պատվեր ${orderId}։ Առաքում՝ ${deliveryLabels[deliveryMethod]}։ Վճարման եղանակ՝ ${paymentLabels[paymentMethod]}։ Կապ՝ ${contact}։ ${paymentNextStep} Պատվերը պահպանվել է այս սարքում։`
+    `Номер ${orderId}. Доставка: ${deliveryLabels[deliveryMethod]}. Способ оплаты: ${paymentLabels[paymentMethod]}. Контакт: ${contact}. ${paymentNextStep} ${storedNote}`,
+    `Order ${orderId}. Delivery: ${deliveryLabels[deliveryMethod]}. Payment method: ${paymentLabels[paymentMethod]}. Contact: ${contact}. ${paymentNextStep} ${storedNote}`,
+    `Պատվեր ${orderId}։ Առաքում՝ ${deliveryLabels[deliveryMethod]}։ Վճարման եղանակ՝ ${paymentLabels[paymentMethod]}։ Կապ՝ ${contact}։ ${paymentNextStep} ${storedNote}`
   );
 });
 

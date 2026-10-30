@@ -1,1 +1,6 @@
 candy-glow-site*.zip
+
+# Local secrets and machine-specific environment values.
+.env
+.env.*
+!.env.example

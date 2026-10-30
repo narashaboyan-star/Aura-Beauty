@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Каталог профессиональной косметики Aura Beauty.">
   <title>Товары — Aura Beauty</title>
-  <link rel="stylesheet" href="styles.css?v=payment-flow-1">
+  <script src="https://telegram.org/js/telegram-web-app.js?64"></script>
+  <link rel="stylesheet" href="styles.css?v=telegram-mini-app-1">
 </head>
 <body>
   <header class="site-header">
@@ -26,6 +27,15 @@
       </div>
     </nav>
   </header>
+
+  <section class="telegram-miniapp-status" id="telegram-miniapp-status" hidden aria-live="polite">
+    <span class="telegram-miniapp-icon" aria-hidden="true">✦</span>
+    <div>
+      <strong data-ru="Aura Beauty в Telegram" data-en="Aura Beauty in Telegram" data-hy="Aura Beauty-ն Telegram-ում">Aura Beauty в Telegram</strong>
+      <p id="telegram-session-message"></p>
+    </div>
+    <button id="telegram-session-retry" type="button" hidden data-ru="Повторить" data-en="Retry" data-hy="Կրկնել">Повторить</button>
+  </section>
 
   <main class="catalog-page">
     <a class="back-link" href="index.html"><span aria-hidden="true">←</span> <span data-ru="На главную" data-en="Back home" data-hy="Գլխավոր էջ">На главную</span></a>
@@ -259,6 +269,10 @@
       <div class="cart-empty" id="cart-empty"><span aria-hidden="true">🛍️</span><p data-ru="Корзина пока пустая" data-en="Your cart is empty" data-hy="Զամբյուղը դատարկ է">Корзина пока пустая</p><small data-ru="Добавьте товары из каталога." data-en="Add products from the catalog." data-hy="Ավելացրեք ապրանքներ կատալոգից։">Добавьте товары из каталога.</small></div>
       <div class="cart-checkout" id="cart-checkout">
         <div class="cart-totals" id="cart-totals"></div>
+        <div class="telegram-checkout-gate" id="telegram-checkout-gate" hidden>
+          <span aria-hidden="true">🔐</span>
+          <div><strong data-ru="Оформление ещё не подключено" data-en="Checkout is not connected yet" data-hy="Պատվերի ձևակերպումը դեռ միացված չէ">Оформление ещё не подключено</strong><p data-ru="Каталог и корзина готовы. Заказ станет доступен после серверной проверки Telegram-покупателя." data-en="The catalog and cart are ready. Ordering will be enabled after the Telegram buyer is verified by the server." data-hy="Կատալոգն ու զամբյուղը պատրաստ են։ Պատվերը հասանելի կլինի Telegram գնորդի սերվերային ստուգումից հետո։">Каталог и корзина готовы. Заказ станет доступен после серверной проверки Telegram-покупателя.</p></div>
+        </div>
         <form class="checkout-form" id="checkout-form" novalidate>
           <h3 data-ru="Оформление заказа" data-en="Checkout" data-hy="Պատվերի ձևակերպում">Оформление заказа</h3>
           <p data-ru="Укажите имя и хотя бы один способ связи. Оплата подтверждается только после согласования заказа." data-en="Enter your name and at least one contact method. Payment is confirmed only after the order is agreed." data-hy="Նշեք անունը և կապի առնվազն մեկ միջոց։ Վճարումը հաստատվում է պատվերը համաձայնեցնելուց հետո։">Укажите имя и хотя бы один способ связи. Оплата подтверждается только после согласования заказа.</p>
@@ -314,6 +328,7 @@
     <span data-ru="Профессиональная косметика для ухода и красоты" data-en="Professional skincare and beauty products" data-hy="Պրոֆեսիոնալ խնամքի և գեղեցկության միջոցներ">Профессиональная косметика для ухода и красоты</span>
   </footer>
   <script src="site.js?v=hy-delivery-1" defer></script>
-  <script src="app.js?v=payment-flow-1" defer></script>
+  <script src="telegram-mini-app.js?v=telegram-mini-app-1" defer></script>
+  <script src="app.js?v=telegram-mini-app-1" defer></script>
 </body>
 </html>

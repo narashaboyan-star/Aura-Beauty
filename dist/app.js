@@ -744,6 +744,10 @@ customerPhone.addEventListener("blur", () => {
 checkoutForm.addEventListener("submit", (event) => {
   event.preventDefault();
   formError.textContent = "";
+  if (window.AuraTelegram && !window.AuraTelegram.guardCheckout()) {
+    formError.textContent = tr("Сначала нужно безопасно подтвердить Telegram-покупателя и подключить общий сервер заказов.", "The Telegram buyer must be securely verified and the shared order server connected first.", "Նախ պետք է ապահով հաստատել Telegram գնորդին և միացնել պատվերների ընդհանուր սերվերը։");
+    return;
+  }
   const name = document.querySelector("#customer-name").value.trim();
   const phone = customerPhone.value.trim();
   const email = customerEmail.value.trim();

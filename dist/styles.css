@@ -347,6 +347,19 @@ button.shade-option { cursor: pointer; }
 .payment-option span { display: grid; gap: 3px; }
 .payment-option strong { font-size: .82rem; }
 .payment-option small { color: var(--muted); font-size: .7rem; font-weight: 500; line-height: 1.45; }
+.secure-payment-panel { padding: 16px; display: grid; gap: 15px; border: 1px solid #b9d7c2; border-radius: 20px; background: linear-gradient(145deg, #f4fbf6, #eef7f1); box-shadow: 0 10px 24px rgba(54,99,68,.08); }
+.secure-payment-panel[hidden] { display: none; }
+.secure-payment-heading { display: grid; grid-template-columns: 42px 1fr; align-items: center; gap: 12px; }
+.secure-payment-heading > span:last-child { display: grid; gap: 3px; }
+.secure-payment-heading strong { font-size: .9rem; }
+.secure-payment-heading small { color: #587060; font-size: .72rem; line-height: 1.45; }
+.secure-payment-icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; background: #dcecdf; font-size: 1.15rem; }
+.payment-steps { margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; list-style: none; }
+.payment-steps li { min-width: 0; padding: 11px; display: grid; grid-template-columns: 25px 1fr; align-items: start; gap: 8px; border-radius: 14px; background: rgba(255,255,255,.78); }
+.payment-steps li > span { width: 25px; height: 25px; display: grid; place-items: center; border-radius: 50%; background: #477656; color: white; font-size: .7rem; font-weight: 900; }
+.payment-steps div { display: grid; gap: 3px; }
+.payment-steps strong { font-size: .72rem; line-height: 1.35; }
+.payment-steps small { color: #617267; font-size: .64rem; line-height: 1.4; }
 .courier-schedule { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .checkout-form .form-error { min-height: 22px; margin: -6px 0; color: #a42f42; font-weight: 700; }
 .checkout-form .checkout-note { margin: 0; padding: 12px 14px; border-radius: 14px; background: #f5f0e3; color: #675c45; font-size: .78rem; }
@@ -468,6 +481,7 @@ button.shade-option { cursor: pointer; }
   .quantity-control { grid-column: 1 / -1; justify-content: end; }
   .contact-grid { grid-template-columns: 1fr; }
   .courier-schedule { grid-template-columns: 1fr; }
+  .payment-steps { grid-template-columns: 1fr; }
   .consultant-widget { --consultant-person-width: 116px; --consultant-person-height: 232px; right: 4px; bottom: 62px; width: calc(128px * var(--consultant-scale)); padding-top: 52px; }
   .consultant-controls { top: 58px; right: -2px; gap: 4px; }
   .consultant-controls button { width: 29px; height: 29px; font-size: .9rem; }

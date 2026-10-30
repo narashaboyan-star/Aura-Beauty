@@ -308,6 +308,7 @@ const checkoutForm = document.querySelector("#checkout-form");
 const formError = document.querySelector("#form-error");
 const customerEmail = document.querySelector("#customer-email");
 const customerPhone = document.querySelector("#customer-phone");
+const securePaymentPanel = document.querySelector("#secure-payment-panel");
 const orderSuccess = document.querySelector("#order-success");
 const orderSuccessText = document.querySelector("#order-success-text");
 const productDialog = document.querySelector("#product-dialog");
@@ -527,6 +528,10 @@ function updateDeliveryFields() {
   renderCart();
 }
 
+function updatePaymentFields() {
+  securePaymentPanel.hidden = checkoutForm.elements.payment.value !== "payment-link";
+}
+
 function renderShadeOptions(product, preferredVariant = null) {
   const selectable = product.variants || [];
   const displayOnly = product.displayShades || [];
@@ -680,6 +685,7 @@ cartItems.addEventListener("click", (event) => {
 }));
 
 checkoutForm.querySelectorAll('input[name="delivery"]').forEach((radio) => radio.addEventListener("change", updateDeliveryFields));
+checkoutForm.querySelectorAll('input[name="payment"]').forEach((radio) => radio.addEventListener("change", updatePaymentFields));
 deliveryDate.min = new Date().toISOString().slice(0, 10);
 
 const emailFormat = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
@@ -744,7 +750,7 @@ checkoutForm.addEventListener("submit", (event) => {
   const paymentMethod = checkoutForm.elements.payment.value;
   const deliveryMethod = checkoutForm.elements.delivery.value;
   const paymentLabels = {
-    "payment-link": tr("банковская карта по защищённой ссылке", "bank card via secure link", "բանկային քարտ՝ ապահով հղմամբ"),
+    "payment-link": tr("онлайн банковской картой через защищённую ссылку", "online bank card via secure link", "առցանց՝ բանկային քարտով, ապահով հղմամբ"),
     "on-receipt": tr("оплата при получении", "payment on receipt", "վճարում ստանալիս"),
     "bank-transfer": tr("банковский перевод", "bank transfer", "բանկային փոխանցում")
   };
@@ -803,15 +809,19 @@ checkoutForm.addEventListener("submit", (event) => {
   saveCart();
   checkoutForm.reset();
   updateDeliveryFields();
+  updatePaymentFields();
   cartItems.hidden = true;
   cartCheckout.hidden = true;
   cartEmpty.hidden = true;
   orderSuccess.hidden = false;
   const contact = email || phone;
+  const paymentNextStep = paymentMethod === "payment-link"
+    ? tr("После подтверждения заказа защищённая ссылка на оплату будет отправлена на указанный контакт.", "After the order is confirmed, a secure payment link will be sent to your contact.", "Պատվերի հաստատումից հետո վճարման ապահով հղումը կուղարկվի նշված կապի միջոցով։")
+    : tr("Магазин уточнит детали оплаты при подтверждении заказа.", "The store will confirm the payment details with your order.", "Խանութը պատվերը հաստատելիս կհստակեցնի վճարման մանրամասները։");
   orderSuccessText.textContent = tr(
-    `Номер ${orderId}. Доставка: ${deliveryLabels[deliveryMethod]}. Способ оплаты: ${paymentLabels[paymentMethod]}. Контакт для подтверждения: ${contact}. Заказ сохранён на этом устройстве.`,
-    `Order ${orderId}. Delivery: ${deliveryLabels[deliveryMethod]}. Payment method: ${paymentLabels[paymentMethod]}. Confirmation contact: ${contact}. The order is saved on this device.`,
-    `Պատվեր ${orderId}։ Առաքում՝ ${deliveryLabels[deliveryMethod]}։ Վճարման եղանակ՝ ${paymentLabels[paymentMethod]}։ Հաստատման կապ՝ ${contact}։ Պատվերը պահպանվել է այս սարքում։`
+    `Номер ${orderId}. Доставка: ${deliveryLabels[deliveryMethod]}. Способ оплаты: ${paymentLabels[paymentMethod]}. Контакт: ${contact}. ${paymentNextStep} Заказ сохранён на этом устройстве.`,
+    `Order ${orderId}. Delivery: ${deliveryLabels[deliveryMethod]}. Payment method: ${paymentLabels[paymentMethod]}. Contact: ${contact}. ${paymentNextStep} The order is saved on this device.`,
+    `Պատվեր ${orderId}։ Առաքում՝ ${deliveryLabels[deliveryMethod]}։ Վճարման եղանակ՝ ${paymentLabels[paymentMethod]}։ Կապ՝ ${contact}։ ${paymentNextStep} Պատվերը պահպանվել է այս սարքում։`
   );
 });
 
@@ -1082,4 +1092,5 @@ document.addEventListener("aura:preferences", () => {
 renderCatalog();
 updateCartCount();
 updateDeliveryFields();
+updatePaymentFields();
 renderCart();

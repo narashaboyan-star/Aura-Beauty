@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Каталог профессиональной косметики Aura Beauty.">
   <title>Товары — Aura Beauty</title>
-  <link rel="stylesheet" href="styles.css?v=contact-validation-1">
+  <link rel="stylesheet" href="styles.css?v=payment-flow-1">
 </head>
 <body>
   <header class="site-header">
@@ -280,12 +280,23 @@
           </div>
           <fieldset class="payment-methods">
             <legend data-ru="Способ оплаты" data-en="Payment method" data-hy="Վճարման եղանակ">Способ оплаты</legend>
-            <label class="payment-option"><input type="radio" name="payment" value="payment-link" checked><span><strong data-ru="Банковской картой по ссылке" data-en="Bank card via secure link" data-hy="Բանկային քարտով՝ ապահով հղմամբ">Банковской картой по ссылке</strong><small data-ru="После подтверждения заказа магазин отправит защищённую ссылку на оплату." data-en="After order confirmation, the store will send a secure payment link." data-hy="Պատվերը հաստատելուց հետո խանութը կուղարկի վճարման ապահով հղում։">После подтверждения заказа магазин отправит защищённую ссылку на оплату.</small></span></label>
+            <label class="payment-option"><input type="radio" name="payment" value="payment-link" checked><span><strong data-ru="Онлайн банковской картой" data-en="Online bank card payment" data-hy="Առցանց՝ բանկային քարտով">Онлайн банковской картой</strong><small data-ru="Через защищённую страницу банка после подтверждения заказа." data-en="On the bank’s secure page after the order is confirmed." data-hy="Բանկի ապահով էջում՝ պատվերի հաստատումից հետո։">Через защищённую страницу банка после подтверждения заказа.</small></span></label>
             <label class="payment-option"><input type="radio" name="payment" value="on-receipt"><span><strong data-ru="При получении" data-en="Pay on receipt" data-hy="Ստանալիս">При получении</strong><small data-ru="Наличными или картой, если этот способ доступен для вашего заказа." data-en="Cash or card, when available for your order." data-hy="Կանխիկ կամ քարտով, եթե այս տարբերակը հասանելի է ձեր պատվերի համար։">Наличными или картой, если этот способ доступен для вашего заказа.</small></span></label>
             <label class="payment-option"><input type="radio" name="payment" value="bank-transfer"><span><strong data-ru="Банковский перевод" data-en="Bank transfer" data-hy="Բանկային փոխանցում">Банковский перевод</strong><small data-ru="Реквизиты будут отправлены после подтверждения заказа." data-en="Bank details will be sent after order confirmation." data-hy="Վավերապայմանները կուղարկվեն պատվերը հաստատելուց հետո։">Реквизиты будут отправлены после подтверждения заказа.</small></span></label>
           </fieldset>
+          <div class="secure-payment-panel" id="secure-payment-panel" aria-live="polite">
+            <div class="secure-payment-heading">
+              <span class="secure-payment-icon" aria-hidden="true">🔒</span>
+              <span><strong data-ru="Безопасная оплата картой" data-en="Secure card payment" data-hy="Ապահով քարտային վճարում">Безопасная оплата картой</strong><small data-ru="Данные карты вводятся только на защищённой странице банка." data-en="Card details are entered only on the bank’s secure page." data-hy="Քարտի տվյալները մուտքագրվում են միայն բանկի ապահով էջում։">Данные карты вводятся только на защищённой странице банка.</small></span>
+            </div>
+            <ol class="payment-steps">
+              <li><span>1</span><div><strong data-ru="Оформите заказ" data-en="Place your order" data-hy="Ձևակերպեք պատվերը">Оформите заказ</strong><small data-ru="Укажите контакт и адрес доставки." data-en="Enter your contact and delivery address." data-hy="Նշեք կապի տվյալն ու առաքման հասցեն։">Укажите контакт и адрес доставки.</small></div></li>
+              <li><span>2</span><div><strong data-ru="Получите ссылку" data-en="Receive a payment link" data-hy="Ստացեք վճարման հղումը">Получите ссылку</strong><small data-ru="Магазин подтвердит заказ и отправит защищённую ссылку." data-en="The store confirms the order and sends a secure link." data-hy="Խանութը կհաստատի պատվերը և կուղարկի ապահով հղում։">Магазин подтвердит заказ и отправит защищённую ссылку.</small></div></li>
+              <li><span>3</span><div><strong data-ru="Оплатите на странице банка" data-en="Pay on the bank’s page" data-hy="Վճարեք բանկի էջում">Оплатите на странице банка</strong><small data-ru="Номер карты, срок и CVV не попадают на сайт Aura Beauty." data-en="Your card number, expiry date and CVV never reach Aura Beauty’s website." data-hy="Քարտի համարը, ժամկետը և CVV-ն չեն փոխանցվում Aura Beauty կայքին։">Номер карты, срок и CVV не попадают на сайт Aura Beauty.</small></div></li>
+            </ol>
+          </div>
           <p class="form-error" id="form-error" role="alert"></p>
-          <p class="checkout-note" data-ru="Заказ сохраняется в этом браузере. Настоящее списание банковской карты будет доступно после подключения платёжного провайдера; сайт пока не запрашивает и не хранит данные карты." data-en="The order is saved in this browser. Live card charging will be available after a payment provider is connected; this site does not currently request or store card details." data-hy="Պատվերը պահպանվում է այս դիտարկիչում։ Քարտից իրական գանձումը հասանելի կլինի վճարային ծառայություն միացնելուց հետո․ կայքը ներկայումս չի հարցնում և չի պահպանում քարտի տվյալները։">Заказ сохраняется в этом браузере. Настоящее списание банковской карты будет доступно после подключения платёжного провайдера; сайт пока не запрашивает и не хранит данные карты.</p>
+          <p class="checkout-note" data-ru="Сейчас заказ сохраняется на этом устройстве. Реальная онлайн-оплата заработает после подключения платёжного сервиса; Aura Beauty не запрашивает и не хранит данные карты." data-en="The order is currently saved on this device. Live online payment will work after a payment service is connected; Aura Beauty does not request or store card details." data-hy="Այժմ պատվերը պահպանվում է այս սարքում։ Իրական առցանց վճարումը կաշխատի վճարային ծառայություն միացնելուց հետո․ Aura Beauty-ն չի հարցնում և չի պահպանում քարտի տվյալները։">Сейчас заказ сохраняется на этом устройстве. Реальная онлайн-оплата заработает после подключения платёжного сервиса; Aura Beauty не запрашивает и не хранит данные карты.</p>
           <button class="checkout-button" type="submit" data-ru="Оформить заказ" data-en="Place order" data-hy="Ձևակերպել պատվերը">Оформить заказ</button>
         </form>
       </div>
@@ -303,6 +314,6 @@
     <span data-ru="Профессиональная косметика для ухода и красоты" data-en="Professional skincare and beauty products" data-hy="Պրոֆեսիոնալ խնամքի և գեղեցկության միջոցներ">Профессиональная косметика для ухода и красоты</span>
   </footer>
   <script src="site.js?v=hy-delivery-1" defer></script>
-  <script src="app.js?v=contact-validation-1" defer></script>
+  <script src="app.js?v=payment-flow-1" defer></script>
 </body>
 </html>

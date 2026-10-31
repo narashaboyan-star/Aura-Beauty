@@ -5,11 +5,12 @@ import os
 import tempfile
 import time
 import unittest
+from unittest import mock
 from urllib.parse import urlencode
 
 from server import db
 from server.auth import TelegramAuthError, validate_init_data
-from server.bot import main_keyboard
+from server.bot import handle_callback, main_keyboard, show_category, show_product
 
 
 def signed_init_data(token, user, auth_date):
@@ -70,11 +71,14 @@ class DatabaseTests(unittest.TestCase):
         self.assertEqual(db.list_orders(42)[0]["status"], "confirmed")
 
     def test_cart_and_bot_state_are_isolated(self):
-        db.add_to_cart(42, "ordinary")
-        db.add_to_cart(42, "ordinary")
+        db.add_to_cart(42, "ordinary", 2)
         db.add_to_cart(99, "cosrx")
         self.assertEqual(db.cart_items(42)[0]["quantity"], 2)
         self.assertEqual(db.cart_items(99)[0]["product_id"], "cosrx")
+        db.set_cart_quantity(42, "ordinary", 5)
+        self.assertEqual(db.cart_items(42)[0]["quantity"], 5)
+        db.set_cart_quantity(42, "ordinary", 0)
+        self.assertEqual(db.cart_items(42), [])
         db.set_state(42, "checkout_name", {"x": 1})
         self.assertEqual(db.get_state(42)["flow"], "checkout_name")
         self.assertEqual(db.get_state(99)["flow"], "")
@@ -93,7 +97,39 @@ class BotPresentationTests(unittest.TestCase):
     def test_main_keyboard_uses_web_app_button(self):
         os.environ["SITE_ORIGIN"] = "https://example.com"
         button = main_keyboard()[0][0]
+        self.assertEqual(button["text"], "Mini App")
         self.assertEqual(button["web_app"]["url"], "https://example.com/products.html")
+
+    @mock.patch("server.bot.send_message")
+    def test_product_card_has_quantity_and_navigation(self, send):
+        show_product(42, "ordinary", 3)
+        text, keyboard = send.call_args.args[1:]
+        self.assertIn("Количество: 3", text)
+        labels = [button["text"] for row in keyboard for button in row]
+        self.assertIn("Добавить 3 в корзину", labels)
+        self.assertIn("Назад", labels)
+        self.assertIn("Меню", labels)
+        self.assertIn("Мои заказы", labels)
+
+    @mock.patch("server.bot.send_message")
+    @mock.patch("server.bot.products_in_category", return_value=[])
+    def test_empty_category_is_explained(self, _items, send):
+        show_category(42, "skincare")
+        self.assertIn("пока нет товаров", send.call_args.args[1])
+
+    @mock.patch("server.bot.answer_callback")
+    @mock.patch("server.bot.show_cart")
+    @mock.patch("server.bot.db.add_to_cart")
+    @mock.patch("server.bot.db.is_ready", return_value=True)
+    def test_selected_quantity_is_added(self, _ready, add, show_cart_mock, _answer):
+        callback = {
+            "id": "cb-1", "data": "add:ordinary:4",
+            "from": {"id": 42, "first_name": "Nara"},
+            "message": {"chat": {"id": 42}},
+        }
+        handle_callback(callback)
+        add.assert_called_once_with(42, "ordinary", 4)
+        show_cart_mock.assert_called_once_with(42, 42)
 
 
 if __name__ == "__main__":

@@ -11,7 +11,7 @@ import sqlite3
 from contextlib import contextmanager
 from datetime import datetime, timezone
 
-from .catalog import PRODUCTS
+from .catalog import PRODUCTS, is_available
 
 
 STATUSES = {"new", "confirmed", "preparing", "sent", "completed", "cancelled"}
@@ -120,7 +120,7 @@ def _normalized_items(items):
         product_id = str(raw.get("id", ""))
         product = PRODUCTS.get(product_id)
         quantity = int(raw.get("quantity", 0))
-        if not product or quantity < 1 or quantity > 20:
+        if not product or not is_available(product_id) or quantity < 1 or quantity > 20:
             raise ValueError("invalid order item")
         result.append({
             "id": product_id,
@@ -215,21 +215,38 @@ def cart_items(telegram_id):
         return [_dict(row) for row in cursor.fetchall()]
 
 
-def add_to_cart(telegram_id, product_id, variant=""):
+def add_to_cart(telegram_id, product_id, quantity=1, variant=""):
     if product_id not in PRODUCTS:
         raise ValueError("unknown product")
+    if not is_available(product_id):
+        raise ValueError("product unavailable")
+    quantity = int(quantity)
+    if quantity < 1 or quantity > 20:
+        raise ValueError("invalid quantity")
     with connect() as connection:
         cursor = connection.cursor()
         cursor.execute(_sql("SELECT quantity FROM bot_cart WHERE telegram_id=? AND product_id=? AND variant=?"),
                        (telegram_id, product_id, variant))
         row = cursor.fetchone()
         if row:
-            quantity = min(int(dict(row)["quantity"]) + 1, 20)
+            next_quantity = min(int(dict(row)["quantity"]) + quantity, 20)
+            cursor.execute(_sql("UPDATE bot_cart SET quantity=? WHERE telegram_id=? AND product_id=? AND variant=?"),
+                           (next_quantity, telegram_id, product_id, variant))
+        else:
+            cursor.execute(_sql("INSERT INTO bot_cart (telegram_id,product_id,variant,quantity) VALUES (?,?,?,?)"),
+                           (telegram_id, product_id, variant, quantity))
+
+
+def set_cart_quantity(telegram_id, product_id, quantity, variant=""):
+    quantity = max(0, min(int(quantity), 20))
+    with connect() as connection:
+        cursor = connection.cursor()
+        if quantity == 0:
+            cursor.execute(_sql("DELETE FROM bot_cart WHERE telegram_id=? AND product_id=? AND variant=?"),
+                           (telegram_id, product_id, variant))
+        else:
             cursor.execute(_sql("UPDATE bot_cart SET quantity=? WHERE telegram_id=? AND product_id=? AND variant=?"),
                            (quantity, telegram_id, product_id, variant))
-        else:
-            cursor.execute(_sql("INSERT INTO bot_cart (telegram_id,product_id,variant,quantity) VALUES (?,?,?,1)"),
-                           (telegram_id, product_id, variant))
 
 
 def clear_cart(telegram_id):

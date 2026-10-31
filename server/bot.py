@@ -5,7 +5,7 @@ import urllib.error
 import urllib.request
 
 from . import db
-from .catalog import CATEGORIES, PRODUCTS, products_in_category
+from .catalog import CATEGORIES, PRODUCTS, is_available, products_in_category
 from .config import admin_ids, bot_token, payment_details, site_origin
 
 
@@ -13,6 +13,7 @@ STATUS_LABELS = {
     "new": "Новый", "confirmed": "Подтверждён", "preparing": "Собирается",
     "sent": "Передан в доставку", "completed": "Выполнен", "cancelled": "Отменён",
 }
+MAX_QUANTITY = 20
 
 
 def telegram_call(method, payload):
@@ -60,7 +61,7 @@ def main_keyboard():
     origin = site_origin()
     rows = []
     if origin:
-        rows.append([{"text": "Открыть каталог", "web_app": {"url": f"{origin}/products.html"}}])
+        rows.append([{"text": "Mini App", "web_app": {"url": f"{origin}/products.html"}}])
     rows.extend([
         [{"text": "Категории", "callback_data": "categories"}, {"text": "Корзина", "callback_data": "cart"}],
         [{"text": "Мои заказы", "callback_data": "orders"}],
@@ -68,15 +69,28 @@ def main_keyboard():
     return rows
 
 
+def navigation_keyboard(back_data="home", include_orders=True):
+    rows = [[
+        {"text": "Назад", "callback_data": back_data},
+        {"text": "Меню", "callback_data": "home"},
+    ]]
+    if include_orders:
+        rows.append([{"text": "Мои заказы", "callback_data": "orders"}])
+    origin = site_origin()
+    if origin:
+        rows.append([{"text": "Mini App", "web_app": {"url": f"{origin}/products.html"}}])
+    return rows
+
+
 def category_keyboard():
-    return [[{"text": label, "callback_data": f"cat:{key}"}] for key, label in CATEGORIES.items()] + [
-        [{"text": "Назад", "callback_data": "home"}]
-    ]
+    return [[{"text": label, "callback_data": f"cat:{key}"}] for key, label in CATEGORIES.items()] + navigation_keyboard()
 
 
-def _product_text(product_id):
+def _product_text(product_id, quantity=1):
     item = PRODUCTS[product_id]
-    return f"{item['brand']}\n{item['name']}\nЦена: ${item['price']:.2f}"
+    availability = "В наличии" if is_available(product_id) else "Временно недоступен"
+    return (f"{item['brand']}\n{item['name']}\nЦена: ${item['price']:.2f}\n"
+            f"Статус: {availability}\nКоличество: {quantity}")
 
 
 def show_home(chat_id, first_name=""):
@@ -86,61 +100,103 @@ def show_home(chat_id, first_name=""):
 
 
 def show_category(chat_id, category):
+    if category not in CATEGORIES:
+        send_message(chat_id, "Такой категории нет. Выберите раздел из меню.", category_keyboard())
+        return
     items = products_in_category(category)
     if not items:
-        send_message(chat_id, "Категория не найдена.", category_keyboard())
+        send_message(chat_id, "В этой категории пока нет товаров. Выберите другой раздел.", category_keyboard())
         return
-    keyboard = [[{"text": f"{item['brand']} — ${item['price']:.2f}", "callback_data": f"product:{key}"}]
-                for key, item in items]
-    keyboard.append([{"text": "К категориям", "callback_data": "categories"}])
+    keyboard = []
+    for key, item in items:
+        suffix = f"${item['price']:.2f}" if is_available(key) else "нет в наличии"
+        keyboard.append([{"text": f"{item['name']} — {suffix}", "callback_data": f"product:{key}"}])
+    keyboard.extend(navigation_keyboard("categories"))
     send_message(chat_id, CATEGORIES[category], keyboard)
 
 
-def show_product(chat_id, product_id):
+def show_product(chat_id, product_id, quantity=1):
     if product_id not in PRODUCTS:
-        send_message(chat_id, "Товар не найден.", category_keyboard())
+        send_message(chat_id, "Товар больше не найден в каталоге. Вернитесь к категориям.", category_keyboard())
         return
-    send_message(chat_id, _product_text(product_id), [
-        [{"text": "Добавить в корзину", "callback_data": f"add:{product_id}"}],
-        [{"text": "Корзина", "callback_data": "cart"},
-         {"text": "К категориям", "callback_data": "categories"}],
-    ])
+    item = PRODUCTS[product_id]
+    back_data = f"cat:{item['category']}"
+    if not is_available(product_id):
+        send_message(chat_id, _product_text(product_id),
+                     navigation_keyboard(back_data))
+        return
+    quantity = max(1, min(int(quantity), MAX_QUANTITY))
+    keyboard = [
+        [
+            {"text": "−", "callback_data": f"qty:{product_id}:{max(1, quantity - 1)}"},
+            {"text": str(quantity), "callback_data": "noop"},
+            {"text": "+", "callback_data": f"qty:{product_id}:{min(MAX_QUANTITY, quantity + 1)}"},
+        ],
+        [{"text": f"Добавить {quantity} в корзину", "callback_data": f"add:{product_id}:{quantity}"}],
+        [{"text": "Корзина", "callback_data": "cart"}],
+    ]
+    keyboard.extend(navigation_keyboard(back_data))
+    send_message(chat_id, _product_text(product_id, quantity), keyboard)
 
 
 def _cart_payload(telegram_id):
     items = db.cart_items(telegram_id)
     total = 0.0
     lines = []
+    unavailable = []
     for item in items:
-        product = PRODUCTS[item["product_id"]]
+        product = PRODUCTS.get(item["product_id"])
+        if not product or not is_available(item["product_id"]):
+            unavailable.append(item["product_id"])
+            lines.append(f"• Товар {item['product_id']} временно недоступен")
+            continue
         subtotal = product["price"] * item["quantity"]
         total += subtotal
         variant = f" ({item['variant']})" if item.get("variant") else ""
         lines.append(f"• {product['name']}{variant} × {item['quantity']} — ${subtotal:.2f}")
-    return items, total, lines
+    return items, total, lines, unavailable
 
 
 def show_cart(chat_id, telegram_id):
-    items, total, lines = _cart_payload(telegram_id)
+    items, total, lines, unavailable = _cart_payload(telegram_id)
     if not items:
         send_message(chat_id, "Корзина пуста.", main_keyboard())
         return
     text = "Корзина:\n" + "\n".join(lines) + f"\n\nИтого: ${total:.2f}"
-    send_message(chat_id, text, [
-        [{"text": "Оформить", "callback_data": "checkout"}],
-        [{"text": "Очистить", "callback_data": "cart:clear"},
-         {"text": "Продолжить выбор", "callback_data": "categories"}],
+    keyboard = []
+    for item in items:
+        product = PRODUCTS.get(item["product_id"])
+        if not product or not is_available(item["product_id"]):
+            continue
+        quantity = int(item["quantity"])
+        keyboard.append([{"text": product["name"], "callback_data": f"product:{item['product_id']}"}])
+        keyboard.append([
+            {"text": "−", "callback_data": f"cartq:{item['product_id']}:{max(0, quantity - 1)}"},
+            {"text": str(quantity), "callback_data": "noop"},
+            {"text": "+", "callback_data": f"cartq:{item['product_id']}:{min(MAX_QUANTITY, quantity + 1)}"},
+        ])
+    if unavailable:
+        text += "\n\nОформление недоступно: уберите недоступный товар или очистите корзину."
+    else:
+        keyboard.append([{"text": "Оформить", "callback_data": "checkout"}])
+    keyboard.append([
+        {"text": "Очистить", "callback_data": "cart:clear"},
+        {"text": "Продолжить выбор", "callback_data": "categories"},
     ])
+    keyboard.extend(navigation_keyboard("categories"))
+    send_message(chat_id, text, keyboard)
 
 
 def show_orders(chat_id, telegram_id):
     orders = db.list_orders(telegram_id)
     if not orders:
-        send_message(chat_id, "У вас пока нет заказов.", main_keyboard())
+        send_message(chat_id, "У вас пока нет заказов. Выберите товары в категориях или откройте Mini App.",
+                     navigation_keyboard("home", include_orders=False))
         return
     lines = [f"{order['id']} — {STATUS_LABELS.get(order['status'], order['status'])} — ${order['total_usd']:.2f}"
              for order in orders]
-    send_message(chat_id, "Ваши заказы:\n\n" + "\n".join(lines), main_keyboard())
+    send_message(chat_id, "Ваши заказы:\n\n" + "\n".join(lines),
+                 navigation_keyboard("home", include_orders=False))
 
 
 def _admin_order_keyboard(order_id):
@@ -248,18 +304,37 @@ def handle_callback(callback):
             show_category(chat_id, data.split(":", 1)[1])
         elif data.startswith("product:"):
             show_product(chat_id, data.split(":", 1)[1])
+        elif data.startswith("qty:"):
+            _, product_id, quantity = data.split(":", 2)
+            show_product(chat_id, product_id, int(quantity))
         elif data.startswith("add:"):
-            product_id = data.split(":", 1)[1]
-            db.add_to_cart(identity["telegram_id"], product_id)
+            parts = data.split(":", 2)
+            product_id = parts[1]
+            quantity = int(parts[2]) if len(parts) == 3 else 1
+            if not is_available(product_id):
+                send_message(chat_id, "Этот товар временно недоступен. Выберите другой товар.",
+                             category_keyboard())
+            else:
+                db.add_to_cart(identity["telegram_id"], product_id, quantity)
+                show_cart(chat_id, identity["telegram_id"])
+        elif data.startswith("cartq:"):
+            _, product_id, quantity = data.split(":", 2)
+            db.set_cart_quantity(identity["telegram_id"], product_id, int(quantity))
             show_cart(chat_id, identity["telegram_id"])
+        elif data == "noop":
+            pass
         elif data == "cart":
             show_cart(chat_id, identity["telegram_id"])
         elif data == "cart:clear":
             db.clear_cart(identity["telegram_id"])
             send_message(chat_id, "Корзина очищена.", main_keyboard())
         elif data == "checkout":
-            if not db.cart_items(identity["telegram_id"]):
+            items, _, _, unavailable = _cart_payload(identity["telegram_id"])
+            if not items:
                 send_message(chat_id, "Корзина пуста.", main_keyboard())
+            elif unavailable:
+                send_message(chat_id, "В корзине есть недоступный товар. Уберите его перед оформлением.",
+                             navigation_keyboard("cart"))
             else:
                 db.set_state(identity["telegram_id"], "checkout_name", {})
                 send_message(chat_id, "Как вас зовут?")

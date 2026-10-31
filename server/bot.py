@@ -13,7 +13,16 @@ STATUS_LABELS = {
     "new": "Новый", "confirmed": "Подтверждён", "preparing": "Собирается",
     "sent": "Передан в доставку", "completed": "Выполнен", "cancelled": "Отменён",
 }
+CUSTOMER_STATUS_EVENTS = {"confirmed", "preparing", "sent", "completed", "cancelled"}
+WRITABLE_STATES = {"chat_started", "granted_signed", "granted_client"}
 MAX_QUANTITY = 20
+
+
+class TelegramAPIError(RuntimeError):
+    def __init__(self, message, error_code="", description=""):
+        super().__init__(message)
+        self.error_code = error_code
+        self.description = description
 
 
 def telegram_call(method, payload):
@@ -29,10 +38,18 @@ def telegram_call(method, payload):
     try:
         with urllib.request.urlopen(request, timeout=8) as response:
             result = json.load(response)
+    except urllib.error.HTTPError as exc:
+        try:
+            result = json.load(exc)
+        except (ValueError, json.JSONDecodeError):
+            result = {}
+        raise TelegramAPIError("Telegram API rejected request", result.get("error_code", exc.code),
+                               result.get("description", "")) from exc
     except (urllib.error.URLError, TimeoutError) as exc:
-        raise RuntimeError("Telegram API request failed") from exc
+        raise TelegramAPIError("Telegram API request failed", "network_error", str(exc)) from exc
     if not result.get("ok"):
-        raise RuntimeError("Telegram API rejected request")
+        raise TelegramAPIError("Telegram API rejected request", result.get("error_code", ""),
+                               result.get("description", ""))
     return result.get("result")
 
 
@@ -65,6 +82,7 @@ def main_keyboard():
     rows.extend([
         [{"text": "Категории", "callback_data": "categories"}, {"text": "Корзина", "callback_data": "cart"}],
         [{"text": "Мои заказы", "callback_data": "orders"}],
+        [{"text": "Уведомления о статусе", "callback_data": "notifications"}],
     ])
     return rows
 
@@ -214,6 +232,69 @@ def _admin_order_keyboard(order_id):
     ]
 
 
+def notification_keyboard(enabled):
+    if enabled:
+        return [[{"text": "Выключить уведомления", "callback_data": "notify:off"}],
+                [{"text": "Мои заказы", "callback_data": "orders"}, {"text": "Меню", "callback_data": "home"}]]
+    return [[{"text": "Включить уведомления", "callback_data": "notify:on"}],
+            [{"text": "Мои заказы", "callback_data": "orders"}, {"text": "Меню", "callback_data": "home"}]]
+
+
+def show_notification_settings(chat_id, telegram_id):
+    settings = db.get_notification_settings(telegram_id)
+    if settings["enabled"]:
+        text = ("Уведомления включены. Бот напишет только вам, когда заказ будет подтверждён, "
+                "начнёт собираться, будет передан в доставку, выполнен или отменён.")
+    else:
+        text = ("Уведомления выключены. Статусы всё равно доступны в «Моих заказах». "
+                "Включение действует только для вашего Telegram-аккаунта.")
+    send_message(chat_id, text, notification_keyboard(settings["enabled"]))
+
+
+def notify_customer_status(order):
+    """Attempt one owner-only notification and persist policy, attempt and delivery separately."""
+    status = order["status"]
+    settings = db.get_notification_settings(order["telegram_id"])
+    preference = "enabled" if settings["enabled"] else "disabled"
+    permission = settings["write_access"]
+    if status not in CUSTOMER_STATUS_EVENTS or not order.get("status_changed", True):
+        return "unchanged"
+    event_id = db.create_notification_event(order, status, preference, permission, "configured")
+    if not settings["enabled"]:
+        db.update_notification_event(event_id, "skipped_no_consent")
+        return "skipped_no_consent"
+    if permission not in WRITABLE_STATES:
+        db.update_notification_event(event_id, "skipped_no_access")
+        return "skipped_no_access"
+    customer_text = f"Статус заказа {order['id']}: {STATUS_LABELS.get(status, status)}."
+    if status == "confirmed" and order["payment_method"] == "bank-transfer" and payment_details():
+        customer_text += "\nРеквизиты для перевода: " + payment_details()
+    db.update_notification_event(event_id, "attempting", attempted=True)
+    try:
+        message = send_message(order["telegram_id"], customer_text, main_keyboard())
+    except TelegramAPIError as exc:
+        blocked = str(exc.error_code) == "403"
+        result = "blocked" if blocked else "failed"
+        db.update_notification_event(event_id, result, exc.error_code)
+        if blocked:
+            db.set_write_access(order["telegram_id"], "blocked", "telegram_send")
+        return result
+    message_id = message.get("message_id", "") if isinstance(message, dict) else ""
+    db.update_notification_event(event_id, "telegram_accepted", telegram_message_id=message_id, confirmed=True)
+    return "telegram_accepted"
+
+
+def _notification_result_text(result):
+    return {
+        "telegram_accepted": "Telegram подтвердил отправку владельцу заказа (прочтение не отслеживается).",
+        "skipped_no_consent": "Уведомление не отправлялось: покупатель его не включил.",
+        "skipped_no_access": "Уведомление не отправлялось: Telegram не разрешает боту писать.",
+        "blocked": "Telegram отклонил сообщение: бот заблокирован покупателем.",
+        "failed": "Попытка отправки не подтверждена; статус сохранён в «Моих заказах».",
+        "unchanged": "Статус не изменился; повторное уведомление не отправлялось.",
+    }.get(result, "Уведомление не отправлялось.")
+
+
 def notify_admins(order):
     if not order:
         return
@@ -248,6 +329,7 @@ def handle_message(message):
     identity = _identity(message["from"])
     if db.is_ready():
         db.record_customer(identity)
+        db.set_write_access(identity["telegram_id"], "chat_started", "bot_message")
     text = (message.get("text") or "").strip()
     if text == "/id":
         send_message(chat_id, f"Ваш Telegram ID: {identity['telegram_id']}")
@@ -301,6 +383,7 @@ def handle_callback(callback):
     identity = _identity(callback["from"])
     if db.is_ready():
         db.record_customer(identity)
+        db.set_write_access(identity["telegram_id"], "chat_started", "bot_callback")
     chat_id = callback["message"]["chat"]["id"]
     try:
         if data == "home":
@@ -350,15 +433,22 @@ def handle_callback(callback):
                 send_message(chat_id, "Как вас зовут?")
         elif data == "orders":
             show_orders(chat_id, identity["telegram_id"])
+        elif data == "notifications":
+            show_notification_settings(chat_id, identity["telegram_id"])
+        elif data == "notify:on":
+            db.set_notification_preference(identity["telegram_id"], True, "chat_started", "bot_callback")
+            send_message(chat_id, "Уведомления о согласованных статусах включены.", notification_keyboard(True))
+        elif data == "notify:off":
+            db.set_notification_preference(identity["telegram_id"], False)
+            send_message(chat_id, "Уведомления выключены. Статусы остаются в «Моих заказах».",
+                         notification_keyboard(False))
         elif data.startswith("adm:") and identity["telegram_id"] in admin_ids():
             _, order_id, status = data.split(":", 2)
             order = db.update_status(order_id, status)
             if order:
-                send_message(chat_id, f"{order_id}: статус обновлён — {STATUS_LABELS.get(status, status)}.")
-                customer_text = f"Статус заказа {order_id}: {STATUS_LABELS.get(status, status)}."
-                if status == "confirmed" and order["payment_method"] == "bank-transfer" and payment_details():
-                    customer_text += "\nРеквизиты для перевода: " + payment_details()
-                send_message(order["telegram_id"], customer_text, main_keyboard())
+                result = notify_customer_status(order)
+                send_message(chat_id, f"{order_id}: статус — {STATUS_LABELS.get(status, status)}.\n"
+                                      f"{_notification_result_text(result)}")
         answer_callback(callback_id)
     except (RuntimeError, ValueError):
         try:

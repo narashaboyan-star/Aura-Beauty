@@ -10,7 +10,8 @@ from urllib.parse import urlencode
 
 from server import db
 from server.auth import TelegramAuthError, validate_init_data
-from server.bot import handle_callback, main_keyboard, show_category, show_product
+from server.bot import (TelegramAPIError, handle_callback, main_keyboard, notify_customer_status,
+                        show_category, show_product)
 
 
 def signed_init_data(token, user, auth_date):
@@ -29,6 +30,12 @@ class TelegramAuthTests(unittest.TestCase):
         identity = validate_init_data(raw, token, now=now)
         self.assertEqual(identity["telegram_id"], 42)
         self.assertEqual(identity["username"], "nara")
+
+    def test_accepts_signed_write_permission(self):
+        token = "123456:test-token"
+        now = int(time.time())
+        raw = signed_init_data(token, {"id": 42, "first_name": "Nara", "allows_write_to_pm": True}, now)
+        self.assertTrue(validate_init_data(raw, token, now=now)["allows_write_to_pm"])
 
     def test_rejects_tampering_and_expired_data(self):
         token = "123456:test-token"
@@ -117,6 +124,41 @@ class DatabaseTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             db.create_order(self.identity, payload, "mini_app")
 
+    @mock.patch("server.bot.send_message")
+    def test_status_notification_requires_consent_and_records_skip(self, send):
+        order = db.create_order(self.identity, self.payload(), "mini_app")
+        updated = db.update_status(order["id"], "confirmed")
+        self.assertEqual(notify_customer_status(updated), "skipped_no_consent")
+        send.assert_not_called()
+        event = db.list_notification_events(order["id"])[0]
+        self.assertEqual(event["result"], "skipped_no_consent")
+        self.assertEqual(db.get_customer_order(order["id"], 42)["status"], "confirmed")
+
+    @mock.patch("server.bot.send_message", return_value={"message_id": 77})
+    def test_status_notification_is_confirmed_only_for_owner(self, send):
+        order = db.create_order(self.identity, self.payload(), "bot")
+        other = {**self.identity, "telegram_id": 99, "username": "other"}
+        other_order = db.create_order(other, self.payload(), "mini_app")
+        db.set_notification_preference(42, True, "chat_started", "bot_callback")
+        db.set_notification_preference(99, True, "chat_started", "bot_callback")
+        updated = db.update_status(order["id"], "sent")
+        self.assertEqual(notify_customer_status(updated), "telegram_accepted")
+        self.assertEqual(send.call_args.args[0], 42)
+        event = db.list_notification_events(order["id"])[0]
+        self.assertEqual(event["result"], "telegram_accepted")
+        self.assertEqual(event["telegram_message_id"], "77")
+        self.assertEqual(db.list_notification_events(other_order["id"]), [])
+
+    @mock.patch("server.bot.send_message", side_effect=TelegramAPIError("blocked", 403, "Forbidden"))
+    def test_block_does_not_hide_updated_status(self, _send):
+        order = db.create_order(self.identity, self.payload(), "mini_app")
+        db.set_notification_preference(42, True, "granted_signed", "mini_app")
+        updated = db.update_status(order["id"], "cancelled")
+        self.assertEqual(notify_customer_status(updated), "blocked")
+        self.assertEqual(db.get_customer_order(order["id"], 42)["status"], "cancelled")
+        self.assertEqual(db.get_notification_settings(42)["write_access"], "blocked")
+        self.assertEqual(db.list_notification_events(order["id"])[0]["result"], "blocked")
+
 
 class BotPresentationTests(unittest.TestCase):
     def setUp(self):
@@ -133,6 +175,8 @@ class BotPresentationTests(unittest.TestCase):
         button = main_keyboard()[0][0]
         self.assertEqual(button["text"], "Mini App")
         self.assertEqual(button["web_app"]["url"], "https://example.com/products.html")
+        labels = [item["text"] for row in main_keyboard() for item in row]
+        self.assertIn("Уведомления о статусе", labels)
 
     @mock.patch("server.bot.send_message")
     def test_product_card_has_quantity_and_navigation(self, send):

@@ -17,8 +17,17 @@ class handler(JSONHandlerMixin, BaseHTTPRequestHandler):
         ready = db.is_ready()
         if ready:
             db.record_customer(identity)
+            if identity.get("allows_write_to_pm"):
+                db.set_write_access(identity["telegram_id"], "granted_signed", "mini_app_init_data")
+            notifications = db.get_notification_settings(identity["telegram_id"])
+        else:
+            notifications = {"enabled": False, "write_access": "unknown"}
         self.send_json(200, {
             "verified": True,
             "user": {"id": identity["telegram_id"], "firstName": identity["first_name"]},
             "capabilities": {"createOrders": ready, "viewOrders": ready},
+            "notifications": {
+                "enabled": notifications["enabled"],
+                "writeAccess": notifications["write_access"],
+            },
         })

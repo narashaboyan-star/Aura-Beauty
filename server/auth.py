@@ -38,6 +38,7 @@ def validate_init_data(raw, bot_token, max_age_seconds=900, now=None):
         "first_name": user.get("first_name", ""),
         "last_name": user.get("last_name", ""),
         "language_code": user.get("language_code", ""),
+        "allows_write_to_pm": user.get("allows_write_to_pm") is True,
         "auth_date": auth_date,
     }
 

@@ -36,6 +36,7 @@
     </div>
     <div class="telegram-status-actions">
       <button id="telegram-orders-open" type="button" hidden data-ru="Мои заказы" data-en="My orders" data-hy="Իմ պատվերները">Мои заказы</button>
+      <button id="telegram-notifications" type="button" hidden>Включить уведомления</button>
       <button id="telegram-session-retry" type="button" hidden data-ru="Повторить" data-en="Retry" data-hy="Կրկնել">Повторить</button>
     </div>
   </section>
@@ -331,6 +332,7 @@
     <div class="cart-shell">
       <header class="cart-heading"><p class="eyebrow">Aura Beauty</p><h2 id="telegram-orders-title" data-ru="Мои заказы" data-en="My orders" data-hy="Իմ պատվերները">Мои заказы</h2></header>
       <p id="telegram-orders-message" aria-live="polite"></p>
+      <button class="secondary-action telegram-orders-refresh" type="button" id="telegram-orders-refresh" data-ru="Обновить статусы" data-en="Refresh statuses" data-hy="Թարմացնել կարգավիճակները">Обновить статусы</button>
       <div class="telegram-orders-list" id="telegram-orders-list"></div>
     </div>
   </dialog>
@@ -340,7 +342,7 @@
     <span data-ru="Профессиональная косметика для ухода и красоты" data-en="Professional skincare and beauty products" data-hy="Պրոֆեսիոնալ խնամքի և գեղեցկության միջոցներ">Профессиональная косметика для ухода и красоты</span>
   </footer>
   <script src="site.js?v=hy-delivery-1" defer></script>
-  <script src="telegram-mini-app.js?v=telegram-mini-app-1" defer></script>
+  <script src="telegram-mini-app.js?v=telegram-status-sync-1" defer></script>
   <script src="app.js?v=telegram-mini-app-1" defer></script>
 </body>
 </html>

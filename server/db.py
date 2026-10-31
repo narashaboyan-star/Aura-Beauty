@@ -92,10 +92,19 @@ def _initialize(connection):
             telegram_id BIGINT PRIMARY KEY, flow TEXT NOT NULL, data_json TEXT NOT NULL,
             updated_at TEXT NOT NULL
         )""",
+        """CREATE TABLE IF NOT EXISTS notification_events (
+            id TEXT PRIMARY KEY, order_id TEXT NOT NULL, telegram_id BIGINT NOT NULL,
+            event TEXT NOT NULL, preference TEXT NOT NULL, permission TEXT NOT NULL,
+            result TEXT NOT NULL, attempted_at TEXT NOT NULL DEFAULT '',
+            confirmed_at TEXT NOT NULL DEFAULT '', telegram_message_id TEXT NOT NULL DEFAULT '',
+            error_code TEXT NOT NULL DEFAULT '', created_at TEXT NOT NULL, updated_at TEXT NOT NULL,
+            FOREIGN KEY(order_id) REFERENCES orders(id) ON DELETE CASCADE
+        )""",
     ]
     cursor = connection.cursor()
     for statement in statements:
         cursor.execute(statement)
+    _ensure_customer_notification_columns(connection)
     for product_id, item in CATALOG_SEED.items():
         cursor.execute(_sql("SELECT id FROM products WHERE id=?"), (product_id,))
         if not cursor.fetchone():
@@ -104,6 +113,25 @@ def _initialize(connection):
                 VALUES (?,?,?,?,?,?,?,?)"""), (
                 product_id, item["category"], item["brand"], item["name"], float(item["price"]),
                 1 if item.get("available", True) else 0, item.get("stock_quantity"), _now()))
+
+
+def _ensure_customer_notification_columns(connection):
+    columns = {
+        "notifications_enabled": "INTEGER NOT NULL DEFAULT 0",
+        "write_access": "TEXT NOT NULL DEFAULT 'unknown'",
+        "write_access_source": "TEXT NOT NULL DEFAULT ''",
+        "write_access_updated_at": "TEXT NOT NULL DEFAULT ''",
+    }
+    cursor = connection.cursor()
+    if _postgres():
+        for name, definition in columns.items():
+            cursor.execute(f"ALTER TABLE customers ADD COLUMN IF NOT EXISTS {name} {definition}")
+        return
+    cursor.execute("PRAGMA table_info(customers)")
+    existing = {dict(row)["name"] for row in cursor.fetchall()}
+    for name, definition in columns.items():
+        if name not in existing:
+            cursor.execute(f"ALTER TABLE customers ADD COLUMN {name} {definition}")
 
 
 def _dict(row):
@@ -172,6 +200,78 @@ def upsert_customer(connection, identity, phone=""):
 def record_customer(identity):
     with connect() as connection:
         upsert_customer(connection, identity)
+
+
+def set_write_access(telegram_id, state, source):
+    if state not in {"unknown", "chat_started", "granted_signed", "granted_client", "denied", "blocked"}:
+        raise ValueError("invalid write access state")
+    with connect() as connection:
+        cursor = connection.cursor()
+        cursor.execute(_sql("""UPDATE customers SET write_access=?,write_access_source=?,
+            write_access_updated_at=?,updated_at=? WHERE telegram_id=?"""),
+            (state, source[:40], _now(), _now(), int(telegram_id)))
+
+
+def set_notification_preference(telegram_id, enabled, write_access=None, source=""):
+    with connect() as connection:
+        cursor = connection.cursor()
+        if write_access is None:
+            cursor.execute(_sql("UPDATE customers SET notifications_enabled=?,updated_at=? WHERE telegram_id=?"),
+                           (1 if enabled else 0, _now(), int(telegram_id)))
+        else:
+            if write_access not in {"unknown", "chat_started", "granted_signed", "granted_client", "denied", "blocked"}:
+                raise ValueError("invalid write access state")
+            cursor.execute(_sql("""UPDATE customers SET notifications_enabled=?,write_access=?,
+                write_access_source=?,write_access_updated_at=?,updated_at=? WHERE telegram_id=?"""),
+                (1 if enabled else 0, write_access, source[:40], _now(), _now(), int(telegram_id)))
+    return get_notification_settings(telegram_id)
+
+
+def get_notification_settings(telegram_id):
+    with connect() as connection:
+        cursor = connection.cursor()
+        cursor.execute(_sql("""SELECT notifications_enabled,write_access,write_access_source,
+            write_access_updated_at FROM customers WHERE telegram_id=?"""), (int(telegram_id),))
+        row = _dict(cursor.fetchone())
+        if not row:
+            return {"enabled": False, "write_access": "unknown", "source": "", "updated_at": ""}
+        return {
+            "enabled": bool(row["notifications_enabled"]), "write_access": row["write_access"],
+            "source": row["write_access_source"], "updated_at": row["write_access_updated_at"],
+        }
+
+
+def create_notification_event(order, event, preference, permission, result):
+    now = _now()
+    event_id = f"NT-{secrets.token_hex(8)}"
+    with connect() as connection:
+        connection.cursor().execute(_sql("""INSERT INTO notification_events
+            (id,order_id,telegram_id,event,preference,permission,result,created_at,updated_at)
+            VALUES (?,?,?,?,?,?,?,?,?)"""), (event_id, order["id"], int(order["telegram_id"]), event,
+                                                preference, permission, result, now, now))
+    return event_id
+
+
+def update_notification_event(event_id, result, error_code="", telegram_message_id="", attempted=False,
+                              confirmed=False):
+    now = _now()
+    with connect() as connection:
+        connection.cursor().execute(_sql("""UPDATE notification_events SET result=?,error_code=?,
+            telegram_message_id=?,attempted_at=CASE WHEN ?=1 THEN ? ELSE attempted_at END,
+            confirmed_at=CASE WHEN ?=1 THEN ? ELSE confirmed_at END,updated_at=? WHERE id=?"""),
+            (result, str(error_code)[:80], str(telegram_message_id)[:80], 1 if attempted else 0, now,
+             1 if confirmed else 0, now, now, event_id))
+
+
+def list_notification_events(order_id=None):
+    with connect() as connection:
+        cursor = connection.cursor()
+        if order_id:
+            cursor.execute(_sql("SELECT * FROM notification_events WHERE order_id=? ORDER BY created_at"),
+                           (order_id,))
+        else:
+            cursor.execute("SELECT * FROM notification_events ORDER BY created_at")
+        return [_dict(row) for row in cursor.fetchall()]
 
 
 def _normalized_items(connection, items):
@@ -276,10 +376,18 @@ def update_status(order_id, status):
         raise ValueError("invalid status")
     with connect() as connection:
         cursor = connection.cursor()
+        cursor.execute(_sql("SELECT status FROM orders WHERE id=?"), (order_id,))
+        current = _dict(cursor.fetchone())
+        if not current:
+            return None
+        previous_status = current["status"]
         cursor.execute(_sql("UPDATE orders SET status=?, updated_at=? WHERE id=?"), (status, _now(), order_id))
         if cursor.rowcount != 1:
             return None
-    return _get_order(order_id)
+    order = _get_order(order_id)
+    order["previous_status"] = previous_status
+    order["status_changed"] = previous_status != status
+    return order
 
 
 def cart_items(telegram_id):

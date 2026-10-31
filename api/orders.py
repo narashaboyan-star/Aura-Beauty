@@ -15,6 +15,7 @@ def _public_order(order):
     return {
         "id": order["id"], "status": order["status"], "source": order["source"],
         "totalUsd": order["total_usd"], "createdAt": order["created_at"],
+        "updatedAt": order["updated_at"],
         "deliveryMethod": order["delivery_method"], "paymentMethod": order["payment_method"],
         "items": order.get("items", []),
     }

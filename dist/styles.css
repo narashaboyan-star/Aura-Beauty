@@ -445,6 +445,7 @@ button.shade-option { cursor: pointer; }
 .telegram-orders-dialog { width: min(92vw, 620px); border: 0; border-radius: 26px; padding: 0; color: var(--ink); background: var(--paper); box-shadow: 0 24px 80px rgba(62,28,52,.24); }
 .telegram-orders-dialog::backdrop { background: rgba(31,17,27,.56); backdrop-filter: blur(4px); }
 .telegram-orders-list { display: grid; gap: .75rem; margin-top: 1rem; }
+.telegram-orders-refresh { margin-top: .6rem; }
 .telegram-order-card { display: grid; grid-template-columns: 1fr auto; gap: .25rem 1rem; padding: 1rem; border: 1px solid rgba(108,67,93,.14); border-radius: 18px; background: rgba(255,255,255,.72); }
 .telegram-order-card small { grid-column: 1 / -1; color: var(--muted); }
 .checkout-button:disabled { cursor: not-allowed; opacity: .55; box-shadow: none; }

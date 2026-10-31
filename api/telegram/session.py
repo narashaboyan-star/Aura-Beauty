@@ -15,6 +15,8 @@ class handler(JSONHandlerMixin, BaseHTTPRequestHandler):
             self.send_error_json(401, "telegram_auth_failed", "Telegram session could not be verified")
             return
         ready = db.is_ready()
+        if ready:
+            db.record_customer(identity)
         self.send_json(200, {
             "verified": True,
             "user": {"id": identity["telegram_id"], "firstName": identity["first_name"]},

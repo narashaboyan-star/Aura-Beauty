@@ -5,7 +5,7 @@ import urllib.error
 import urllib.request
 
 from . import db
-from .catalog import CATEGORIES, PRODUCTS, is_available, products_in_category
+from .catalog import CATEGORIES
 from .config import admin_ids, bot_token, payment_details, site_origin
 
 
@@ -86,9 +86,13 @@ def category_keyboard():
     return [[{"text": label, "callback_data": f"cat:{key}"}] for key, label in CATEGORIES.items()] + navigation_keyboard()
 
 
-def _product_text(product_id, quantity=1):
-    item = PRODUCTS[product_id]
-    availability = "В наличии" if is_available(product_id) else "Временно недоступен"
+def _max_quantity(item):
+    stock = item.get("stock_quantity")
+    return min(MAX_QUANTITY, int(stock)) if stock is not None else MAX_QUANTITY
+
+
+def _product_text(item, quantity=1):
+    availability = "В наличии" if db.product_is_available(item) else "Временно недоступен"
     return (f"{item['brand']}\n{item['name']}\nЦена: ${item['price']:.2f}\n"
             f"Статус: {availability}\nКоличество: {quantity}")
 
@@ -103,40 +107,41 @@ def show_category(chat_id, category):
     if category not in CATEGORIES:
         send_message(chat_id, "Такой категории нет. Выберите раздел из меню.", category_keyboard())
         return
-    items = products_in_category(category)
+    items = db.list_products(category)
     if not items:
         send_message(chat_id, "В этой категории пока нет товаров. Выберите другой раздел.", category_keyboard())
         return
     keyboard = []
-    for key, item in items:
-        suffix = f"${item['price']:.2f}" if is_available(key) else "нет в наличии"
-        keyboard.append([{"text": f"{item['name']} — {suffix}", "callback_data": f"product:{key}"}])
+    for item in items:
+        suffix = f"${item['price']:.2f}" if db.product_is_available(item) else "нет в наличии"
+        keyboard.append([{"text": f"{item['name']} — {suffix}", "callback_data": f"product:{item['id']}"}])
     keyboard.extend(navigation_keyboard("categories"))
     send_message(chat_id, CATEGORIES[category], keyboard)
 
 
 def show_product(chat_id, product_id, quantity=1):
-    if product_id not in PRODUCTS:
+    item = db.get_product(product_id)
+    if not item:
         send_message(chat_id, "Товар больше не найден в каталоге. Вернитесь к категориям.", category_keyboard())
         return
-    item = PRODUCTS[product_id]
     back_data = f"cat:{item['category']}"
-    if not is_available(product_id):
-        send_message(chat_id, _product_text(product_id),
+    if not db.product_is_available(item):
+        send_message(chat_id, _product_text(item),
                      navigation_keyboard(back_data))
         return
-    quantity = max(1, min(int(quantity), MAX_QUANTITY))
+    maximum = _max_quantity(item)
+    quantity = max(1, min(int(quantity), maximum))
     keyboard = [
         [
             {"text": "−", "callback_data": f"qty:{product_id}:{max(1, quantity - 1)}"},
             {"text": str(quantity), "callback_data": "noop"},
-            {"text": "+", "callback_data": f"qty:{product_id}:{min(MAX_QUANTITY, quantity + 1)}"},
+            {"text": "+", "callback_data": f"qty:{product_id}:{min(maximum, quantity + 1)}"},
         ],
         [{"text": f"Добавить {quantity} в корзину", "callback_data": f"add:{product_id}:{quantity}"}],
         [{"text": "Корзина", "callback_data": "cart"}],
     ]
     keyboard.extend(navigation_keyboard(back_data))
-    send_message(chat_id, _product_text(product_id, quantity), keyboard)
+    send_message(chat_id, _product_text(item, quantity), keyboard)
 
 
 def _cart_payload(telegram_id):
@@ -145,8 +150,8 @@ def _cart_payload(telegram_id):
     lines = []
     unavailable = []
     for item in items:
-        product = PRODUCTS.get(item["product_id"])
-        if not product or not is_available(item["product_id"]):
+        product = db.get_product(item["product_id"])
+        if not db.product_is_available(product, item["quantity"]):
             unavailable.append(item["product_id"])
             lines.append(f"• Товар {item['product_id']} временно недоступен")
             continue
@@ -165,15 +170,15 @@ def show_cart(chat_id, telegram_id):
     text = "Корзина:\n" + "\n".join(lines) + f"\n\nИтого: ${total:.2f}"
     keyboard = []
     for item in items:
-        product = PRODUCTS.get(item["product_id"])
-        if not product or not is_available(item["product_id"]):
+        product = db.get_product(item["product_id"])
+        if not db.product_is_available(product, item["quantity"]):
             continue
         quantity = int(item["quantity"])
         keyboard.append([{"text": product["name"], "callback_data": f"product:{item['product_id']}"}])
         keyboard.append([
             {"text": "−", "callback_data": f"cartq:{item['product_id']}:{max(0, quantity - 1)}"},
             {"text": str(quantity), "callback_data": "noop"},
-            {"text": "+", "callback_data": f"cartq:{item['product_id']}:{min(MAX_QUANTITY, quantity + 1)}"},
+            {"text": "+", "callback_data": f"cartq:{item['product_id']}:{min(_max_quantity(product), quantity + 1)}"},
         ])
     if unavailable:
         text += "\n\nОформление недоступно: уберите недоступный товар или очистите корзину."
@@ -241,6 +246,8 @@ def _create_bot_order(identity, state):
 def handle_message(message):
     chat_id = message["chat"]["id"]
     identity = _identity(message["from"])
+    if db.is_ready():
+        db.record_customer(identity)
     text = (message.get("text") or "").strip()
     if text == "/id":
         send_message(chat_id, f"Ваш Telegram ID: {identity['telegram_id']}")
@@ -292,6 +299,8 @@ def handle_callback(callback):
     callback_id = callback["id"]
     data = callback.get("data", "")
     identity = _identity(callback["from"])
+    if db.is_ready():
+        db.record_customer(identity)
     chat_id = callback["message"]["chat"]["id"]
     try:
         if data == "home":
@@ -311,7 +320,8 @@ def handle_callback(callback):
             parts = data.split(":", 2)
             product_id = parts[1]
             quantity = int(parts[2]) if len(parts) == 3 else 1
-            if not is_available(product_id):
+            product = db.get_product(product_id)
+            if not db.product_is_available(product, quantity):
                 send_message(chat_id, "Этот товар временно недоступен. Выберите другой товар.",
                              category_keyboard())
             else:

@@ -210,6 +210,13 @@ const products = {
   }
 };
 
+let sharedCatalogReady = false;
+Object.values(products).forEach((item) => {
+  item.price = Number.NaN;
+  item.available = false;
+  item.stockQuantity = null;
+});
+
 const productLocales = {
   ordinary: {
     ru: {brand: "The Ordinary", note: "Сыворотка для контроля жирности, 30 мл", description: "Лёгкая водная сыворотка для кожи с расширенными порами, неровной текстурой и избыточной жирностью.", facts: [["Объём", "30 мл"], ["Активы", "Ниацинамид 10%, цинк 1%"], ["Подходит", "Для всех типов кожи"], ["Применение", "Несколько капель утром и вечером перед кремом"]], ingredients: "Ключевые ингредиенты: ниацинамид 10%, Zinc PCA, пентиленгликоль и камедь тамаринда. Формула без отдушки и масел."},
@@ -457,6 +464,7 @@ function splitCartKey(key) {
 }
 
 function addToCart(productId, variant = null) {
+  if (!sharedCatalogReady || !products[productId]?.available || !Number.isFinite(products[productId]?.price)) return;
   const key = makeCartKey(productId, variant);
   cart[key] = (cart[key] || 0) + 1;
   saveCart();
@@ -464,7 +472,10 @@ function addToCart(productId, variant = null) {
 }
 
 function changeQuantity(key, change) {
-  const next = (cart[key] || 0) + change;
+  const {productId} = splitCartKey(key);
+  const stock = products[productId]?.stockQuantity;
+  const maximum = stock == null ? 20 : Math.min(20, Number(stock));
+  const next = Math.min((cart[key] || 0) + change, maximum);
   if (next <= 0) delete cart[key];
   else cart[key] = next;
   saveCart();
@@ -474,7 +485,7 @@ function changeQuantity(key, change) {
 function getCartEntries() {
   return Object.entries(cart)
     .map(([key, quantity]) => ({key, quantity, ...splitCartKey(key)}))
-    .filter(({productId, quantity}) => products[productId] && quantity > 0);
+    .filter(({productId, quantity}) => products[productId]?.available && Number.isFinite(products[productId].price) && quantity > 0);
 }
 
 function renderCart() {
@@ -587,13 +598,18 @@ function openProduct(productId, preferredVariant = null) {
   const image = document.querySelector("#dialog-product-image");
   image.src = product.image;
   image.alt = `${locale.brand} ${product.name}`;
-  document.querySelector("#dialog-product-brand").textContent = locale.brand;
+  document.querySelector("#dialog-product-brand").textContent = product.brand;
   document.querySelector("#product-dialog-title").textContent = product.name;
   document.querySelector("#dialog-product-description").textContent = locale.description;
-  document.querySelector("#dialog-product-price").textContent = formattedPrice(product.price);
   productIngredients.textContent = locale.ingredients;
-  dialogAddButton.disabled = !Number.isFinite(product.price);
-  dialogAddButton.textContent = Number.isFinite(product.price) ? tr("Добавить в корзину", "Add to cart", "Ավելացնել զամբյուղ") : tr("Сначала уточним цену", "Ask for the price first", "Նախ ճշտել գինը");
+  const purchasable = sharedCatalogReady && product.available && Number.isFinite(product.price);
+  document.querySelector("#dialog-product-price").textContent = purchasable
+    ? formattedPrice(product.price)
+    : tr("Нет в наличии", "Out of stock", "Առկա չէ");
+  dialogAddButton.disabled = !purchasable;
+  dialogAddButton.textContent = purchasable
+    ? tr("Добавить в корзину", "Add to cart", "Ավելացնել զամբյուղ")
+    : tr("Товар недоступен", "Product unavailable", "Ապրանքը հասանելի չէ");
   productSource.href = product.source;
   const facts = document.querySelector("#dialog-product-facts");
   facts.replaceChildren();
@@ -623,13 +639,18 @@ function renderCatalog() {
     const productId = card.dataset.productId;
     const product = products[productId];
     const locale = localProduct(productId);
-    card.querySelector(".product-kind").textContent = locale.brand;
+    card.querySelector(".product-kind").textContent = product.brand;
     card.querySelector(".product-note").textContent = locale.note;
-    card.querySelector(".price").textContent = formattedPrice(product.price);
+    const purchasable = sharedCatalogReady && product.available && Number.isFinite(product.price);
+    card.querySelector(".price").textContent = purchasable
+      ? formattedPrice(product.price)
+      : (sharedCatalogReady ? tr("Нет в наличии", "Out of stock", "Առկա չէ") : tr("Каталог недоступен", "Catalog unavailable", "Կատալոգը հասանելի չէ"));
     card.setAttribute("aria-label", tr(`Подробнее о ${product.name}`, `View details for ${product.name}`, `${product.name} մանրամասներ`));
     card.querySelector('[data-action="details"]').textContent = tr("Подробнее", "Details", "Մանրամասներ");
     const purchase = card.querySelector('[data-action="add"], [data-action="choose"]');
-    if (purchase.dataset.action === "add") purchase.textContent = tr("В корзину", "Add to cart", "Զամբյուղ");
+    purchase.disabled = !purchasable;
+    if (!purchasable) purchase.textContent = tr("Недоступен", "Unavailable", "Հասանելի չէ");
+    else if (purchase.dataset.action === "add") purchase.textContent = tr("В корзину", "Add to cart", "Զամբյուղ");
     else if (productId === "clinique") purchase.textContent = tr("Посмотреть оттенки", "View shades", "Դիտել երանգները");
     else if (productId === "nars") purchase.textContent = tr("Посмотреть тона", "View shades", "Դիտել երանգները");
     else purchase.textContent = tr("Выбрать оттенок", "Choose shade", "Ընտրել երանգը");
@@ -663,7 +684,7 @@ document.querySelectorAll(".product-card").forEach((card) => {
 });
 
 dialogAddButton.addEventListener("click", () => {
-  if (!activeProductId || !Number.isFinite(products[activeProductId].price)) return;
+  if (!activeProductId || !products[activeProductId].available || !Number.isFinite(products[activeProductId].price)) return;
   addToCart(activeProductId, activeVariant);
   productDialog.close();
   openCart();
@@ -1106,8 +1127,36 @@ document.addEventListener("aura:preferences", () => {
   if (consultantDialog.open) startConsultant();
 });
 
-renderCatalog();
-updateCartCount();
-updateDeliveryFields();
-updatePaymentFields();
-renderCart();
+async function loadSharedCatalog() {
+  try {
+    const response = await fetch("/api/catalog", {credentials: "same-origin"});
+    if (!response.ok) throw new Error("catalog-unavailable");
+    const payload = await response.json();
+    const received = new Set();
+    (payload.products || []).forEach((item) => {
+      if (!products[item.id]) return;
+      received.add(item.id);
+      Object.assign(products[item.id], {
+        category: item.category,
+        brand: item.brand,
+        name: item.name,
+        price: Number(item.priceUsd),
+        available: item.available === true,
+        stockQuantity: item.stockQuantity
+      });
+    });
+    Object.keys(products).forEach((id) => {
+      if (!received.has(id)) products[id].available = false;
+    });
+    sharedCatalogReady = true;
+  } catch {
+    sharedCatalogReady = false;
+  }
+  renderCatalog();
+  updateCartCount();
+  updateDeliveryFields();
+  updatePaymentFields();
+  renderCart();
+}
+
+loadSharedCatalog();

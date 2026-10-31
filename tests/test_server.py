@@ -62,13 +62,38 @@ class DatabaseTests(unittest.TestCase):
 
     def test_order_is_owned_and_status_is_shared(self):
         order = db.create_order(self.identity, self.payload(), "mini_app")
+        bot_order = db.create_order(self.identity, self.payload(), "bot")
         self.assertTrue(order["id"].startswith("AB-"))
         self.assertEqual(order["total_usd"], 12.0)
-        self.assertEqual(len(db.list_orders(42)), 1)
+        self.assertEqual({item["id"] for item in db.list_orders(42)}, {order["id"], bot_order["id"]})
         self.assertEqual(db.list_orders(999), [])
         updated = db.update_status(order["id"], "confirmed")
         self.assertEqual(updated["status"], "confirmed")
-        self.assertEqual(db.list_orders(42)[0]["status"], "confirmed")
+        self.assertEqual(db.get_customer_order(order["id"], 42)["status"], "confirmed")
+        self.assertIsNone(db.get_customer_order(order["id"], 999))
+
+    def test_buyers_are_isolated_across_bot_and_mini_app(self):
+        buyer_a = {**self.identity, "telegram_id": 101, "username": "same-name"}
+        buyer_b = {**self.identity, "telegram_id": 202, "username": "same-name"}
+        order_a = db.create_order(buyer_a, self.payload(), "bot")
+        order_b = db.create_order(buyer_b, self.payload(), "mini_app")
+        self.assertEqual([item["id"] for item in db.list_orders(101)], [order_a["id"]])
+        self.assertEqual([item["id"] for item in db.list_orders(202)], [order_b["id"]])
+        self.assertIsNone(db.get_customer_order(order_a["id"], 202))
+        self.assertIsNone(db.get_customer_order(order_b["id"], 101))
+        self.assertEqual({item["id"] for item in db.list_recent_orders()}, {order_a["id"], order_b["id"]})
+
+    def test_shared_catalog_stock_is_enforced(self):
+        with db.connect() as connection:
+            connection.execute("UPDATE products SET stock_quantity=2,available=1 WHERE id='ordinary'")
+        self.assertEqual(db.get_product("ordinary")["stock_quantity"], 2)
+        order = db.create_order(self.identity, self.payload(), "mini_app")
+        self.assertTrue(order["id"].startswith("AB-"))
+        product = db.get_product("ordinary")
+        self.assertEqual(product["stock_quantity"], 0)
+        self.assertFalse(product["available"])
+        with self.assertRaises(ValueError):
+            db.create_order(self.identity, self.payload(), "bot")
 
     def test_cart_and_bot_state_are_isolated(self):
         db.add_to_cart(42, "ordinary", 2)
@@ -94,6 +119,15 @@ class DatabaseTests(unittest.TestCase):
 
 
 class BotPresentationTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        os.environ.pop("DATABASE_URL", None)
+        os.environ["AURA_SQLITE_PATH"] = os.path.join(self.temp.name, "aura.db")
+
+    def tearDown(self):
+        os.environ.pop("AURA_SQLITE_PATH", None)
+        self.temp.cleanup()
+
     def test_main_keyboard_uses_web_app_button(self):
         os.environ["SITE_ORIGIN"] = "https://example.com"
         button = main_keyboard()[0][0]
@@ -112,7 +146,7 @@ class BotPresentationTests(unittest.TestCase):
         self.assertIn("Мои заказы", labels)
 
     @mock.patch("server.bot.send_message")
-    @mock.patch("server.bot.products_in_category", return_value=[])
+    @mock.patch("server.bot.db.list_products", return_value=[])
     def test_empty_category_is_explained(self, _items, send):
         show_category(42, "skincare")
         self.assertIn("пока нет товаров", send.call_args.args[1])

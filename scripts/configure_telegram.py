@@ -5,6 +5,7 @@ commands and Mini App menu button to the single Aura Beauty bot.
 """
 
 import json
+import os
 from pathlib import Path
 import urllib.request
 
@@ -15,6 +16,14 @@ def load_env():
         if "=" in line and not line.lstrip().startswith("#"):
             key, value = line.split("=", 1)
             result[key.strip()] = value.strip()
+    for key in (
+        "TELEGRAM_BOT_TOKEN",
+        "TELEGRAM_WEBHOOK_SECRET",
+        "TELEGRAM_ADMIN_USER_IDS",
+        "SITE_ORIGIN",
+    ):
+        if os.environ.get(key):
+            result[key] = os.environ[key]
     return result
 
 

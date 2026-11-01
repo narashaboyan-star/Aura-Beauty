@@ -4,6 +4,7 @@ candy-glow-site*.zip
 .env
 .env.*
 !.env.example
+.DS_Store
 
 # Local server runtime files.
 *.db

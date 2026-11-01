@@ -52,5 +52,8 @@ class handler(JSONHandlerMixin, BaseHTTPRequestHandler):
         except ValueError as exc:
             self.send_error_json(422, "invalid_order", str(exc))
             return
-        notify_admins(order)
-        self.send_json(201, {"ok": True, "order": _public_order(order)})
+        replayed = order.get("idempotent_replay") is True
+        if not replayed:
+            notify_admins(order)
+        self.send_json(200 if replayed else 201, {"ok": True, "replayed": replayed,
+                                                  "order": _public_order(order)})

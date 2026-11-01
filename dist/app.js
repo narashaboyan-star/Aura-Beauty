@@ -318,6 +318,9 @@ const customerPhone = document.querySelector("#customer-phone");
 const securePaymentPanel = document.querySelector("#secure-payment-panel");
 const orderSuccess = document.querySelector("#order-success");
 const orderSuccessText = document.querySelector("#order-success-text");
+const checkoutSubmit = checkoutForm?.querySelector('[type="submit"]');
+let checkoutSubmitting = false;
+let pendingOrderRequest = null;
 const productDialog = document.querySelector("#product-dialog");
 const shadeArea = document.querySelector("#dialog-shade-area");
 const shadeTitle = document.querySelector("#shade-title");
@@ -764,6 +767,7 @@ customerPhone.addEventListener("blur", () => {
 
 checkoutForm.addEventListener("submit", async (event) => {
   event.preventDefault();
+  if (checkoutSubmitting) return;
   formError.textContent = "";
   if (window.AuraTelegram && !window.AuraTelegram.guardCheckout()) {
     formError.textContent = tr("Сначала нужно безопасно подтвердить Telegram-покупателя и подключить общий сервер заказов.", "The Telegram buyer must be securely verified and the shared order server connected first.", "Նախ պետք է ապահով հաստատել Telegram գնորդին և միացնել պատվերների ընդհանուր սերվերը։");
@@ -829,16 +833,34 @@ checkoutForm.addEventListener("submit", async (event) => {
     items: entries.map(({productId, variant, quantity}) => ({id: productId, name: products[productId].name, variant, quantity, price: formattedPrice(products[productId].price)}))
   };
 
+  const requestSignature = JSON.stringify({
+    customer: order.customer,
+    delivery: order.delivery,
+    paymentMethod: order.paymentMethod,
+    items: order.items.map(({id, variant, quantity}) => ({id, variant, quantity}))
+  });
+  if (!pendingOrderRequest || pendingOrderRequest.signature !== requestSignature) {
+    const fallback = `${Date.now()}-${Math.random().toString(16).slice(2)}-${Math.random().toString(16).slice(2)}`;
+    pendingOrderRequest = {signature: requestSignature, key: window.crypto?.randomUUID?.() || fallback};
+  }
+  order.requestKey = pendingOrderRequest.key;
+
   let storedNote = tr("Заказ сохранён на этом устройстве.", "The order is saved on this device.", "Պատվերը պահպանվել է այս սարքում։");
   if (window.AuraTelegram?.active) {
+    checkoutSubmitting = true;
+    if (checkoutSubmit) checkoutSubmit.disabled = true;
     try {
       const created = await window.AuraTelegram.createOrder(order);
       orderId = created.id;
       order.id = created.id;
+      pendingOrderRequest = null;
       storedNote = tr("Заказ сохранён в Aura Beauty и доступен в разделе «Мои заказы».", "The order is saved in Aura Beauty and is available under My orders.", "Պատվերը պահպանվել է Aura Beauty-ում և հասանելի է «Իմ պատվերները» բաժնում։");
     } catch {
-      formError.textContent = tr("Не удалось сохранить заказ на сервере. Корзина не изменена — попробуйте ещё раз.", "The order could not be saved. Your cart is unchanged—please try again.", "Չհաջողվեց պահպանել պատվերը։ Զամբյուղը չի փոխվել, փորձեք կրկին։");
+      formError.textContent = tr("Результат сохранения не подтверждён. Корзина не изменена. Повторите запрос: если первый запрос успел сохраниться, повтор вернёт тот же номер без дубля.", "The save result was not confirmed. Your cart is unchanged. Retry: if the first request was saved, the retry returns the same order number without a duplicate.", "Պահպանման արդյունքը հաստատված չէ։ Զամբյուղը չի փոխվել։ Կրկնեք հարցումը․ եթե առաջին հարցումը պահպանվել է, կրկնումը կվերադարձնի նույն համարը՝ առանց կրկնօրինակի։");
       return;
+    } finally {
+      checkoutSubmitting = false;
+      if (checkoutSubmit) checkoutSubmit.disabled = false;
     }
   } else {
     localStorage.setItem(orderStorageKey, JSON.stringify(order));

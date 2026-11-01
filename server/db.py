@@ -5,6 +5,7 @@ SQLite with AURA_SQLITE_PATH. No implicit ephemeral production fallback is used.
 """
 
 import json
+import hashlib
 import os
 import secrets
 import sqlite3
@@ -105,6 +106,7 @@ def _initialize(connection):
     for statement in statements:
         cursor.execute(statement)
     _ensure_customer_notification_columns(connection)
+    _ensure_order_idempotency_columns(connection)
     for product_id, item in CATALOG_SEED.items():
         cursor.execute(_sql("SELECT id FROM products WHERE id=?"), (product_id,))
         if not cursor.fetchone():
@@ -132,6 +134,25 @@ def _ensure_customer_notification_columns(connection):
     for name, definition in columns.items():
         if name not in existing:
             cursor.execute(f"ALTER TABLE customers ADD COLUMN {name} {definition}")
+
+
+def _ensure_order_idempotency_columns(connection):
+    columns = {
+        "request_key": "TEXT NOT NULL DEFAULT ''",
+        "request_fingerprint": "TEXT NOT NULL DEFAULT ''",
+    }
+    cursor = connection.cursor()
+    if _postgres():
+        for name, definition in columns.items():
+            cursor.execute(f"ALTER TABLE orders ADD COLUMN IF NOT EXISTS {name} {definition}")
+    else:
+        cursor.execute("PRAGMA table_info(orders)")
+        existing = {dict(row)["name"] for row in cursor.fetchall()}
+        for name, definition in columns.items():
+            if name not in existing:
+                cursor.execute(f"ALTER TABLE orders ADD COLUMN {name} {definition}")
+    cursor.execute("CREATE UNIQUE INDEX IF NOT EXISTS orders_owner_request_key "
+                   "ON orders(telegram_id,request_key) WHERE request_key<>''")
 
 
 def _dict(row):
@@ -294,6 +315,49 @@ def _normalized_items(connection, items):
     return result
 
 
+def _request_fingerprint(payload):
+    customer = payload.get("customer") or {}
+    delivery = payload.get("delivery") or {}
+    items = sorted(({
+        "id": str(item.get("id") or ""),
+        "variant": str(item.get("variant") or "")[:120],
+        "quantity": int(item.get("quantity", 0)),
+    } for item in (payload.get("items") or [])), key=lambda item: (item["id"], item["variant"]))
+    canonical = {
+        "customer": {
+            "name": str(customer.get("name") or "").strip()[:120],
+            "phone": str(customer.get("phone") or "").strip()[:40],
+            "email": str(customer.get("email") or "").strip()[:254],
+            "comment": str(customer.get("comment") or "")[:1000],
+        },
+        "delivery": {
+            "method": str(delivery.get("method") or "post")[:30],
+            "address": str(delivery.get("address") or "").strip()[:500],
+            "date": str(delivery.get("date") or "")[:20],
+            "time": str(delivery.get("time") or "")[:20],
+        },
+        "payment_method": str(payload.get("paymentMethod") or "on-receipt")[:40],
+        "items": items,
+    }
+    encoded = json.dumps(canonical, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def _get_order_by_request(telegram_id, request_key):
+    if not request_key:
+        return None
+    with connect() as connection:
+        cursor = connection.cursor()
+        cursor.execute(_sql("SELECT id,request_fingerprint FROM orders WHERE telegram_id=? AND request_key=?"),
+                       (int(telegram_id), request_key))
+        row = _dict(cursor.fetchone())
+    if not row:
+        return None
+    order = get_customer_order(row["id"], telegram_id)
+    order["request_fingerprint"] = row["request_fingerprint"]
+    return order
+
+
 def create_order(identity, payload, source):
     customer = payload.get("customer") or {}
     delivery = payload.get("delivery") or {}
@@ -303,36 +367,58 @@ def create_order(identity, payload, source):
     email = str(customer.get("email") or "").strip()[:254]
     if not name or not address or (not phone and not email):
         raise ValueError("name, address and contact are required")
+    request_key = str(payload.get("requestKey") or "").strip()
+    if source == "mini_app" and (len(request_key) < 16 or len(request_key) > 120):
+        raise ValueError("valid request key is required")
+    if source != "mini_app":
+        request_key = ""
+    request_fingerprint = _request_fingerprint(payload) if request_key else ""
+    existing = _get_order_by_request(identity["telegram_id"], request_key)
+    if existing:
+        if existing.get("request_fingerprint") != request_fingerprint:
+            raise ValueError("request key was already used for another order")
+        existing["idempotent_replay"] = True
+        return existing
     order_id = f"AB-{datetime.now(timezone.utc):%y%m%d}-{secrets.token_hex(2).upper()}"
     now = _now()
-    with connect() as connection:
-        items = _normalized_items(connection, payload.get("items"))
-        total = sum(item["unit_price_usd"] * item["quantity"] for item in items)
-        upsert_customer(connection, identity, phone)
-        connection.cursor().execute(_sql("""INSERT INTO orders
-            (id,telegram_id,source,status,customer_name,phone,email,address,delivery_method,
-             delivery_date,delivery_time,payment_method,comment,currency,total_usd,created_at,updated_at)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"""), (
-                order_id, identity["telegram_id"], source, "new", name, phone, email, address,
-                str(delivery.get("method") or "post")[:30], str(delivery.get("date") or "")[:20],
-                str(delivery.get("time") or "")[:20], str(payload.get("paymentMethod") or "on-receipt")[:40],
-                str(customer.get("comment") or "")[:1000], str(payload.get("currency") or "USD")[:8],
-                total, now, now))
-        for item in items:
-            connection.cursor().execute(_sql("""INSERT INTO order_items
-                (order_id,product_id,product_name,variant,quantity,unit_price_usd)
-                VALUES (?,?,?,?,?,?)"""), (order_id, item["id"], item["name"], item["variant"],
-                                            item["quantity"], item["unit_price_usd"]))
-            product = _get_product(connection, item["id"])
-            if product["stock_quantity"] is not None:
-                stock_cursor = connection.cursor()
-                stock_cursor.execute(_sql("""UPDATE products SET stock_quantity=stock_quantity-?,
-                    available=CASE WHEN stock_quantity-? > 0 THEN 1 ELSE 0 END, updated_at=?
-                    WHERE id=? AND stock_quantity>=?"""), (
-                    item["quantity"], item["quantity"], now, item["id"], item["quantity"]))
-                if stock_cursor.rowcount != 1:
-                    raise ValueError("product is out of stock")
-    return get_customer_order(order_id, identity["telegram_id"])
+    try:
+        with connect() as connection:
+            items = _normalized_items(connection, payload.get("items"))
+            total = sum(item["unit_price_usd"] * item["quantity"] for item in items)
+            upsert_customer(connection, identity, phone)
+            connection.cursor().execute(_sql("""INSERT INTO orders
+                (id,telegram_id,source,status,customer_name,phone,email,address,delivery_method,
+                 delivery_date,delivery_time,payment_method,comment,currency,total_usd,created_at,updated_at,
+                 request_key,request_fingerprint)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"""), (
+                    order_id, identity["telegram_id"], source, "new", name, phone, email, address,
+                    str(delivery.get("method") or "post")[:30], str(delivery.get("date") or "")[:20],
+                    str(delivery.get("time") or "")[:20], str(payload.get("paymentMethod") or "on-receipt")[:40],
+                    str(customer.get("comment") or "")[:1000], str(payload.get("currency") or "USD")[:8],
+                    total, now, now, request_key, request_fingerprint))
+            for item in items:
+                connection.cursor().execute(_sql("""INSERT INTO order_items
+                    (order_id,product_id,product_name,variant,quantity,unit_price_usd)
+                    VALUES (?,?,?,?,?,?)"""), (order_id, item["id"], item["name"], item["variant"],
+                                                item["quantity"], item["unit_price_usd"]))
+                product = _get_product(connection, item["id"])
+                if product["stock_quantity"] is not None:
+                    stock_cursor = connection.cursor()
+                    stock_cursor.execute(_sql("""UPDATE products SET stock_quantity=stock_quantity-?,
+                        available=CASE WHEN stock_quantity-? > 0 THEN 1 ELSE 0 END, updated_at=?
+                        WHERE id=? AND stock_quantity>=?"""), (
+                        item["quantity"], item["quantity"], now, item["id"], item["quantity"]))
+                    if stock_cursor.rowcount != 1:
+                        raise ValueError("product is out of stock")
+    except Exception:
+        existing = _get_order_by_request(identity["telegram_id"], request_key)
+        if existing and existing.get("request_fingerprint") == request_fingerprint:
+            existing["idempotent_replay"] = True
+            return existing
+        raise
+    order = get_customer_order(order_id, identity["telegram_id"])
+    order["idempotent_replay"] = False
+    return order
 
 
 def _get_order(order_id, telegram_id=None):

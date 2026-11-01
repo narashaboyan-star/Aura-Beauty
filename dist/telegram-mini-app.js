@@ -148,23 +148,35 @@
 
   async function apiRequest(path, options = {}) {
     if (!telegram?.initData || !state.verified) throw new Error("telegram-session-unavailable");
-    const response = await fetch(path, {
-      ...options,
-      headers: {
-        "Authorization": `tma ${telegram.initData}`,
-        "Content-Type": "application/json",
-        ...(options.headers || {})
-      },
-      credentials: "same-origin"
-    });
-    const payload = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(payload?.error || "request-failed");
-    return payload;
+    const controller = options.timeoutMs ? new AbortController() : null;
+    const timeout = controller ? setTimeout(() => controller.abort(), options.timeoutMs) : null;
+    try {
+      const response = await fetch(path, {
+        ...options,
+        signal: options.signal || controller?.signal,
+        headers: {
+          "Authorization": `tma ${telegram.initData}`,
+          "Content-Type": "application/json",
+          ...(options.headers || {})
+        },
+        credentials: "same-origin"
+      });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(payload?.error || "request-failed");
+      return payload;
+    } catch (error) {
+      if (error?.name === "AbortError") throw new Error("network-result-unknown");
+      throw error;
+    } finally {
+      if (timeout) clearTimeout(timeout);
+    }
   }
 
   async function createOrder(order) {
     if (!state.createOrders) throw new Error("checkout-unavailable");
-    const payload = await apiRequest("/api/orders", {method: "POST", body: JSON.stringify(order)});
+    const payload = await apiRequest("/api/orders", {
+      method: "POST", body: JSON.stringify(order), timeoutMs: 12000
+    });
     return payload.order;
   }
 

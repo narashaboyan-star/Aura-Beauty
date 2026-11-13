@@ -26,3 +26,7 @@ def admin_ids():
 
 def payment_details():
     return os.environ.get("TELEGRAM_PAYMENT_DETAILS", "").strip()
+
+
+def openai_api_key():
+    return os.environ.get("OPENAI_API_KEY", "").strip()

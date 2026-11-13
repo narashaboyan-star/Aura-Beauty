@@ -4,7 +4,7 @@ import json
 import urllib.error
 import urllib.request
 
-from . import db
+from . import ai, db
 from .catalog import CATEGORIES
 from .config import admin_ids, bot_token, payment_details, site_origin
 
@@ -324,6 +324,13 @@ def _create_bot_order(identity, state):
     return order
 
 
+def answer_free_question(chat_id, text):
+    """Answer from public knowledge only; never pass identity, contacts or orders to AI."""
+    result = ai.answer_question(text)
+    send_message(chat_id, result["answer"], main_keyboard())
+    return result["status"]
+
+
 def handle_message(message):
     chat_id = message["chat"]["id"]
     identity = _identity(message["from"])
@@ -374,7 +381,7 @@ def handle_message(message):
         send_message(chat_id, f"Заказ {order['id']} создан. Оплата — при получении.\n"
                               "Статус можно проверить через «Мои заказы».", main_keyboard())
     else:
-        show_home(chat_id, identity["first_name"])
+        answer_free_question(chat_id, text)
 
 
 def handle_callback(callback):

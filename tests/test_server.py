@@ -9,10 +9,10 @@ import uuid
 from unittest import mock
 from urllib.parse import urlencode
 
-from server import db
+from server import ai, db, knowledge
 from server.auth import TelegramAuthError, validate_init_data
-from server.bot import (TelegramAPIError, handle_callback, main_keyboard, notify_customer_status,
-                        show_category, show_product)
+from server.bot import (TelegramAPIError, handle_callback, handle_message, main_keyboard,
+                        notify_customer_status, show_category, show_product)
 from api.orders import _public_order
 
 
@@ -290,6 +290,103 @@ class BotPresentationTests(unittest.TestCase):
         handle_callback(callback)
         add.assert_called_once_with(42, "ordinary", 4)
         show_cart_mock.assert_called_once_with(42, 42)
+
+
+class GroundedAITests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        os.environ.pop("DATABASE_URL", None)
+        os.environ.pop("OPENAI_API_KEY", None)
+        os.environ["AURA_SQLITE_PATH"] = os.path.join(self.temp.name, "aura.db")
+
+    def tearDown(self):
+        os.environ.pop("AURA_SQLITE_PATH", None)
+        os.environ.pop("OPENAI_API_KEY", None)
+        self.temp.cleanup()
+
+    @mock.patch("server.ai._call_openai", return_value="Почтой — 2–5 рабочих дней; курьером — 1 000 ֏.")
+    def test_delivery_question_uses_grounded_facts(self, call_ai):
+        os.environ["OPENAI_API_KEY"] = "test-key"
+        result = ai.answer_question("Какая у вас доставка?")
+        self.assertEqual(result["status"], "answered")
+        context = call_ai.call_args.args[1]
+        self.assertIn("2–5 рабочих дней", context)
+        self.assertIn("1 000 ֏", context)
+
+    def test_product_question_uses_current_server_catalog(self):
+        with db.connect() as connection:
+            connection.execute("UPDATE products SET price_usd=9.5,stock_quantity=3,available=1 "
+                               "WHERE id='ordinary'")
+        entries = knowledge.search("Сколько стоит Niacinamide и есть ли в наличии?")
+        context = knowledge.context_text(entries)
+        self.assertIn("$9.50", context)
+        self.assertIn("остаток 3 шт.", context)
+
+    @mock.patch("server.ai._call_openai")
+    def test_unknown_question_does_not_call_ai_or_invent_answer(self, call_ai):
+        os.environ["OPENAI_API_KEY"] = "test-key"
+        result = ai.answer_question("Кто выиграет чемпионат на Марсе?")
+        self.assertEqual(result["status"], "no_knowledge")
+        self.assertIn("нет ответа", result["answer"])
+        call_ai.assert_not_called()
+
+    @mock.patch("server.bot.answer_free_question")
+    @mock.patch("server.bot.send_message")
+    def test_start_command_does_not_enter_ai(self, _send, answer_ai):
+        handle_message({"from": {"id": 42, "first_name": "Buyer"},
+                        "chat": {"id": 42}, "text": "/start"})
+        answer_ai.assert_not_called()
+
+    @mock.patch("server.bot.answer_free_question")
+    @mock.patch("server.bot.send_message")
+    def test_checkout_answers_do_not_enter_ai(self, _send, answer_ai):
+        db.set_state(42, "checkout_phone", {"name": "Buyer"})
+        handle_message({"from": {"id": 42, "first_name": "Buyer"},
+                        "chat": {"id": 42}, "text": "+374 00 000 000"})
+        answer_ai.assert_not_called()
+        self.assertEqual(db.get_state(42)["flow"], "checkout_address")
+
+    @mock.patch("server.bot.send_message")
+    @mock.patch("server.bot.ai.answer_question", return_value={
+        "status": "answered", "answer": "Подтверждённый ответ", "context": "public facts"
+    })
+    def test_free_question_enters_ai_without_identity_or_contacts(self, answer_ai, send):
+        handle_message({"from": {"id": 42, "first_name": "Buyer", "username": "private-user"},
+                        "chat": {"id": 42}, "text": "Какая у вас доставка?"})
+        answer_ai.assert_called_once_with("Какая у вас доставка?")
+        self.assertEqual(send.call_args.args[1], "Подтверждённый ответ")
+
+    def test_retrieval_never_reads_customer_contacts_or_orders(self):
+        identity = {"telegram_id": 42, "username": "private-user", "first_name": "Private", "last_name": ""}
+        payload = {
+            "customer": {"name": "PRIVATE-CUSTOMER", "phone": "PRIVATE-PHONE", "email": "", "comment": ""},
+            "delivery": {"method": "post", "address": "PRIVATE-ADDRESS", "date": "", "time": ""},
+            "paymentMethod": "on-receipt", "items": [{"id": "ordinary", "quantity": 1}],
+        }
+        db.create_order(identity, payload, "bot")
+        context = knowledge.context_text(knowledge.search("Сколько стоит Niacinamide?"))
+        for secret in ("PRIVATE-CUSTOMER", "PRIVATE-PHONE", "PRIVATE-ADDRESS", "private-user"):
+            self.assertNotIn(secret, context)
+
+    @mock.patch("server.ai._call_openai", side_effect=ai.AIProviderError("timeout"))
+    def test_ai_failure_returns_clear_fallback(self, _call_ai):
+        os.environ["OPENAI_API_KEY"] = "test-key"
+        result = ai.answer_question("Какая у вас доставка?")
+        self.assertEqual(result["status"], "provider_error")
+        self.assertIn("недоступен", result["answer"])
+
+    @mock.patch("server.ai.urllib.request.urlopen", side_effect=TimeoutError("timeout"))
+    def test_provider_timeout_is_caught(self, _urlopen):
+        os.environ["OPENAI_API_KEY"] = "test-key"
+        result = ai.answer_question("Какая у вас доставка?")
+        self.assertEqual(result["status"], "provider_error")
+        self.assertIn("Магазин и оформление заказов продолжают работать", result["answer"])
+
+    def test_without_key_is_transparent_and_still_grounded(self):
+        result = ai.answer_question("Какая у вас доставка?")
+        self.assertEqual(result["status"], "not_configured")
+        self.assertIn("AI пока не подключён", result["answer"])
+        self.assertIn("2–5 рабочих дней", result["answer"])
 
 
 if __name__ == "__main__":

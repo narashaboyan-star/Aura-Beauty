@@ -1,6 +1,7 @@
 from http.server import BaseHTTPRequestHandler
 
 from server import db
+from server.ai import configured as ai_configured
 from server.config import bot_token, site_origin, webhook_secret
 from server.http import JSONHandlerMixin
 
@@ -13,4 +14,5 @@ class handler(JSONHandlerMixin, BaseHTTPRequestHandler):
             "telegramConfigured": bool(bot_token()),
             "webhookSecretConfigured": bool(webhook_secret()),
             "siteOriginConfigured": bool(site_origin()),
+            "aiConfigured": ai_configured(),
         })
